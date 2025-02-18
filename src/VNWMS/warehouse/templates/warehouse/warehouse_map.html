@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>子頁面</title>
+    <style>
+        .warehouse_map {
+            display: block;
+            background-image: url('{{ bg }}');
+            background-repeat: no-repeat;
+            background-position: left;
+            width: 1024px;
+            height: 900px;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            background-size: 100%;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div style="background-image: url('/static/base/ruler.jpg');background-repeat: no-repeat; background-position: left;width: 1424px;height: 1000px;">
+        <div class="warehouse_map">
+            <h2>這是子頁面</h2>
+            <p>bin_id: <span id="binIdDisplay"></span></p>
+
+            <button onclick="sendValue('按鈕A')">按鈕 A</button>
+            <button onclick="sendValue('按鈕B')">按鈕 B</button>
+        </div>
+    </div>
+
+    <script>
+        function sendValue(value) {
+            if (window.opener) {
+                window.opener.postMessage(value, window.location.origin); // 傳值給母視窗
+                window.close();
+            }
+        }
+    </script>
+
+</body>
+</html>

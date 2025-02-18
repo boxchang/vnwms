@@ -1,0 +1,163 @@
+{% extends 'warehouse/bases/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Search Product Order" %} {% endblock %}
+{% block css %}
+    <style>
+        h3 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 2% !important;
+            margin-bottom: 10px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding-bottom: 10px;
+        }
+
+        #jsGrid {
+            font-size: 16px;
+            margin-left: 2%;
+        }
+
+        #workOrder {
+            font-size: 16px;
+            padding: 6px 8px 8px 8px;
+            width: 300px;
+            margin-left: 2%;
+
+        }
+
+        #searchBtn {
+            font-size: 16px;
+            padding: 8px;
+            margin-bottom: 1%;
+            margin-top: 1%;
+            margin-left: 1px;
+        }
+    </style>
+
+    <script>
+    $(document).ready(function() {
+
+        const searchParams = new URLSearchParams(window.location.search);
+        const workOrder = searchParams.get("product_order");
+
+        if (workOrder) {
+            // Tự động điền vào thanh tìm kiếm
+            $("#workOrder").val(workOrder);
+
+            $.ajax({
+            url: `{% url 'work_order_search' %}`,
+            method: 'GET',
+            data: {
+                search: workOrder,
+                product_order: searchParams.get('product_order'),
+            },
+            success: function(response) {
+                // Cập nhật dữ liệu cho jsGrid
+                $("#jsGrid").jsGrid("option", "data", response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+        }
+
+        $("#jsGrid").jsGrid({
+            width: "95%",
+            height: "550px",
+            noDataContent: "{% trans "Not found" %}",
+            inserting: false,
+            editing: false,
+            sorting: true,
+            paging: true,
+            fields: [
+                { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", css: "text-center", width: 20 },
+                { name: "product_order", title: "{% trans "Product Order" %}", type: "text", css: "text-center", width: 30 },
+                { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", css: "text-center", width: 40 },
+                { name: "version_no", title: "{% trans "Version No" %}", type: "text", css: "text-center", width: 25 },
+                { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", css: "text-center", width: 25 },
+                { name: "size", title: "{% trans "Size" %}", type: "text", css: "text-center", width: 25 },
+                { name: "bin", title: "{% trans "Bin" %}", type: "text", css: "text-center", width: 25 },
+                { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 25 },
+                {
+                    type: "control",
+                    itemTemplate: function(_, item) {
+                        return $("<button>").text("{% trans "Transfer" %}")
+                            .addClass("btn btn-warning")
+                            .on("click", function() {
+                                let queryParams = $.param({
+                                    warehouse: item.bin__area__warehouse__wh_code,
+                                    product_order: item.product_order,
+                                    purchase_no: item.purchase_no,
+                                    version_no: item.version_no,
+                                    version_seq: item.version_seq,
+                                    size: item.size,
+                                    bin: item.bin,
+                                    qty: item.qty,
+                                    search: $("#workOrder").val()
+                                });
+
+                                window.open("/warehouse/bin_transfer_page?" + queryParams, "");
+                        });
+                    }
+                },
+                {
+                    type: "control",
+                    width: 30,
+                    itemTemplate: function(_, item) {
+                        return $("<button>").text("{% trans "Adjust" %}")
+                            .addClass("btn btn-warning")
+                            .on("click", function() {
+                                let queryParams = $.param({
+                                    warehouse: item.bin__area__warehouse__wh_code,
+                                    product_order: item.product_order,
+                                    purchase_no: item.purchase_no,
+                                    version_no: item.version_no,
+                                    version_seq: item.version_seq,
+                                    size: item.size,
+                                    bin: item.bin,
+                                    qty: item.qty,
+                                    search: $("#workOrder").val()
+                                });
+
+                                window.open("/warehouse/bin_adjust_page?" + queryParams, "");
+                        });
+                    }
+                }
+            ]
+        });
+
+
+        $("#searchBtn").on("click", function() {
+            const workOrder = $("#workOrder").val();
+
+            $.ajax({
+                url: '{% url "work_order_search" %}?product_order=' + encodeURIComponent(workOrder),
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $("#jsGrid").jsGrid("option", "data", response);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error: ' + error);
+                }
+            });
+
+        });
+    });
+
+</script>
+{% endblock %}
+{% block content %}
+    <h3>{% trans "Search By Work Order" %}</h3>
+    <input type="text" id="workOrder" placeholder="{% trans "Work Order Id" %}">
+    <button id="searchBtn" class="btn btn-primary">{% trans "Search" %}</button>
+    <div id="jsGrid"></div>
+
+
+
+{% endblock %}

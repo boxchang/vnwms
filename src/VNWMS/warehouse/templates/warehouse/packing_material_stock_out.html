@@ -1,0 +1,367 @@
+{% extends 'warehouse/bases/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Stock Out" %} {% endblock %}
+{% block css %}
+<style>
+.item_list {
+    background: #ffffe7;
+    border-color: #f7e1b5;
+    border-width: 1px;
+    border-style: dashed solid;
+}
+
+.jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
+    display: none !important;
+}
+
+/* Hình ảnh trong popup */
+#zoneImage {
+  width: auto;
+  height: 100%;
+  position: relative;
+
+}
+
+.zone {
+    position: absolute; /* Cần để các zone có thể được định vị chính xác */
+
+}
+/* Overlay che toàn màn hình */
+#popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+/* Nội dung popup */
+#popupContent {
+  position: fixed;
+  top: 50%;
+  left: 53%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  z-index: 9999;
+  border-radius: 8px;
+  text-align: center;
+  width: auto; /* Điều chỉnh phần rộng tối đa của popup */
+  height: 100%; /* Điều chỉnh chiều cao tối đa của popup */
+  overflow: auto; /* Nếu cần cuộn, nếu hình ảnh quá lớn */
+}
+
+
+
+/* Nút đóng */
+#closePopup {
+  display: inline-block;
+  padding: 5px 10px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.green{
+            border: 2px solid rgba(0, 255, 0, 0.7);  /* Màu xanh lá cây với độ trong suốt 70% */
+            background-color: rgba(0, 255, 0, 0.3);  /* Màu xanh lá cây với độ trong suốt 30% */
+}
+
+
+.input-custom {
+    --bs-gutter-x: 0;
+}
+</style>
+
+{% endblock css %}
+{% block base_js %}
+{{ block.super }}
+<script>
+    $(document).ready(function() {
+        let isInputClicked = false;
+
+        $(document).on('keydown', function(e) {
+            if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
+                {#console.log("Phím ESC đã được nhấn");#}
+                const updateButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
+
+                if (updateButton.length) {
+                    updateButton.click();  // Mô phỏng click vào nút cập nhật
+                }
+            }
+        });
+
+        $(document).on('keydown', (event) => {
+          if (event.which === 13) {  // Kiểm tra nếu phím Enter (key code 13) được nhấn
+            {#console.log('Enter key pressed:', event);#}
+            const updateButton = $(".jsgrid-button.jsgrid-update-button");
+
+            // Nếu nút "Cập nhật" tồn tại, mô phỏng sự kiện click
+            if (updateButton.length) {
+                updateButton.click();  // Mô phỏng click vào nút cập nhật
+            }
+          }
+        });
+
+
+        $("#id_product_order").on("change", function() {
+            get_order_info();
+        });
+
+        get_order_info = function() {
+
+            var product_order = $("#id_product_order").val();
+            {#alert(product_order);#}
+            $.ajax({
+                url: '{% url 'get_product_order_stout' %}', type: 'post',
+                dataType: 'json',
+                async: false,
+                data: {"csrfmiddlewaretoken": "{{ csrf_token }}", "product_order": product_order},
+                success: function(data) {
+                    if (data.status === 'no_change'){
+                        console.log("Keep the data table");
+                    } else {
+                        $("#jsGrid").jsGrid("option", "data", data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("資料加載失敗：", error);
+                }
+            });
+        };
+
+
+        $("#id_purchase_no").on("change", function() {
+
+            get_no_info();
+        });
+
+
+        get_no_info = function() {
+
+            var purchase_no = $("#id_purchase_no").val();
+            {#alert(purchase_no);#}
+            $.ajax({
+                url: '{% url 'get_purchase_no_stout' %}', type: 'post',
+                dataType: 'json',
+                async: false,
+                data: {"csrfmiddlewaretoken": "{{ csrf_token }}", "purchase_no": purchase_no},
+                success: function(data) {
+                    if (data.status === 'no_change'){
+                        console.log("Keep the data table");
+                    } else {
+                        $("#jsGrid").jsGrid("option", "data", data);
+                    }
+
+                },
+                error: function (xhr, status, error) {
+                    console.error("資料加載失敗：", error);
+                }
+            });
+        };
+
+
+        data: [], // 初始為空，將透過 AJAX 加載資料
+
+        // 初始化 jsGrid
+        $("#jsGrid").jsGrid({
+            width: "100%",
+            height: "400px",
+            noDataContent: "{% trans "Not found" %}",
+
+            inserting: true,  // 啟用新增功能
+            editing: true,    // 啟用編輯功能
+            sorting: true,    // 啟用排序功能
+            paging: true,     // 啟用分頁功能
+
+            rowClick: function (args) {
+                this.editItem(args.item);
+            },
+
+            data: [],   // 將 JSON 資料導入表格
+
+            fields: [
+                {
+                    type: "control",
+                    width: 80,
+                    itemTemplate: function(_, item) {
+                        // 建立刪除按鈕
+                        var deleteButton = $("<button>")
+                            .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
+                            .text("{% trans "Delete" %}")
+                            .on("click", function(e) {
+                                e.stopPropagation(); // 防止觸發行點擊事件
+                                $("#jsGrid").jsGrid("deleteItem", item);
+
+                            });
+
+                        return deleteButton;
+                    }
+                },
+                { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", align: "center", readOnly: true, visible: false },
+                { name: "order_qty", type: "text", width: 120, title: "{% trans "Order Qty" %}", align: "center" },
+                { name: "order_bin", type: "text", width: 120, title: "{% trans "Order Bin" %}", align: "center", editing: false },
+                { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", align: "center", editing: true },
+                { name: "product_order", type: "text", width: 150, title: "{% trans "Product Order" %}", validate: "required", editing: false, align: "center" },
+                { name: "purchase_no", type: "text", width: 170, title: "{% trans "Purchase No" %}", editing: false, align: "center" },
+                { name: "version_no", type: "text", width: 170, title: "{% trans "Version No" %}", align: "center", editing: false },
+                { name: "version_seq", type: "number", width: 120, title: "{% trans "Version Seq" %}", editing: false, align: "center" },
+                { name: "size", type: "text", width: 55, title: "{% trans "Size" %}", editing: false, align: "center" },
+                { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", align: "center", editing: false },
+            ]
+        });
+
+        $(".jsgrid-grid-body").on("click", ".jsgrid-button", function(e) {
+            // Cách để kiểm soát hành động sao chép
+            if ($(this).text() === "Copy") {
+                // Ngừng sự kiện nếu không muốn thông báo khi Enter được nhấn
+                e.stopPropagation();
+                e.preventDefault();
+
+            }
+        });
+
+
+        // Khi click vào một zone (div chứa bin_id)
+        $(".zone").on("click", function() {
+            // Lấy giá trị của bin_id từ data-value của div
+            var bin_id = $(this).data("value");
+            const updateInput = $("#zonePopup").data("updateInput"); // 取得回調函數
+            if (updateInput) {
+                updateInput(bin_id); // 更新輸入框的值
+            }
+            // Đóng popup
+            $("#zonePopup").fadeOut();
+        });
+
+
+        // 關閉彈窗
+        $("#closePopup").on("click", function () {
+            $("#zonePopup").fadeOut();
+        });
+
+        // Reset data input
+        $("#button-id-bin_clear").on("click", function() {
+            // Reset form
+            $("#myForm")[0].reset();
+        });
+
+        // 當按下過帳按鈕時
+        $('#postDataButton').click(function(event) {
+            event.preventDefault();
+            // 獲取 jsGrid 的所有數據
+            var gridData = $("#jsGrid").data("JSGrid").data;
+
+            if (!gridData || gridData.length === 0) {
+                alert("{% trans "No data in the table! Please enter at least one row." %}");
+                return; // Dừng xử lý nếu không có dữ liệu
+            }
+
+            // 檢查 order_qty 是否都有值
+            for (var i = 0; i < gridData.length; i++) {
+                if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
+                    alert("第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！");
+                    return; // 阻止繼續執行
+                }
+            }
+
+            // 將數據轉換為 JSON 格式
+            var jsonData = JSON.stringify(gridData);
+
+            // 使用 Ajax 發送數據到後端
+            $.ajax({
+                url: '{% url 'packing_material_stock_out_post' %}',  // 設置後端接收數據的 URL
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData,
+                success: function(response) {
+
+                    //Reset all input
+                    $("#myForm")[0].reset();
+
+                    $("#jsGrid").jsGrid("option", "data", []);
+                    $("#jsGrid").jsGrid("refresh");
+
+
+                    alert("Success！");
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    alert("Fail！");
+                    console.log(error);
+                }
+            });
+        });
+
+    });
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row p-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="row">
+            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Outgoing Form" %}</div>
+        </div>
+    <form id="myForm">
+        {% crispy form %}
+        <div id="jsGrid"></div>
+            <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+            <h3>{% trans "Choose Location" %}</h3>
+
+
+            {% for bin in bins %}
+                <button class="number-btn" data-value="{{ bin.bin_id }}" style="{% if bin.has_stock %}background-color: #d2e8b9{% else %}; background-color: #fff{% endif %}">{{ bin.bin_id }}</button>
+                {% endfor %}
+                <br><br>
+                <button id="closePicker">{% trans "Close" %}</button>
+            </div>
+
+          <!-- Popup -->
+          <div id="zonePopup" style="display: none;">
+            <div id="popupOverlay"></div>
+            <div id="popupContent">
+              <img src="/media/warehouse_images/warehouse_2.jpg" id="zoneImage" alt="Zone Map" usemap="#zoneMap">
+              <map name="zoneMap">
+                <area shape="rect" coords="50,50,150,150" href="#" data-zone="Zone 1">
+                <area shape="rect" coords="200,50,300,150" href="#" data-zone="Zone 2">
+                <!-- Thêm nhiều vùng khác -->
+              </map>
+            {% for bin in bins %}
+
+            <div class="zone" data-value="{{ bin.bin_id }}" style="top: {{ bin.pos_y }}px; left: {{ bin.pos_x }}px; width: {{ bin.bin_w }}px; height: {{ bin.bin_l }}px;
+                    {% if bin.has_stock %}
+                        border: 2px solid rgba(255, 0, 0, 0.7);
+                        background-color: rgba(255, 0, 0, 0.3);
+                    {% else %};
+                        border: 2px solid rgba(0, 255, 0, 0.7);
+                        background-color: rgba(0, 255, 0, 0.3);
+                    {% endif %}">{{ bin.bin_id }}</div>
+
+            {% endfor %}
+                <br>
+              <button id="closePopup">Đóng</button>
+            </div>
+          </div>
+        <hr />
+        <div style="text-align: center" class="p-3">
+            <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
+        </div>
+    </form>
+
+    <div class="col-1"></div>
+</div>
+</div>
+{% endblock %}
+
+{% block alert %}
+
+{% endblock %}

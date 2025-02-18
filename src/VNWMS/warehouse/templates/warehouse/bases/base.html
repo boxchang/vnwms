@@ -1,0 +1,66 @@
+{% extends 'bases/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% block head %}{% endblock %}
+{% block title %}{% endblock title %}
+{% block breadcrumb %}{% endblock %}
+
+{% block base_js %}
+    <style>
+    .custom-edit{
+
+    }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+{% endblock %}
+
+{% block ready %}{% endblock ready %}
+
+{% block container %}
+    <div class="card-header">
+        <div class="row">
+            <div>
+                <div class="btn-group">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% trans "Transaction Function" %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'packing_material_stock_in' %}">{% trans "Packing Material Stock In" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'packing_material_stock_out' %}">{% trans "Packing Material Stock Out" %}</a></li>
+                        <hr />
+                        <li><a class="dropdown-item" href="{% url 'work_order_page' %}">{% trans "Quantity Transfer & Adjust Form" %}</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% trans "Search Function" %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'bin_search' %}">{% trans "Inventory Search" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'work_order_bin_search' %}">{% trans "Transaction History" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'search_bin_value' %}">{% trans "Bin Value Search" %}</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% trans "Basic Data" %}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="{% url 'warehouse_list' %}">{% trans "Storage Setting" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'upload_excel' %}">{% trans "Input Data" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'bin_value_import' %}">{% trans "Input Bin Value Data" %}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block content %} {% endblock %}
+{% endblock %}
+
+{% block alert %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+{% endblock %}
+
