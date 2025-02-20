@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'bin_search' %}">{% trans "Inventory Search" %}</a></li>
                         <li><a class="dropdown-item" href="{% url 'work_order_bin_search' %}">{% trans "Transaction History" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'search_bin_value' %}">{% trans "Bin Value Search" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'search_bin_value' %}">{% trans "Inventory Sheet" %}</a></li>
                     </ul>
                 </div>
                 <div class="btn-group">
@@ -50,8 +50,8 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="dropdown-item" href="{% url 'warehouse_list' %}">{% trans "Storage Setting" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'upload_excel' %}">{% trans "Input Data" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'bin_value_import' %}">{% trans "Input Bin Value Data" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'upload_excel' %}">{% trans "Location Importing" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'open_data_import' %}">{% trans "Open Data Importing" %}</a></li>
                     </ul>
                 </div>
             </div>

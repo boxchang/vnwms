@@ -130,11 +130,6 @@ class UserInfoForm(forms.ModelForm):
         self.helper.form_tag = False
         self.helper.form_show_errors = True
 
-        if user.is_superuser:
-            self.fields['default_homepage'].queryset = HomePageOption.objects.all()
-        else:
-            user_roles = user.groups.all()
-            self.fields['default_homepage'].queryset = HomePageOption.objects.filter(roles__in=user_roles).distinct()
 
         self.helper.layout = Layout(
             Fieldset(_('base_information'),
@@ -144,10 +139,6 @@ class UserInfoForm(forms.ModelForm):
                  ),
                  Div(
                      Div('email', css_class="col-sm-4"),
-                     css_class='row'
-                 ),
-                 Div(
-                     Div('default_homepage', css_class="col-sm-4"),
                      css_class='row'
                  ),
             ),

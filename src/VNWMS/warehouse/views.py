@@ -1284,7 +1284,7 @@ def to_string_or_none(value):
     return "" if pd.isna(value) else value
 
 
-def bin_value_import(request):
+def open_data_import(request):
     form = ExcelUploadForm()
 
     if request.method == "POST":
@@ -1318,8 +1318,8 @@ def bin_value_import(request):
 
                         stock_in = StockInForm()
                         YYYYMM = datetime.now().strftime("%Y%m")
-                        key = "STIN" + YYYYMM
-                        stock_in.form_no = key + str(get_series_number(key, "STIN")).zfill(3)
+                        key = "OPEN" + YYYYMM
+                        stock_in.form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
 
                         mvt = MovementType.objects.get(mvt_code="OPEN")
 
@@ -1333,13 +1333,13 @@ def bin_value_import(request):
                         if hasattr(excel_file, 'temporary_file_path'):
                             os.remove(excel_file.temporary_file_path())
 
-                        return render(request, "warehouse/bin/bin_value_import.html",
+                        return render(request, "warehouse/bin/open_data_import.html",
                                       {"form": form, "message": "Upload successfully!"})
                     except Exception as e:
-                        return render(request, "warehouse/bin/bin_value_import.html",
+                        return render(request, "warehouse/bin/open_data_import.html",
                                       {"form": form, "error": f"Lỗi khi xử lý file: {str(e)}"})
 
-    return render(request, "warehouse/bin/bin_value_import.html", {"form": form})
+    return render(request, "warehouse/bin/open_data_import.html", {"form": form})
 
 
 def search_bin_value(request):

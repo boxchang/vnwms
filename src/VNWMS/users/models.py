@@ -123,7 +123,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     plant = models.ForeignKey(Plant, related_name='users_plant', on_delete=models.DO_NOTHING, null=True, blank=True)
     manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='user_manager', null=True, blank=True)
-    default_homepage = models.ForeignKey(HomePageOption, related_name='user_default_homepage', null=True, blank=True, on_delete=models.DO_NOTHING)
 
     objects = CustomUserManager()
 

@@ -92,10 +92,7 @@ def login(request):
 
             # messages.success(request, '登入成功')
 
-            if request.user.default_homepage:
-                return redirect(reverse(request.user.default_homepage.url_name))
-            else:
-                return response
+            return redirect(reverse('warehouse_dashboard'))
 
 
 def logout(request):
@@ -204,10 +201,7 @@ def user_info(request):
             user.save()
             messages.info(request, '修改成功!')
 
-            if user.default_homepage:
-                return redirect(reverse(user.default_homepage.url_name))
-            else:
-                return redirect('index')
+            return redirect('index')
     else:
         form = UserInfoForm(instance=member, user=request.user)
 
