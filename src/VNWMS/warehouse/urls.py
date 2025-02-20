@@ -6,7 +6,8 @@ from warehouse.views import index, packing_material_stock_in, packing_material_s
     packing_material_stock_in_post, packing_material_stock_out_post, dashboard, get_purchase_no_info, work_order_search, \
     work_order_page, bin_transfer, \
     bin_transfer_page, get_product_order_stout, work_order_bin_search, work_order_hist_data, get_purchase_no_stout, \
-    bin_adjust_page, bin_adjust, upload_excel, bin_value_import, search_bin_value, warehouse_map
+    bin_adjust_page, bin_adjust, upload_excel, bin_value_import, search_bin_value, warehouse_map, get_all_areas, \
+    check_bin_exists
 from . import views
 
 
@@ -22,6 +23,7 @@ urlpatterns = [
     url(r'^area/area_by_warehouse/(?P<wh_code>\w+)/$', views.area_by_warehouse, name='area_by_warehouse'),
     url(r'^area/delete/(?P<pk>[^/]+)/$', views.area_delete, name='area-delete'),
     url(r'^area/list/$', views.area_list, name='area_list'),
+    url(r'^area/get-all-areas/$', get_all_areas, name='get_all_areas'),
 
     url(r'^bin/bin_action/$', views.bin_action, name='bin_action'),
     url(r'^bin/check_po_exists/$', views.check_po_exists, name='check_po_exists'),
@@ -36,6 +38,7 @@ urlpatterns = [
     url(r'^get-areas/$', views.get_areas, name='get_areas'),
     url(r'^get-bins/$', views.get_bins, name='get_bins'),
     url(r'^get-bin-data/$', views.get_bin_data, name='get_bin_data'),
+    url(r'^check-bin-exists/$', check_bin_exists, name='check_bin_exists'),
     url(r'^search-bin-value/$', search_bin_value, name="search_bin_value"),
     url(r'^$', views.warehouse_list, name='warehouse_list'),
 

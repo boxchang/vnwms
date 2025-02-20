@@ -324,15 +324,7 @@ def bin_search(request):
             result_history = None
             result_value = None
 
-
-    return render(request, 'warehouse/search_bin_history.html', locals()
-    #               {
-    #     'bin_values': bin_values,
-    #     'page_obj': page_obj,  # Truyền page_obj thay vì records
-    #     'range_pages': range_pages,
-    #     'message': message if message else '',  # Truyền message nếu có
-    # }
- )
+    return render(request, 'warehouse/search_bin_history.html', locals())
 
 
 def check_po_exists(request):
@@ -1172,10 +1164,14 @@ def upload_excel(request):
                         area_id = row["Area Id"]
                         area_name = to_string_or_none(row["Area Name"])
                         warehouse_instance = warehouses.get(row["Warehouse Code"])  # Lấy warehouse từ cache
-
+                        pos_x = row["Position X"]
+                        pos_y = row["Position Y"]
+                        area_l = row["Area Length"]
+                        area_w = row["Area Width"]
                         if area_id in existing_areas:
                             obj = existing_areas[area_id]
-                            if obj.warehouse != warehouse_instance or obj.area_name != area_name:
+                            if obj.warehouse != warehouse_instance or obj.area_name != area_name or obj.area_l != area_l or \
+                                        obj.area_w != area_w or obj.pos_x != pos_x or obj.pos_y != pos_y:
                                 obj.warehouse = warehouse_instance
                                 obj.area_name = area_name
                                 obj.update_at = timezone.now()
@@ -1186,6 +1182,10 @@ def upload_excel(request):
                                 area_id=area_id,
                                 warehouse=warehouse_instance,
                                 area_name=area_name,
+                                area_w=area_w,
+                                area_l=area_w,
+                                pos_x=pos_x,
+                                pos_y=pos_y,
                                 create_at=timezone.now(),
                                 create_by=request.user,
                                 update_at=timezone.now(),
@@ -1195,7 +1195,8 @@ def upload_excel(request):
                     with transaction.atomic():
                         if areas_to_update:
                             Area.objects.bulk_update(areas_to_update,
-                                                     ["warehouse", "area_name", "update_at", "update_by"])
+                                                     ["warehouse", "area_name", "area_w", "area_l", "pos_x",
+                                                      "pos_y", "update_at", "update_by"])
                         if areas_to_create:
                             Area.objects.bulk_create(areas_to_create)
 
@@ -1354,16 +1355,47 @@ def search_bin_value(request):
     return render(request, 'warehouse/bin/search_bin_value.html', {'form': form, 'results': results, 'warehouses': warehouses})
 
 
+# GET DATA
+
 def get_areas(request):
     warehouse_id = request.GET.get('warehouse')
     areas = Area.objects.filter(warehouse_id=warehouse_id).values('area_id', 'area_name')
     return JsonResponse(list(areas), safe=False)
 
 
+def get_all_areas(request):
+    areas = Area.objects.all().values('area_id', 'area_name', 'pos_y', 'pos_x', 'area_l', 'area_w')
+    return JsonResponse(list(areas), safe=False)
+
+
 def get_bins(request):
     area_id = request.GET.get('area')
-    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name')
+    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name', 'pos_x', 'pos_y', 'bin_w', 'bin_l')
     return JsonResponse(list(bins), safe=False)
+
+
+def check_bin_exists(request):
+    area_id = request.GET.get('area')
+    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name', 'pos_x', 'pos_y', 'bin_w', 'bin_l')
+
+    bin_data = []
+
+    for bin in bins:
+        bin_value_exists = Bin_Value.objects.filter(bin_id=bin["bin_id"]).exists()
+
+        status = "red" if bin_value_exists else "green"  # Nếu tồn tại giá trị thì đỏ, ngược lại xanh
+
+        bin_data.append({
+            "bin_id": bin["bin_id"],
+            "bin_name": bin["bin_name"],
+            "pos_x": bin["pos_x"],
+            "pos_y": bin["pos_y"],
+            "bin_w": bin["bin_w"],
+            "bin_l": bin["bin_l"],
+            "status": status
+        })
+
+    return JsonResponse(bin_data, safe=False)
 
 
 def get_bin_data(request):
@@ -1379,4 +1411,5 @@ def get_bin_data(request):
         return JsonResponse(list(products), safe=False)
     return JsonResponse([], safe=False)
 
+# -- END DATA --
 

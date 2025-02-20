@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>子頁面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
         .warehouse_map {
             display: block;
@@ -19,27 +20,42 @@
         }
 
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            {#margin: 0;#}
+            {#padding: 0;#}
+            {#width: 100%;#}
+            {#height: 100%;#}
             position: absolute;
-            top: 0;
-            left: 0;
+            {#top: 0;#}
+            {#left: 0;#}
         }
 
     </style>
 </head>
 <body>
-    <div style="background-image: url('/static/base/ruler.jpg');background-repeat: no-repeat; background-position: left;width: 1424px;height: 1000px;">
-        <div class="warehouse_map">
-            <h2>這是子頁面</h2>
-            <p>bin_id: <span id="binIdDisplay"></span></p>
+    <div class="container">
+        <div class="row">
+            <div style="
+                background-image: url('/static/base/ruler.jpg');
+                background-repeat: no-repeat;
+                background-position: left;
+                width: 1424px;
+                height: 1000px;
+            " class="col-5">
 
-            <button onclick="sendValue('按鈕A')">按鈕 A</button>
-            <button onclick="sendValue('按鈕B')">按鈕 B</button>
+                <div class="warehouse_map">
+{#                    <h2>這是子頁面</h2>#}
+{#                    <p>bin_id: <span id="binIdDisplay"></span></p>#}
+{##}
+{#                    <button onclick="sendValue('按鈕A')">按鈕 A</button>#}
+{#                    <button onclick="sendValue('按鈕B')">按鈕 B</button>#}
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         function sendValue(value) {
@@ -48,6 +64,150 @@
                 window.close();
             }
         }
+
+
+        // Hàm lấy dữ liệu từ API và hiển thị các rectangle
+        async function loadAreas() {
+            const response = await fetch('/warehouse/area/get-all-areas/'); // Lấy dữ liệu từ API
+            const areas = await response.json();
+
+            const warehouseMap = document.querySelector(".warehouse_map"); // Lấy div chứa ảnh nền
+
+            // Duyệt qua từng khu vực và tạo các div.rectangle
+            areas.forEach(area => {
+                const rect = document.createElement("div");
+                rect.classList.add("rectangle"); // Thêm lớp rectangle cho div
+
+                // Css for rectangle class
+                rect.style.top = area.pos_y + (-103) + "px";
+                rect.style.left = area.pos_x + (-100) + "px";
+                rect.style.width = area.area_w + "px";
+                rect.style.height = area.area_l + "px";
+
+                rect.style.backgroundColor = "rgba(255, 165, 0, 0.6)";
+                rect.style.border = "2px solid rgba(255, 165, 0, 0.8)";
+                rect.style.position = "absolute";
+                rect.style.display = "flex";
+                rect.style.alignItems = "center";
+                rect.style.justifyContent = "center";
+
+                // Thiết lập phong cách nổi bật cho tên của các zone
+                rect.style.color = "#FFFF00";  // Màu chữ vàng nổi bật
+                rect.style.fontSize = "18px";  // Kích thước chữ lớn, dễ đọc
+                rect.style.fontWeight = "bold";  // Làm đậm chữ để nổi bật
+                rect.style.fontFamily = "'Arial', sans-serif";  // Sử dụng font Arial
+                rect.style.textShadow = "2px 2px 8px rgba(0, 0, 0, 0.7)";  // Tạo bóng chữ để nổi bật hơn trên nền tối
+                rect.style.cursor = "pointer";
+
+                rect.textContent = area.area_name;
+
+
+                // Set data-zone với tên khu vực
+                rect.setAttribute("data-zone", area.area_id);
+
+                // Thêm div.rectangle vào trong warehouse_map
+                warehouseMap.appendChild(rect);
+            });
+
+
+            // Gọi hàm xử lý sự kiện click sau khi tất cả các div.rectangle đã được tạo
+            addClickEventToAreas();
+        }
+
+
+        // Hàm xử lý sự kiện click vào các div.rectangle
+        function addClickEventToAreas() {
+            document.querySelectorAll(".rectangle").forEach(rect => {
+                rect.addEventListener("click", async function () {
+                    let area_id = this.getAttribute("data-zone"); // Lấy giá trị data-zone
+                    console.log("Selected Area ID:", area_id);
+
+                    try {
+                        const response = await fetch(`/warehouse/check-bin-exists/?area=${area_id}`);
+                        const bins = await response.json();
+
+                        console.log("Received data:", bins);
+
+                        if (bins.error) {
+                            alert(`Lỗi: ${bins.error}`);
+                            return;
+                        }
+
+                        let maxHeight = 850; // Chiều cao tối đa cho mỗi cột
+                        let topOffset = 50;
+                        let leftOffset = 108; // Vị trí cột đầu tiên (%)
+                        let colIndex = 0; // Theo dõi số cột
+
+                        // Xóa các bins cũ trước khi thêm mới
+                        document.querySelectorAll(".bin").forEach(bin => bin.remove());
+
+                        const warehouseMap = document.querySelector(".warehouse_map");
+
+                        // Duyệt qua danh sách bins và tạo div tương ứng
+                        bins.forEach(bin => {
+                            const binDiv = document.createElement("div");
+                            binDiv.classList.add("bin");
+
+                            // Set CSS
+                            binDiv.style.position = "absolute";
+                            binDiv.style.top = topOffset + "px";
+                            binDiv.style.left = `${leftOffset}%`;
+                            binDiv.style.width = "100px";
+                            binDiv.style.height = "50px";
+                            binDiv.style.cursor = "pointer";
+
+
+                            binDiv.style.backgroundColor = bin.status === "red" ? "rgba(255, 0, 0, 0.5)" : "rgba(0, 255, 0, 0.5)";
+                            binDiv.style.border = bin.status === "red" ? "2px solid red" : "2px solid green";
+
+                            binDiv.style.display = "flex";
+                            binDiv.style.alignItems = "center";
+                            binDiv.style.justifyContent = "center";
+
+                            binDiv.textContent = bin.bin_id;
+                            binDiv.setAttribute("data-zone", bin.bin_id);
+
+                            // Thêm div bin vào warehouse_map
+                            warehouseMap.appendChild(binDiv);
+
+                            // Cập nhật vị trí
+                            topOffset += 70;
+
+                            // Nếu vượt quá chiều cao, xuống cột mới
+                            if (topOffset > maxHeight) {
+                                topOffset = 50; // Reset vị trí hàng đầu tiên
+                                colIndex++;
+                                leftOffset = 108 + colIndex * 11; // Dời cột sang phải
+                            }
+
+                            addClickEventToBins();
+                        });
+
+                    } catch (error) {
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            });
+        }
+
+
+
+        // Hàm xử lý sự kiện click vào các div.rectangle
+        function addClickEventToBins() {
+            document.querySelectorAll(".bin").forEach(b => {
+                b.addEventListener("click", async function () {
+
+                    const binId = this.getAttribute("data-zone");
+                    sendValue(binId);
+
+                });
+            });
+        }
+
+        // Gọi hàm loadAreas khi trang được tải
+        window.onload = loadAreas;
+
+
     </script>
 
 </body>

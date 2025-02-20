@@ -63,10 +63,14 @@ class WarehouseForm(forms.ModelForm):
 class AreaForm(forms.ModelForm):
     class Meta:
         model = Area  # Chỉ định model mà form này sẽ sử dụng
-        fields = ['area_id', 'area_name', 'warehouse']
+        fields = ['area_id', 'area_name', 'pos_x', 'pos_y', 'area_w', 'area_l', 'warehouse']
 
     area_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     area_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    pos_x = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    pos_y = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    area_w = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    area_l = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
     warehouse = forms.ModelChoiceField(
         queryset=Warehouse.objects.all(),  # Lấy tất cả các đối tượng Warehouse
         required=False,
@@ -240,6 +244,7 @@ class BinTransferForm(forms.Form):
             ),
         )
 
+
 class QuantityAdjustForm(forms.Form):
 
     qty = forms.IntegerField(label="Quantity", required=True)
@@ -252,13 +257,14 @@ class QuantityAdjustForm(forms.Form):
         self.helper.form_show_errors = True
         self.helper.layout = Layout(
             Div(
-                Div('', css_class='col-md-5'),
+                HTML("<div class='col-md-5'></div>"),  # Sửa lỗi này
                 Div('qty', css_class='col-md-5'),
                 Submit('submit', 'Confirm', css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
                                                                                         'padding-right: 10px'),
                 css_class='row'
             ),
         )
+
 
 class StockInPForm(forms.Form):
     product_order = forms.CharField(max_length=20, label=_("Product Order"), required=True, )  # VBELN 收貨單號

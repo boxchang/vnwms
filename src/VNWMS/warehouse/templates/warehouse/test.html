@@ -13,7 +13,7 @@
         /* 倉庫地圖背景 */
         .warehouse-map {
             position: relative;
-            background: url('/media/warehouse_images/warehouse_2.jpg') no-repeat;
+            background: url('/media/warehouse_images/packing_storage_i9Q3Zmq.jpg') no-repeat;
             {#center center#}
             height: 800px;
             width: auto;
@@ -86,7 +86,14 @@
         {% for bin in bins %}
             {% for status in bins_status %}
                 {% if status.bin_id == bin.bin_id and status.status == 'red' %}
-                    <div class="zone red" bin_name="{{ bin.bin_id }}" style="top: {{ bin.pos_y }}px; left: {{ bin.pos_x }}px; width: {{ bin.bin_w }}px; height: {{ bin.bin_l }}px;" data-zone="A001"></div>
+                    <div class="zone red" bin_name="{{ bin.bin_id }}"
+                         style="
+                                 top: {{ bin.pos_y }}px;
+                                 left: {{ bin.pos_x }}px;
+                                 width: {{ bin.bin_w }}px;
+                                 height: {{ bin.bin_l }}px;"
+                         data-zone="A001">
+                    </div>
                 {% elif status.bin_id == bin.bin_id and status.status == 'green' %}
                     <div class="zone green" bin_name="{{ bin.bin_id }}" style="top: {{ bin.pos_y }}px; left: {{ bin.pos_x }}px; width: {{ bin.bin_w }}px; height: {{ bin.bin_l }}px;" data-zone="A001"></div>
                 {% endif %}

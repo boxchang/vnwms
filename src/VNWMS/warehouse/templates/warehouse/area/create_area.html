@@ -25,6 +25,30 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="pos_x" class="form-label">{% trans "Position X" %}</label>
+                            {{ form.pos_x }}
+                            <div class="text-danger">{{ form.pos_x.errors }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pos_y" class="form-label">{% trans "Position Y" %}</label>
+                            {{ form.pos_y }}
+                            <div class="text-danger">{{ form.pos_y.errors }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="area_w" class="form-label">{% trans "Area Width" %}</label>
+                            {{ form.area_w }}
+                            <div class="text-danger">{{ form.area_w.errors }}</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="area_l" class="form-label">{% trans "Area Length" %}</label>
+                            {{ form.area_l }}
+                            <div class="text-danger">{{ form.area_l.errors }}</div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="wh_code" class="form-label">{% trans "Warehouse Id" %}</label>
                             {{ form.warehouse }}
                             <div class="text-danger">{{ form.wh_code.errors }}</div>

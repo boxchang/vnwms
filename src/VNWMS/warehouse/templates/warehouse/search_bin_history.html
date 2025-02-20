@@ -30,9 +30,6 @@
             margin-bottom: 5px;
         }
 
-        {#.scroll::-webkit-scrollbar {#}
-        {#    display: none; /* Ẩn thanh cuộn trên các trình duyệt Webkit (Chrome, Safari) */#}
-        {#}#}
     </style>
 {% endblock %}
 
@@ -91,7 +88,7 @@
 
     <!-- Table for displaying results -->
     <div class="table-container justify-content-center">
-        <h2>{% trans "Current Inventory" %}</h2>
+        <h2 style="font-size: 1.5em;">{% trans "Current Inventory" %}</h2>
         <!-- BIN VALUES TABLE -->
         <div style="overflow-y: auto; height: 200px;" class="scroll bin_value">
             <table class="table table-striped table-bordered col-md-6 A">
@@ -131,7 +128,7 @@
         </div>
 
         <!--BIN HISTORIES TABLE -->
-        <h2>{% trans "History" %}</h2>
+        <h2 style="font-size: 1.5em;">{% trans "History" %}</h2>
         <div style="height: 300px; overflow-y: auto;" class="scroll bin_hist">
             <table class="table table-striped table-bordered B">
                 <thead>

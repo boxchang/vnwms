@@ -326,31 +326,31 @@
             </div>
 
           <!-- Popup -->
-          <div id="zonePopup" style="display: none;">
-            <div id="popupOverlay"></div>
-            <div id="popupContent">
-              <img src="/media/warehouse_images/warehouse_2.jpg" id="zoneImage" alt="Zone Map" usemap="#zoneMap">
-              <map name="zoneMap">
-                <area shape="rect" coords="50,50,150,150" href="#" data-zone="Zone 1">
-                <area shape="rect" coords="200,50,300,150" href="#" data-zone="Zone 2">
-                <!-- Thêm nhiều vùng khác -->
-              </map>
-            {% for bin in bins %}
-
-            <div class="zone" data-value="{{ bin.bin_id }}" style="top: {{ bin.pos_y }}px; left: {{ bin.pos_x }}px; width: {{ bin.bin_w }}px; height: {{ bin.bin_l }}px;
-                    {% if bin.has_stock %}
-                        border: 2px solid rgba(255, 0, 0, 0.7);
-                        background-color: rgba(255, 0, 0, 0.3);
-                    {% else %};
-                        border: 2px solid rgba(0, 255, 0, 0.7);
-                        background-color: rgba(0, 255, 0, 0.3);
-                    {% endif %}">{{ bin.bin_id }}</div>
-
-            {% endfor %}
-                <br>
-              <button id="closePopup">Đóng</button>
-            </div>
-          </div>
+{#          <div id="zonePopup" style="display: none;">#}
+{#            <div id="popupOverlay"></div>#}
+{#            <div id="popupContent">#}
+{#              <img src="/media/warehouse_images/warehouse_2.jpg" id="zoneImage" alt="Zone Map" usemap="#zoneMap">#}
+{#              <map name="zoneMap">#}
+{#                <area shape="rect" coords="50,50,150,150" href="#" data-zone="Zone 1">#}
+{#                <area shape="rect" coords="200,50,300,150" href="#" data-zone="Zone 2">#}
+{#                <!-- Thêm nhiều vùng khác -->#}
+{#              </map>#}
+{#            {% for bin in bins %}#}
+{##}
+{#            <div class="zone" data-value="{{ bin.bin_id }}" style="top: {{ bin.pos_y }}px; left: {{ bin.pos_x }}px; width: {{ bin.bin_w }}px; height: {{ bin.bin_l }}px;#}
+{#                    {% if bin.has_stock %}#}
+{#                        border: 2px solid rgba(255, 0, 0, 0.7);#}
+{#                        background-color: rgba(255, 0, 0, 0.3);#}
+{#                    {% else %};#}
+{#                        border: 2px solid rgba(0, 255, 0, 0.7);#}
+{#                        background-color: rgba(0, 255, 0, 0.3);#}
+{#                    {% endif %}">{{ bin.bin_id }}</div>#}
+{##}
+{#            {% endfor %}#}
+{#                <br>#}
+{#              <button id="closePopup">Đóng</button>#}
+{#            </div>#}
+{#          </div>#}
         <hr />
         <div style="text-align: center" class="p-3">
             <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>

@@ -5,38 +5,19 @@
 {% block title %} {% trans "Search Product Order" %} {% endblock %}
 {% block css %}
     <style>
-        h3 {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 2% !important;
-            margin-bottom: 10px;
-            color: #333;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding-bottom: 10px;
-        }
 
         #jsGrid {
             font-size: 16px;
-            margin-left: 2%;
         }
 
         #workOrder {
             font-size: 16px;
-            padding: 6px 8px 8px 8px;
             width: 300px;
-            margin-left: 2%;
+            height: 40px;
 
         }
 
-        #searchBtn {
-            font-size: 16px;
-            padding: 8px;
-            margin-bottom: 1%;
-            margin-top: 1%;
-            margin-left: 1px;
-        }
+
     </style>
 
     <script>
@@ -68,14 +49,15 @@
 
         $("#jsGrid").jsGrid({
             width: "95%",
-            height: "550px",
+            height: "500px",
             noDataContent: "{% trans "Not found" %}",
             inserting: false,
             editing: false,
             sorting: true,
             paging: true,
+            pageSize: 20,
             fields: [
-                { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", css: "text-center", width: 20 },
+                { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", css: "text-center", width: 30 },
                 { name: "product_order", title: "{% trans "Product Order" %}", type: "text", css: "text-center", width: 30 },
                 { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", css: "text-center", width: 40 },
                 { name: "version_no", title: "{% trans "Version No" %}", type: "text", css: "text-center", width: 25 },
@@ -153,11 +135,13 @@
 </script>
 {% endblock %}
 {% block content %}
-    <h3>{% trans "Search By Work Order" %}</h3>
-    <input type="text" id="workOrder" placeholder="{% trans "Work Order Id" %}">
-    <button id="searchBtn" class="btn btn-primary">{% trans "Search" %}</button>
-    <div id="jsGrid"></div>
-
-
+    <div style="padding-left: 7rem; padding-right: 7rem;">
+        <h3 style="font-size: 1.5em;text-align: center;" class="mt-4">{% trans "Search By Work Order" %}</h3>
+        <div class="mt-5">
+            <input type="text" id="workOrder" placeholder="{% trans "Work Order Id" %}">
+            <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i> {% trans "Search" %}</button>
+        </div>
+        <div class="mt-2" id="jsGrid"></div>
+    </div>
 
 {% endblock %}
