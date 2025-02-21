@@ -4,10 +4,11 @@ import os
 import pandas as pd
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db import transaction
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.shortcuts import render
@@ -1420,3 +1421,11 @@ def get_bin_data(request):
 
 # -- END DATA --
 
+def download_excel_template(request, filename):
+
+    file_path = os.path.join(settings.BASE_DIR, 'static/excel', filename)
+
+    if not os.path.exists(file_path):
+        raise Http404("File not exist")
+
+    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=filename)

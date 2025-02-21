@@ -3,11 +3,13 @@ from django.urls import re_path as url
 
 from warehouse.views import index, packing_material_stock_in, packing_material_stock_out, stockin_detail, \
     get_product_order_info, \
-    packing_material_stock_in_post, packing_material_stock_out_post, dashboard, get_purchase_no_info, product_order_search, \
+    packing_material_stock_in_post, packing_material_stock_out_post, dashboard, get_purchase_no_info, \
+    product_order_search, \
     transfer_and_adjust, bin_transfer, \
-    bin_transfer_page, get_product_order_stout, product_order_bin_search, product_order_hist_data, get_purchase_no_stout, \
+    bin_transfer_page, get_product_order_stout, product_order_bin_search, product_order_hist_data, \
+    get_purchase_no_stout, \
     bin_adjust_page, bin_adjust, upload_excel, open_data_import, inventory_sheet, warehouse_map, get_all_areas, \
-    check_bin_exists
+    check_bin_exists, download_excel_template
 from . import views
 
 
@@ -63,6 +65,7 @@ urlpatterns = [
     url(r'^bin_adjust_page/$', bin_adjust_page, name='bin_adjust_page'),
     url(r'^bin/adjust/$', bin_adjust, name='bin_adjust'),
     url(r'^map/(?P<pk>\w+)/$', warehouse_map, name='warehouse_map'),
+    url(r'^download-template/(?P<filename>[\w\-.]+)/$', download_excel_template, name='download_excel_template'),
     url(r'^$', views.index, name='warehouse_index'),
 ]
 

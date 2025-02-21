@@ -1,4 +1,3 @@
-{% load i18n %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -21,13 +20,7 @@
         }
 
         html, body {
-            {#margin: 0;#}
-            {#padding: 0;#}
-            {#width: 100%;#}
-            {#height: 100%;#}
             position: absolute;
-            {#top: 0;#}
-            {#left: 0;#}
         }
 
     </style>
@@ -43,13 +36,7 @@
                 height: 1000px;
             " class="col-5">
 
-                <div class="warehouse_map">
-{#                    <h2>這是子頁面</h2>#}
-{#                    <p>bin_id: <span id="binIdDisplay"></span></p>#}
-{##}
-{#                    <button onclick="sendValue('按鈕A')">按鈕 A</button>#}
-{#                    <button onclick="sendValue('按鈕B')">按鈕 B</button>#}
-                </div>
+                <div class="warehouse_map"></div>
             </div>
 
         </div>
@@ -94,7 +81,7 @@
 
                 // Thiết lập phong cách nổi bật cho tên của các zone
                 rect.style.color = "#FFFF00";  // Màu chữ vàng nổi bật
-                rect.style.fontSize = "18px";  // Kích thước chữ lớn, dễ đọc
+                rect.style.fontSize = "15px";  // Kích thước chữ lớn, dễ đọc
                 rect.style.fontWeight = "bold";  // Làm đậm chữ để nổi bật
                 rect.style.fontFamily = "'Arial', sans-serif";  // Sử dụng font Arial
                 rect.style.textShadow = "2px 2px 8px rgba(0, 0, 0, 0.7)";  // Tạo bóng chữ để nổi bật hơn trên nền tối
@@ -153,7 +140,7 @@
                             binDiv.style.position = "absolute";
                             binDiv.style.top = topOffset + "px";
                             binDiv.style.left = `${leftOffset}%`;
-                            binDiv.style.width = "100px";
+                            binDiv.style.width = "90px";
                             binDiv.style.height = "50px";
                             binDiv.style.cursor = "pointer";
 
@@ -178,7 +165,7 @@
                             if (topOffset > maxHeight) {
                                 topOffset = 50; // Reset vị trí hàng đầu tiên
                                 colIndex++;
-                                leftOffset = 108 + colIndex * 11; // Dời cột sang phải
+                                leftOffset = 108 + colIndex * 10; // Dời cột sang phải
                             }
 
                             addClickEventToBins();
