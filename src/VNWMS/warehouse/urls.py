@@ -3,10 +3,10 @@ from django.urls import re_path as url
 
 from warehouse.views import index, packing_material_stock_in, packing_material_stock_out, stockin_detail, \
     get_product_order_info, \
-    packing_material_stock_in_post, packing_material_stock_out_post, dashboard, get_purchase_no_info, work_order_search, \
-    work_order_page, bin_transfer, \
-    bin_transfer_page, get_product_order_stout, work_order_bin_search, work_order_hist_data, get_purchase_no_stout, \
-    bin_adjust_page, bin_adjust, upload_excel, open_data_import, search_bin_value, warehouse_map, get_all_areas, \
+    packing_material_stock_in_post, packing_material_stock_out_post, dashboard, get_purchase_no_info, product_order_search, \
+    transfer_and_adjust, bin_transfer, \
+    bin_transfer_page, get_product_order_stout, product_order_bin_search, product_order_hist_data, get_purchase_no_stout, \
+    bin_adjust_page, bin_adjust, upload_excel, open_data_import, inventory_sheet, warehouse_map, get_all_areas, \
     check_bin_exists
 from . import views
 
@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^get-bins/$', views.get_bins, name='get_bins'),
     url(r'^get-bin-data/$', views.get_bin_data, name='get_bin_data'),
     url(r'^check-bin-exists/$', check_bin_exists, name='check_bin_exists'),
-    url(r'^search-bin-value/$', search_bin_value, name="search_bin_value"),
+    url(r'^inventory_sheet/$', inventory_sheet, name="inventory_sheet"),
     url(r'^$', views.warehouse_list, name='warehouse_list'),
 
     url(r'^packing_material_stock_in/', packing_material_stock_in, name='packing_material_stock_in'),
@@ -54,10 +54,10 @@ urlpatterns = [
     url(r'^dashboard/', dashboard, name='warehouse_dashboard'),
     url(r'^upload/$', upload_excel, name="upload_excel"),
 
-    url(r'^work_order_search/$', work_order_search, name='work_order_search'),
-    url(r'^work_order_hist_data/$', work_order_hist_data, name='work_order_hist_data'),
-    url(r'^work_order_bin_search/$', work_order_bin_search, name='work_order_bin_search'),
-    url(r'^work_order_page/$', work_order_page, name='work_order_page'),
+    url(r'^product_order_search/$', product_order_search, name='product_order_search'),
+    url(r'^product_order_hist_data/$', product_order_hist_data, name='product_order_hist_data'),
+    url(r'^product_order_bin_search/$', product_order_bin_search, name='product_order_bin_search'),
+    url(r'^transfer_and_adjust/$', transfer_and_adjust, name='transfer_and_adjust'),
     url(r'^bin_transfer_page/$', bin_transfer_page, name='bin_transfer_page'),
     url(r'^bin/transfer/$', bin_transfer, name='bin_transfer'),
     url(r'^bin_adjust_page/$', bin_adjust_page, name='bin_adjust_page'),

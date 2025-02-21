@@ -821,7 +821,7 @@ def packing_material_stock_out_post(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 
-def work_order_search(request):
+def product_order_search(request):
     product_order = request.GET.get('product_order')
 
     if not product_order:
@@ -850,8 +850,8 @@ def work_order_search(request):
     return JsonResponse(data, safe=False)
 
 
-def work_order_page(request):
-    return render(request, 'warehouse/work_order_search.html')
+def transfer_and_adjust(request):
+    return render(request, 'warehouse/transfer_and_adjust.html')
 
 
 # no use this
@@ -1039,7 +1039,7 @@ def bin_adjust_page(request):
     return render(request, 'warehouse/bin/bin_adjust.html', locals())
 
 
-def work_order_hist_data(request):
+def product_order_hist_data(request):
     product_order = request.GET.get('product_order')
     bin_id = request.GET.get('bin_id')
 
@@ -1090,12 +1090,8 @@ def work_order_hist_data(request):
     return JsonResponse(data, safe=False)
 
 
-def work_order_bin_search(request):
-    return render(request, 'warehouse/work_order_bin_search.html')
-
-
-def work_order_bin(request):
-    return render(request, 'warehouse/work_order_search.html')
+def product_order_bin_search(request):
+    return render(request, 'warehouse/product_order_bin_search.html')
 
 
 def upload_excel(request):
@@ -1342,10 +1338,10 @@ def open_data_import(request):
     return render(request, "warehouse/bin/open_data_import.html", {"form": form})
 
 
-def search_bin_value(request):
+def inventory_sheet(request):
     form = BinValueSearchForm(request.GET)
     results = []
-    warehouses = Warehouse.objects.all()
+    warehouses = Warehouse.objects.filter(wh_plant=request.user.plant)
 
     if form.is_valid():
         bin_id = form.cleaned_data.get('bin')
@@ -1370,13 +1366,13 @@ def get_all_areas(request):
 
 def get_bins(request):
     area_id = request.GET.get('area')
-    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name', 'pos_x', 'pos_y', 'bin_w', 'bin_l')
+    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name')
     return JsonResponse(list(bins), safe=False)
 
 
 def check_bin_exists(request):
     area_id = request.GET.get('area')
-    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name', 'pos_x', 'pos_y', 'bin_w', 'bin_l')
+    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name')
 
     bin_data = []
 
@@ -1388,10 +1384,6 @@ def check_bin_exists(request):
         bin_data.append({
             "bin_id": bin["bin_id"],
             "bin_name": bin["bin_name"],
-            "pos_x": bin["pos_x"],
-            "pos_y": bin["pos_y"],
-            "bin_w": bin["bin_w"],
-            "bin_l": bin["bin_l"],
             "status": status
         })
 
@@ -1399,9 +1391,23 @@ def check_bin_exists(request):
 
 
 def get_bin_data(request):
-    bin_id = request.GET.get("bin")  # Lấy bin_id từ request
-    if bin_id:
-        products = Bin_Value.objects.filter(bin_id=bin_id).select_related(
+    warehouse_id = request.GET.get("warehouse")
+    area_id = request.GET.get("area")
+    bin_id = request.GET.get("bin")
+
+    stocks = Bin_Value.objects.all()
+
+    if warehouse_id or area_id or bin_id:
+        if warehouse_id:
+            stocks = stocks.filter(Q(bin__area__warehouse_id=warehouse_id))
+
+        if area_id:
+            stocks = stocks.filter(Q(bin__area__area_id=area_id))
+
+        if bin_id:
+            stocks = stocks.filter(Q(bin_id=bin_id))
+
+        products = stocks.select_related(
             "bin__area__warehouse"
         ).values(
             "bin__area__warehouse__wh_name",
@@ -1409,6 +1415,7 @@ def get_bin_data(request):
             "product_order", "purchase_no", "version_no", "version_seq", "size", "bin_id", "qty", "purchase_unit"
         )
         return JsonResponse(list(products), safe=False)
+
     return JsonResponse([], safe=False)
 
 # -- END DATA --

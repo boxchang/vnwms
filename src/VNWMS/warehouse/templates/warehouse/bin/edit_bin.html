@@ -16,44 +16,19 @@
 {#                    {{ form.bin_id|attr:"readonly:readonly" }}#}
                     {{ form.bin_id }}
                 <div class="text-danger">{{ form.bin_id.errors }}</div>
-            </div>
+                </div>
 
-            <div class="mb-3">
-                <label for="bin_name" class="form-label">{% trans "Bin Name" %}</label>
-                {{ form.bin_name }}
-                <div class="text-danger">{{ form.bin_name.errors }}</div>
-            </div>
+                <div class="mb-3">
+                    <label for="bin_name" class="form-label">{% trans "Bin Name" %}</label>
+                    {{ form.bin_name }}
+                    <div class="text-danger">{{ form.bin_name.errors }}</div>
+                </div>
 
-            <div class="mb-3">
-                <label for="area_id" class="form-label">{% trans "Area Id" %}</label>
-                {{ form.area }}
-                <div class="text-danger">{{ form.area.errors }}</div>
-            </div>
-
-            <div class="mb-3">
-                <label for="pos_x" class="form-label">{% trans "Position X" %}</label>
-                {{ form.pos_x }}
-                <div class="text-danger">{{ form.pos_x.errors }}</div>
-            </div>
-
-            <div class="mb-3">
-                <label for="pos_y" class="form-label">{% trans "Position Y" %}</label>
-                {{ form.pos_y }}
-                <div class="text-danger">{{ form.pos_y.errors }}</div>
-            </div>
-
-            <div class="mb-3">
-                <label for="pos_y" class="form-label">{% trans "Bin Width" %}</label>
-                {{ form.bin_w }}
-                <div class="text-danger">{{ form.bin_w.errors }}</div>
-            </div>
-
-            <div class="mb-3">
-                <label for="pos_y" class="form-label">{% trans "Bin Length" %}</label>
-                {{ form.bin_l }}
-                <div class="text-danger">{{ form.bin_l.errors }}</div>
-            </div>
-
+                <div class="mb-3">
+                    <label for="area_id" class="form-label">{% trans "Area Id" %}</label>
+                    {{ form.area }}
+                    <div class="text-danger">{{ form.area.errors }}</div>
+                </div>
                 <button type="submit" class="btn btn-success">{% trans "Save Changes" %}</button>
                 <a href="{% url 'bin_by_area' area_code %}" class="btn btn-secondary mt-3">{% trans "Back to List" %}</a>
             </div>

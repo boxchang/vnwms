@@ -92,10 +92,6 @@ class Bin(models.Model):
     bin_id = models.CharField(max_length=20, unique=True, primary_key=True)
     bin_name = models.CharField(max_length=100)
     area = models.ForeignKey(Area, related_name='bin_area', on_delete=models.CASCADE)  # Liên kết với bảng Area
-    pos_x = models.IntegerField(blank=True, null=True)  # Toạ độ X, có thể null
-    pos_y = models.IntegerField(blank=True, null=True)  # Toạ độ Y, có thể null
-    bin_w = models.IntegerField(blank=True, null=True)  # Bin Width
-    bin_l = models.IntegerField(blank=True, null=True)  # Bin Length
     create_at = models.DateTimeField(default=timezone.now)
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
                                   related_name='bin_create_by')

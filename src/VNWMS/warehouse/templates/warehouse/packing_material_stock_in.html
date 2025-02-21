@@ -94,6 +94,7 @@
             }
 
             obj.val(event.data);
+            obj.focus();
         }, false);
 
     }
@@ -148,6 +149,11 @@
             const customer_no =$("#id_customer_no").val();
             const version_seq = $("#id_version_seq").val();
 
+            if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "") {
+                alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %} are required")
+                return false;
+            }
+
             const newItem = {
                 order_qty: order_qty,
                 order_bin: order_bin,
@@ -181,7 +187,6 @@
                 scrollTop: $(document).height()
             }, 1000);
 
-            alert("{% trans "New item added successfully!" %}");
         }
 
 
@@ -193,7 +198,7 @@
         get_order_info = function() {
 
             var product_order = $("#id_product_order").val();
-            {#alert(product_order);#}
+
             $.ajax({
                 url: '{% url 'get_product_order_info' %}', type: 'post',
                 dataType: 'json',
@@ -222,7 +227,7 @@
         get_no_info = function() {
 
             var purchase_no = $("#id_purchase_no").val();
-            {#alert(purchase_no);#}
+
             $.ajax({
                 url: '{% url 'get_purchase_no_info' %}', type: 'post',
                 dataType: 'json',
@@ -317,13 +322,13 @@
                     }
                 },
                 { name: "id", type: "number", width: 50, title: "ID", align: "center", readOnly: true, visible: false },
-                { name: "order_qty", type: "text", width: 125, title: "{% trans "Order Qty" %}", align: "center" },
+                { name: "order_qty", type: "text", width: 125, title: "{% trans "Qty" %}", align: "center" },
                 {
                     name: "order_bin",
                     type: "text",
                     width: 170,
                     align: "center",
-                    title: "{% trans "Order Bin" %}",
+                    title: "{% trans "Location" %}",
                     itemTemplate: function (value) {
                         return value; // Hiển thị nội dung
                     },
@@ -356,58 +361,12 @@
 
                         // pass this data to jsgrid
                         this._input = $input;
-                        {#this._input = $button;#}
-
 
                         $button.on("click", function () {
-
-                            //$("#zonePopup").fadeIn(); // Hiển thị pop-up
-
-                            //$("#zonePopup").data("updateInput", (newValue) => {
-                            //    $input.val(newValue); // 更新輸入框的值
-                            //});
                             obj = $input;
                             openMapPage('PKG', obj);
 
                         });
-
-
-                        // Đóng popup khi click bên ngoài nội dung
-                        //$(document).on('click', function(event) {
-                        //    if (
-                        //        !$(event.target).closest('#popupContent').length &&
-                        //        !$(event.target).closest('#id_order_bin').length
-                        //    ) {
-                                // Kiểm tra nếu không click vào #popupContent và #id_order_bin
-                        //        if (!isInputClicked) {
-                        //            $('#zonePopup').fadeOut(); // Đóng popup
-                        //        }
-
-                        //        if ($(event.target).closest('#popupOverlay').length) {
-                        //            isInputClicked = false; // Đặt giá trị false nếu nhấp vào popupOverlay
-                        //            $('#zonePopup').fadeOut();
-                        //            console.log('Clicked on popupOverlay. isInputClicked =', isInputClicked);
-                        //        }
-                        //    }
-                        //});
-
-
-                            {#// Remember position of current page#}
-                            {#var scrollPosition = $(window).scrollTop();#}
-                            {##}
-                            {#//Restore position of current page#}
-                            {#$(window).scrollTop(scrollPosition);#}
-
-                        // Hiển thị pop-up khi click vào $button
-                        //$button.on("click", function (event) {
-                        //    event.preventDefault();
-
-                        //    isInputClicked = true;
-                        //    $("#zonePopup").fadeIn();
-
-                        //    console.log(isInputClicked)
-
-                        //});
 
                         return $container;
                     },
@@ -523,8 +482,6 @@
 
     });
 
-
-
 </script>
 {% endblock %}
 
@@ -533,7 +490,7 @@
     <div class="col-1"></div>
     <div class="col-10">
         <div class="row">
-            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Receiving Form" %}</div>
+            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Stock In Form" %}</div>
         </div>
     <form id="myForm">
         {% crispy form %}
@@ -546,66 +503,6 @@
             <br><br>
             <button id="closePicker">{% trans "Close" %}</button>
         </div>
-
-
-{#<!-- Đưa col-2 vào trong popupContent -->#}
-{#                <div class="col-2" id="dropdownContainer">#}
-{#                    <select id="warehouseDropdown" class="form-control">#}
-{#                        {% for wh in warehouses %}#}
-{#                            <button class="btn btn-warning wh-button" data-wh-code="{{ wh.wh_code }}" style="width: 200px">#}
-{#                                {{ wh.wh_code }}#}
-{#                            </button>#}
-{#                            <option value="{{ wh.id }}">{{ wh.wh_name }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </div>#}
-          <!-- Popup -->
-
-{#          <div id="zonePopup" style="display: none;">#}
-{#            <div id="popupOverlay">#}
-{#            <div class="row">#}
-{##}
-{##}
-{##}
-{#                <div id="popupContent" class="col-8">#}
-{#                    <img src="/media/warehouse_images/warehouse_2.jpg" id="zoneImage" alt="Zone Map" usemap="#zoneMap">#}
-{##}
-{#                    <div id="binData">#}
-{#                        <map name="zoneMap">#}
-{#                            <area shape="rect" coords="50,50,150,150" href="#" data-zone="Zone 1">#}
-{#                            <area shape="rect" coords="200,50,300,150" href="#" data-zone="Zone 2">#}
-{#                        </map>#}
-{##}
-{#                        {% for bin in bins %}#}
-{#                        <div class="zone"#}
-{#                            data-value="{{ bin.bin_id }}"#}
-{#                            style="#}
-{#                                top: {{ bin.pos_y }}px;#}
-{#                                left: {{ bin.pos_x }}px;#}
-{#                                width: {{ bin.bin_w }}px;#}
-{#                                height: {{ bin.bin_l }}px;#}
-{#                                {% if bin.has_stock %}#}
-{#                                    border: 2px solid rgba(255, 0, 0, 0.7);#}
-{#                                    background-color: rgba(255, 0, 0, 0.3);#}
-{#                                {% else %}#}
-{#                                    border: 2px solid rgba(0, 255, 0, 0.7);#}
-{#                                    background-color: rgba(0, 255, 0, 0.3);#}
-{#                                {% endif %}#}
-{#                            ">#}
-{#                            {{ bin.bin_id }}#}
-{#                        </div>#}
-{#                    {% endfor %}#}
-{##}
-{#                    </div>#}
-{##}
-{##}
-{#                </div>#}
-{##}
-{##}
-{#            </div>#}
-{##}
-{#          </div>#}
-{#        </div>#}
 
         <hr />
         <div style="text-align: center" class="p-3">

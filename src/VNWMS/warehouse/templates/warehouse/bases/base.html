@@ -31,7 +31,7 @@
                         <li><a class="dropdown-item" href="{% url 'packing_material_stock_in' %}">{% trans "Packing Material Stock In" %}</a></li>
                         <li><a class="dropdown-item" href="{% url 'packing_material_stock_out' %}">{% trans "Packing Material Stock Out" %}</a></li>
                         <hr />
-                        <li><a class="dropdown-item" href="{% url 'work_order_page' %}">{% trans "Quantity Transfer & Adjust Form" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'transfer_and_adjust' %}">{% trans "Quantity Transfer & Adjust Form" %}</a></li>
                     </ul>
                 </div>
                 <div class="btn-group">
@@ -40,8 +40,8 @@
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'bin_search' %}">{% trans "Inventory Search" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'work_order_bin_search' %}">{% trans "Transaction History" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'search_bin_value' %}">{% trans "Inventory Sheet" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'product_order_bin_search' %}">{% trans "Transaction History" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'inventory_sheet' %}">{% trans "Inventory Sheet" %}</a></li>
                     </ul>
                 </div>
                 <div class="btn-group">

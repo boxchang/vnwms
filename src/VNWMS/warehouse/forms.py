@@ -106,7 +106,7 @@ class AreaForm(forms.ModelForm):
 class BinForm(forms.ModelForm):
     class Meta:
         model = Bin  # Chỉ định model mà form này sẽ sử dụng
-        fields = ['bin_id', 'bin_name', 'area', 'pos_x', 'pos_y', 'bin_w', 'bin_l']
+        fields = ['bin_id', 'bin_name', 'area']
 
     bin_id = forms.CharField(max_length=20, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     bin_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -115,10 +115,6 @@ class BinForm(forms.ModelForm):
         required=True,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    pos_x = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    pos_y = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    bin_w = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    bin_l = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
 
     def save(self, commit=True):
         # Lấy instance của Bin từ dữ liệu form
@@ -280,7 +276,7 @@ class StockInPForm(forms.Form):
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
     order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
-    order_bin = forms.ModelChoiceField(queryset=Bin.objects.all(), label=_("Location"))
+    order_bin = forms.CharField(max_length=20, label=_("Location"), required=False)
     gift_qty = forms.CharField(max_length=20, label="Complimentary Quantity", required=False, initial=0)
     gift_bin = forms.CharField(max_length=20, label=_("Complimentary Location"), required=False, )
     supplier = forms.CharField(max_length=10, label=_("Supplier"), required=False)  # NAME1

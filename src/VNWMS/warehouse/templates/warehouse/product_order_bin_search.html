@@ -45,11 +45,11 @@
 
 
         $("#searchBtn").on("click", function() {
-            const workOrder = $("#workOrder").val();
+            const productOrder = $("#productOrder").val();
             const bin = $("#bin").val();
 
             $.ajax({
-                url: '{% url "work_order_hist_data" %}?product_order=' + workOrder + '&bin_id=' + bin,
+                url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin,
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -71,8 +71,8 @@
         <div style="padding-left: 5rem; padding-top: 1rem">
             <div class="row">
                 <div class="col-md-5">
-                    <label for="workOrder" class="mr-2">{% trans "Product Order" %}:</label>
-                    <input type="text" id="workOrder" class="form-control" placeholder="{% trans "Enter Product Order" %}">
+                    <label for="productOrder" class="mr-2">{% trans "Product Order" %}:</label>
+                    <input type="text" id="productOrder" class="form-control" placeholder="{% trans "Enter Product Order" %}">
                 </div>
                 <div class="col-md-5">
                     <label for="Bin" class="mr-2">{% trans "Location" %}:</label>

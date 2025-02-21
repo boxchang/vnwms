@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
-{% block title %} {% trans "Search Product Order" %} {% endblock %}
+{% block title %} {% trans "Quantity Transfer & Adjust Form" %} {% endblock %}
 {% block css %}
     <style>
 
@@ -10,7 +10,7 @@
             font-size: 16px;
         }
 
-        #workOrder {
+        #productOrder {
             font-size: 16px;
             width: 300px;
             height: 40px;
@@ -24,17 +24,17 @@
     $(document).ready(function() {
 
         const searchParams = new URLSearchParams(window.location.search);
-        const workOrder = searchParams.get("product_order");
+        const productOrder = searchParams.get("product_order");
 
-        if (workOrder) {
+        if (productOrder) {
             // Tự động điền vào thanh tìm kiếm
-            $("#workOrder").val(workOrder);
+            $("#productOrder").val(productOrder);
 
             $.ajax({
-            url: `{% url 'work_order_search' %}`,
+            url: `{% url 'product_order_search' %}`,
             method: 'GET',
             data: {
-                search: workOrder,
+                search: productOrder,
                 product_order: searchParams.get('product_order'),
             },
             success: function(response) {
@@ -80,7 +80,7 @@
                                     size: item.size,
                                     bin: item.bin,
                                     qty: item.qty,
-                                    search: $("#workOrder").val()
+                                    search: $("#productOrder").val()
                                 });
 
                                 window.open("/warehouse/bin_transfer_page?" + queryParams, "");
@@ -103,7 +103,7 @@
                                     size: item.size,
                                     bin: item.bin,
                                     qty: item.qty,
-                                    search: $("#workOrder").val()
+                                    search: $("#productOrder").val()
                                 });
 
                                 window.open("/warehouse/bin_adjust_page?" + queryParams, "");
@@ -115,10 +115,10 @@
 
 
         $("#searchBtn").on("click", function() {
-            const workOrder = $("#workOrder").val();
+            const productOrder = $("#productOrder").val();
 
             $.ajax({
-                url: '{% url "work_order_search" %}?product_order=' + encodeURIComponent(workOrder),
+                url: '{% url "product_order_search" %}?product_order=' + encodeURIComponent(productOrder),
                 method: 'GET',
                 dataType: 'json',
                 success: function(response) {
@@ -136,9 +136,9 @@
 {% endblock %}
 {% block content %}
     <div style="padding-left: 7rem; padding-right: 7rem;">
-        <h3 style="font-size: 1.5em;text-align: center;" class="mt-4">{% trans "Search By Work Order" %}</h3>
+        <h3 style="font-size: 1.5em;text-align: center;" class="mt-4">{% trans "Quantity Transfer & Adjust Form" %}</h3>
         <div class="mt-5">
-            <input type="text" id="workOrder" placeholder="{% trans "Work Order Id" %}">
+            <input type="text" id="productOrder" placeholder="{% trans "Product Order" %}">
             <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i> {% trans "Search" %}</button>
         </div>
         <div class="mt-2" id="jsGrid"></div>

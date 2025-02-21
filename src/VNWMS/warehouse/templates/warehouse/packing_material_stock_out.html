@@ -205,8 +205,8 @@
                     }
                 },
                 { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", align: "center", readOnly: true, visible: false },
-                { name: "order_qty", type: "text", width: 120, title: "{% trans "Order Qty" %}", align: "center" },
-                { name: "order_bin", type: "text", width: 120, title: "{% trans "Order Bin" %}", align: "center", editing: false },
+                { name: "order_qty", type: "text", width: 120, title: "{% trans "Qty" %}", align: "center" },
+                { name: "order_bin", type: "text", width: 120, title: "{% trans "Location" %}", align: "center", editing: false },
                 { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", align: "center", editing: true },
                 { name: "product_order", type: "text", width: 150, title: "{% trans "Product Order" %}", validate: "required", editing: false, align: "center" },
                 { name: "purchase_no", type: "text", width: 170, title: "{% trans "Purchase No" %}", editing: false, align: "center" },
@@ -309,7 +309,7 @@
     <div class="col-1"></div>
     <div class="col-10">
         <div class="row">
-            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Outgoing Form" %}</div>
+            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Stock Out Form" %}</div>
         </div>
     <form id="myForm">
         {% crispy form %}
@@ -324,33 +324,6 @@
                 <br><br>
                 <button id="closePicker">{% trans "Close" %}</button>
             </div>
-
-          <!-- Popup -->
-{#          <div id="zonePopup" style="display: none;">#}
-{#            <div id="popupOverlay"></div>#}
-{#            <div id="popupContent">#}
-{#              <img src="/media/warehouse_images/warehouse_2.jpg" id="zoneImage" alt="Zone Map" usemap="#zoneMap">#}
-{#              <map name="zoneMap">#}
-{#                <area shape="rect" coords="50,50,150,150" href="#" data-zone="Zone 1">#}
-{#                <area shape="rect" coords="200,50,300,150" href="#" data-zone="Zone 2">#}
-{#                <!-- Thêm nhiều vùng khác -->#}
-{#              </map>#}
-{#            {% for bin in bins %}#}
-{##}
-{#            <div class="zone" data-value="{{ bin.bin_id }}" style="top: {{ bin.pos_y }}px; left: {{ bin.pos_x }}px; width: {{ bin.bin_w }}px; height: {{ bin.bin_l }}px;#}
-{#                    {% if bin.has_stock %}#}
-{#                        border: 2px solid rgba(255, 0, 0, 0.7);#}
-{#                        background-color: rgba(255, 0, 0, 0.3);#}
-{#                    {% else %};#}
-{#                        border: 2px solid rgba(0, 255, 0, 0.7);#}
-{#                        background-color: rgba(0, 255, 0, 0.3);#}
-{#                    {% endif %}">{{ bin.bin_id }}</div>#}
-{##}
-{#            {% endfor %}#}
-{#                <br>#}
-{#              <button id="closePopup">Đóng</button>#}
-{#            </div>#}
-{#          </div>#}
         <hr />
         <div style="text-align: center" class="p-3">
             <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>

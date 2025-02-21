@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
-{% block title %} {% trans "Bin Import" %} {% endblock %}
+{% block title %} {% trans "Open Data Importing" %} {% endblock %}
 {% block js %}
 
 <style>
@@ -40,7 +40,7 @@
         </div>
 
 
-        <h2 class="col p-3" style="font-size: 1.5em;text-align: center;">Upload Bin Value File Excel</h2>
+        <h2 class="col p-3" style="font-size: 1.5em;text-align: center;">Upload Open Data Excel File</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row d-flex justify-content-center">
