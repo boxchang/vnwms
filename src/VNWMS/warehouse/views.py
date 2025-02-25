@@ -469,6 +469,7 @@ def warehouse_map(request, pk):
 
     return render(request, 'warehouse/warehouse_map.html', locals())
 
+
 # 入庫作業
 @transaction.atomic
 @login_required

@@ -47,7 +47,13 @@
                             </a>
                         </li>
                         <hr />
-                        <li><a class="dropdown-item" href="{% url 'transfer_and_adjust' %}">{% trans "Quantity Transfer & Adjust Form" %}</a></li>
+                        {% if user.is_superuser %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'transfer_and_adjust' %}">
+                                <i class="fas fa-people-carry"></i> {% trans "Quantity Transfer & Adjust Form" %}
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
                 <div class="btn-group">
@@ -72,6 +78,7 @@
                         </li>
                     </ul>
                 </div>
+                {% if user.is_superuser %}
                 <div class="btn-group">
                     <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% trans "Basic Data" %}
@@ -94,6 +101,7 @@
                         </li>
                     </ul>
                 </div>
+            {% endif %}
             </div>
         </div>
     </div>

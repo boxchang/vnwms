@@ -1,5 +1,5 @@
 from datetime import timedelta, date, datetime
-
+from crispy_forms.bootstrap import AppendedText
 from django import forms
 import PIL
 from PIL import Image
@@ -269,7 +269,6 @@ class StockInPForm(forms.Form):
     version_seq = forms.CharField(max_length=20, label=_("Version Sequence"), required=True, )  # ZZVERSION_SEQ
     lot_no = forms.CharField(max_length=20, label=_("Lot Number"), required=False, )  # LOTNO
     item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Receive Type"), required=False)
-    packing_type = forms.ModelChoiceField(queryset=PackMethod.objects.all(), label=_("Packing Type"), required=False)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
     purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, )  # MENGE_PO 採購數量
     size = forms.CharField(max_length=20, label=_("Size"), required=True, )  # ZSIZE 尺寸
@@ -277,8 +276,6 @@ class StockInPForm(forms.Form):
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
     order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
     order_bin = forms.CharField(max_length=20, label=_("Location"), required=False)
-    gift_qty = forms.CharField(max_length=20, label="Complimentary Quantity", required=False, initial=0)
-    gift_bin = forms.CharField(max_length=20, label=_("Complimentary Location"), required=False, )
     supplier = forms.CharField(max_length=10, label=_("Supplier"), required=False)  # NAME1
     sap_mtr_no = forms.CharField(max_length=20, label=_("SAP Material Number"), required=False, )  # MBLNR
     desc = forms.CharField(max_length=2000, label=_("Comment"), required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}))
@@ -292,16 +289,29 @@ class StockInPForm(forms.Form):
 
         self.helper.layout = Layout(
             Div(
-                Div('purchase_no', css_class='col-md-3'),
+                # Div('purchase_no', css_class='col-md-3'),
+                Div(AppendedText(
+                    'purchase_no',
+                    '<button type="button" id="_purchase_no" class="btn btn-sm btn-outline-secondary p-0" '
+                    'style="height: 24px; width: 25px; display: flex; align-items: center; justify-content: center;">'
+                    '<i class="fas fa-search"></i>'
+                    '</button>'
+                ), css_class='col-md-3'),
                 Div('customer_no', css_class='col-md-3'),
                 Div('version_no', css_class='col-md-3'),
                 Div('version_seq', css_class='col-md-3'),
                 css_class='row'),
             Div(
-                Div('product_order', css_class='col-md-3'),
+                # Div('product_order', css_class='col-md-3'),
+                Div(AppendedText(
+                    'product_order',
+                    '<button type="button" id="_product_order" class="btn btn-sm btn-outline-secondary p-0" '
+                    'style="height: 24px; width: 25px; display: flex; align-items: center; justify-content: center;">'
+                    '<i class="fas fa-search"></i>'
+                    '</button>'
+                ), css_class='col-md-3'),
                 Div('sap_mtr_no', css_class='col-md-3'),
                 Div('item_type', css_class='col-md-3'),
-                Div('packing_type', css_class='col-md-3'),
                 css_class='row'),
             Div(
                 Div('post_date', css_class='col-md-3'),

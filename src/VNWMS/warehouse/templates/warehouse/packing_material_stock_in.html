@@ -74,6 +74,8 @@
 }
 
 
+
+
 .input-custom {
     --bs-gutter-x: 0;
 }
@@ -154,7 +156,6 @@
             purchaseUnit: "{% trans 'Purchase Unit' %}",
             itemType: "{% trans 'Item Type' %}",
             postDate: "{% trans 'Post Date' %}",
-            packingType: "{% trans 'Packing Type' %}",
             supplier: "{% trans 'Supplier' %}",
             customerNo: "{% trans 'Customer No' %}",
             sapMtrNo: "{% trans 'Mtr No' %}",
@@ -187,71 +188,8 @@
         });
 
 
-        $("#create").on("click", function() {
-            add_item();
-        });
 
-        function add_item() {
-            const order_qty =$("#id_order_qty").val();
-            const order_bin =$("#id_order_bin").val();
-            const desc =$("#id_desc").val();
-            const product_order =$("#id_product_order").val();
-            const version_no =$("#id_version_no").val();
-            const lot_no =$("#id_lot_no").val();
-            const item_type =$("#id_item_type").val();
-            const packing_type =$("#id_packing_type").val();
-            const purchase_no =$("#id_purchase_no").val();
-            const purchase_qty =$("#id_purchase_qty").val();
-            const size =$("#id_size").val();
-            const purchase_unit =$("#id_purchase_unit").val();
-            const post_date =$("#id_post_date").val();
-            const supplier =$("#id_supplier").val();
-            const sap_mtr_no =$("#id_sap_mtr_no").val();
-            const customer_no =$("#id_customer_no").val();
-            const version_seq = $("#id_version_seq").val();
-
-            if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "") {
-                alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %} {% trans "are required" %}");
-                return false;
-            }
-
-            const newItem = {
-                order_qty: order_qty,
-                order_bin: order_bin,
-                desc: desc,
-                customer_no: customer_no,
-                product_order: product_order,
-                version_no: version_no,
-                version_seq: version_seq,
-                lot_no: lot_no,
-                item_type: item_type,
-                packing_type: packing_type,
-                purchase_no: purchase_no,
-                purchase_qty: purchase_qty,
-                size: size,
-                purchase_unit: purchase_unit,
-                post_date: post_date,
-                supplier: supplier,
-                sap_mtr_no: sap_mtr_no
-            };
-
-            // Lấy dữ liệu hiện tại của jsGrid
-            var gridData = $("#jsGrid").jsGrid("option", "data");
-
-            // Thêm mục mới vào dữ liệu grid
-            gridData.push(newItem);
-
-            // Cập nhật lại dữ liệu cho jsGrid
-            $("#jsGrid").jsGrid("option", "data", gridData);
-            $("#jsGrid").jsGrid("refresh");
-            $('html, body').animate({
-                scrollTop: $(document).height()
-            }, 1000);
-
-        }
-
-
-        $("#id_product_order").on("change", function() {
+        $("#_product_order").on("click", function() {
             get_order_info();
         });
 
@@ -279,7 +217,8 @@
         };
 
 
-        $("#id_purchase_no").on("change", function() {
+        // already fix
+        $("#_purchase_no").on("click", function() {
 
             get_no_info();
         });
@@ -309,7 +248,69 @@
         };
 
 
-        data: [], // 初始為空，將透過 AJAX 加載資料
+        $("#create").on("click", function() {
+            add_item();
+        });
+
+        function add_item() {
+            const order_qty =$("#id_order_qty").val();
+            const order_bin =$("#id_order_bin").val();
+            const desc =$("#id_desc").val();
+            const product_order =$("#id_product_order").val();
+            const version_no =$("#id_version_no").val();
+            const lot_no =$("#id_lot_no").val();
+            const item_type =$("#id_item_type").val();
+            const purchase_no =$("#id_purchase_no").val();
+            const purchase_qty =$("#id_purchase_qty").val();
+            const size =$("#id_size").val();
+            const purchase_unit =$("#id_purchase_unit").val();
+            const post_date =$("#id_post_date").val();
+            const supplier =$("#id_supplier").val();
+            const sap_mtr_no =$("#id_sap_mtr_no").val();
+            const customer_no =$("#id_customer_no").val();
+            const version_seq = $("#id_version_seq").val();
+
+            if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "") {
+                alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %} {% trans "are required" %}");
+                return false;
+            }
+
+            const newItem = {
+                order_qty: order_qty,
+                order_bin: order_bin,
+                desc: desc,
+                customer_no: customer_no,
+                product_order: product_order,
+                version_no: version_no,
+                version_seq: version_seq,
+                lot_no: lot_no,
+                item_type: item_type,
+                purchase_no: purchase_no,
+                purchase_qty: purchase_qty,
+                size: size,
+                purchase_unit: purchase_unit,
+                post_date: post_date,
+                supplier: supplier,
+                sap_mtr_no: sap_mtr_no
+            };
+
+            // Lấy dữ liệu hiện tại của jsGrid
+            var gridData = $("#jsGrid").jsGrid("option", "data");
+
+            // Thêm mục mới vào dữ liệu grid
+            gridData.push(newItem);
+
+            // Cập nhật lại dữ liệu cho jsGrid
+            $("#jsGrid").jsGrid("option", "data", gridData);
+            $("#jsGrid").jsGrid("refresh");
+            $('html, body').animate({
+                scrollTop: $(document).height()
+            }, 1000);
+
+        }
+
+
+        data: []; // 初始為空，將透過 AJAX 加載資料
 
         // 初始化 jsGrid
         $("#jsGrid").jsGrid({
@@ -408,7 +409,7 @@
                                             "padding-right": "1px"
                                        });
 
-                        var $button = $("<button>")
+                        var $button = $("<button>", {type: "button"})
                                        .addClass("btn btn-primary")
                                        .css({
                                            width: "auto",
@@ -457,7 +458,6 @@
                 { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, align: "center", editing: false },
                 { name: "item_type", type: "text", width: 120, title: translations.itemType, align: "center", editing: false },
                 { name: "post_date", type: "text", width: 150, title: translations.postDate, align: "center", editing: false },
-                { name: "packing_type", type: "text", width: 150, title: translations.packingType, align: "center", editing: false },
                 { name: "supplier", type: "text", width: 120, title: translations.supplier, align: "center", editing: false },
                 { name: "customer_no", type: "text", width: 120, title: translations.customerNo, align: "center", editing: false },
                 { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, align: "center", editing: false }
