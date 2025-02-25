@@ -186,25 +186,25 @@ class BinSearchForm(forms.Form):
     bin = forms.CharField(
         required=False,
         label=_("Location:"),
-        widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'margin-left: 4vh'}))
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
     po_no = forms.CharField(
         required=False,
         label=_("Product Order:"),
-        widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'margin-left: 4vh'}))
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
     size = forms.CharField(
         required=False,
         label=_("Size"),
-        widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'margin-left: 4vh'})
+        widget=forms.TextInput(attrs={'class': 'form-control'})
     )
     from_date = forms.DateField(
         required=False,
         label=_("From"),
-        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'style': 'margin-left: 2vh'})
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
     )
     to_date = forms.DateField(
         required=False,
         label=_("To"),
-        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'style': 'margin-left: 5vh'})
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
     )
 
     def __init__(self, *args, bin_value=None, **kwargs):
@@ -218,11 +218,11 @@ class BinSearchForm(forms.Form):
 class BinTransferForm(forms.Form):
     bin = forms.ModelChoiceField(
         queryset=Bin.objects.all().order_by('bin_id'),
-        label="Location:",
+        label=_("Location:"),
         required=True,
     )
 
-    qty = forms.IntegerField(label="Quantity", required=True)
+    qty = forms.IntegerField(label=_("Quantity"), required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -234,7 +234,7 @@ class BinTransferForm(forms.Form):
             Div(
                 Div('bin', css_class='col-md-6'),
                 Div('qty', css_class='col-md-5'),
-                Submit('submit', 'Confirm', css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
+                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
                                                                                         'padding-right: 10px'),
                 css_class='row'
             ),
@@ -243,7 +243,7 @@ class BinTransferForm(forms.Form):
 
 class QuantityAdjustForm(forms.Form):
 
-    qty = forms.IntegerField(label="Quantity", required=True)
+    qty = forms.IntegerField(label=_("Quantity"), required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -255,7 +255,7 @@ class QuantityAdjustForm(forms.Form):
             Div(
                 HTML("<div class='col-md-5'></div>"),  # Sửa lỗi này
                 Div('qty', css_class='col-md-5'),
-                Submit('submit', 'Confirm', css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
+                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
                                                                                         'padding-right: 10px'),
                 css_class='row'
             ),
@@ -424,7 +424,7 @@ class StockOutPForm(forms.Form):
 
 class ExcelUploadForm(forms.Form):
     file = forms.FileField(
-        label="Choose file Excel",
+        label=_("Choose Excel File"),
         widget=forms.ClearableFileInput(attrs={"class": "form-control"})
     )
 
@@ -448,9 +448,9 @@ class BinValueSearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["warehouse"].choices = [("", "Choose Warehouse")] + list(Warehouse.objects.values_list("wh_code",
+        self.fields["warehouse"].choices = [("", _("Choose Warehouse"))] + list(Warehouse.objects.values_list("wh_code",
                                                                                                            "wh_name"))
-        self.fields["area"].choices = [("", "Choose Area")]
-        self.fields["bin"].choices = [("", "Choose Location")]
+        self.fields["area"].choices = [("", _("Choose Area"))]
+        self.fields["bin"].choices = [("", _("Choose Location"))]
 
 

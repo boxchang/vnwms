@@ -6,10 +6,12 @@
 {% block base_js %}
 {{ block.super }}
 <!-- Bootstrap CSS -->
+
 <style>
-    .wh{
-        outline: 4px solid #ccc;
+    .btn-danger, .btn-primary, .btn-success {
+        width: auto;
     }
+
     table {
         width: 100%;
         border-collapse: collapse;
@@ -24,15 +26,19 @@
         {#background-color: #fdf0cb;#}
         color: #ff2b3b; /* Màu chữ khi hover */
     }
+
 </style>
+
 {% endblock %}
 
 {% block content %}
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h2 class="mb-4">{% trans "Warehouse List" %}</h2>
-                <a class="btn btn-primary mb-3" style="width: 70px" href="{% url 'warehouse_create' %}" role="button">{% trans "Add" %}</a>
+                <h2 class="mb-4" style="font-size: 2em;text-align: center;">{% trans "Warehouse List" %}</h2>
+                <a class="btn btn-success mb-3" style="width: auto" href="{% url 'warehouse_create' %}" role="button">
+                    <i class="fas fa-plus"></i> {% trans "Add" %}
+                </a>
                 <!-- Kiểm tra nếu có dữ liệu -->
                 {% if warehouses %}
                 <table class="table table-bordered">
@@ -52,8 +58,10 @@
                             <td onclick="redirectToPage('{% url 'area_by_warehouse' wh_code=warehouse.wh_code %}')">{{ warehouse.wh_name }}</td>
                             <td>
                                 {% if warehouse.wh_code %}
-                                    <a class="btn btn-primary" style="width: 70px" href="{% url 'edit_warehouse' warehouse_code=warehouse.wh_code %}" role="button">{% trans "Edit" %}</a>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-warehouse-id="{{ warehouse.pk }}" data-warehouse-name="{{ warehouse.wh_name }}">{% trans "Delete" %}</button>
+                                    <a class="btn btn-primary" href="{% url 'edit_warehouse' warehouse_code=warehouse.wh_code %}" role="button">
+                                        <i class="fas fa-edit"></i> {% trans "Edit" %}</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-warehouse-id="{{ warehouse.pk }}" data-warehouse-name="{{ warehouse.wh_name }}">
+                                        <i class="fas fa-trash"></i> {% trans "Delete" %}</button>
                                 {% else %}
                                     <a class="btn btn-primary" style="width: 70px" href="#" role="button">{% trans "Edit" %}</a>
                                     <a class="btn btn-primary" style="width: 70px" href="#" role="button">{% trans "Delete" %}</a>
@@ -75,7 +83,9 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">{% trans "Confirm Delete" %}</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle" style="color: #FFC107; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);"></i> {% trans "Delete Item" %}
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -93,8 +103,9 @@
     </div>
 {% endblock %}
 
-{% block alert %}
+{% block javascript %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
         <script>
             // Dynamic data injection into modal
             const deleteModal = document.getElementById('deleteModal');

@@ -5,72 +5,9 @@
 {% block title %} {% trans "Stock Out" %} {% endblock %}
 {% block css %}
 <style>
-.item_list {
-    background: #ffffe7;
-    border-color: #f7e1b5;
-    border-width: 1px;
-    border-style: dashed solid;
-}
 
 .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
     display: none !important;
-}
-
-/* Hình ảnh trong popup */
-#zoneImage {
-  width: auto;
-  height: 100%;
-  position: relative;
-
-}
-
-.zone {
-    position: absolute; /* Cần để các zone có thể được định vị chính xác */
-
-}
-/* Overlay che toàn màn hình */
-#popupOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
-}
-
-/* Nội dung popup */
-#popupContent {
-  position: fixed;
-  top: 50%;
-  left: 53%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  padding: 20px;
-  z-index: 9999;
-  border-radius: 8px;
-  text-align: center;
-  width: auto; /* Điều chỉnh phần rộng tối đa của popup */
-  height: 100%; /* Điều chỉnh chiều cao tối đa của popup */
-  overflow: auto; /* Nếu cần cuộn, nếu hình ảnh quá lớn */
-}
-
-
-
-/* Nút đóng */
-#closePopup {
-  display: inline-block;
-  padding: 5px 10px;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.green{
-            border: 2px solid rgba(0, 255, 0, 0.7);  /* Màu xanh lá cây với độ trong suốt 70% */
-            background-color: rgba(0, 255, 0, 0.3);  /* Màu xanh lá cây với độ trong suốt 30% */
 }
 
 
@@ -80,11 +17,43 @@
 </style>
 
 {% endblock css %}
-{% block base_js %}
-{{ block.super }}
-<script>
+
+
+{% block content %}
+<div class="row p-3">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="row">
+            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Stock Out Form" %}</div>
+        </div>
+    <form id="myForm">
+        {% crispy form %}
+        <div id="jsGrid"></div>
+            <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+            <h3>{% trans "Choose Location" %}</h3>
+
+
+            {% for bin in bins %}
+                <button class="number-btn" data-value="{{ bin.bin_id }}" style="{% if bin.has_stock %}background-color: #d2e8b9{% else %}; background-color: #fff{% endif %}">{{ bin.bin_id }}</button>
+                {% endfor %}
+                <br><br>
+                <button id="closePicker">{% trans "Close" %}</button>
+            </div>
+        <hr />
+        <div style="text-align: center" class="p-3">
+            <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
+        </div>
+    </form>
+
+    <div class="col-1"></div>
+</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
     $(document).ready(function() {
-        let isInputClicked = false;
 
         $(document).on('keydown', function(e) {
             if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
@@ -179,6 +148,7 @@
             editing: true,    // 啟用編輯功能
             sorting: true,    // 啟用排序功能
             paging: true,     // 啟用分頁功能
+            {#confirmDeleting: false,#}
 
             rowClick: function (args) {
                 this.editItem(args.item);
@@ -217,15 +187,6 @@
             ]
         });
 
-        $(".jsgrid-grid-body").on("click", ".jsgrid-button", function(e) {
-            // Cách để kiểm soát hành động sao chép
-            if ($(this).text() === "Copy") {
-                // Ngừng sự kiện nếu không muốn thông báo khi Enter được nhấn
-                e.stopPropagation();
-                e.preventDefault();
-
-            }
-        });
 
 
         // Khi click vào một zone (div chứa bin_id)
@@ -240,17 +201,6 @@
             $("#zonePopup").fadeOut();
         });
 
-
-        // 關閉彈窗
-        $("#closePopup").on("click", function () {
-            $("#zonePopup").fadeOut();
-        });
-
-        // Reset data input
-        $("#button-id-bin_clear").on("click", function() {
-            // Reset form
-            $("#myForm")[0].reset();
-        });
 
         // 當按下過帳按鈕時
         $('#postDataButton').click(function(event) {
@@ -289,11 +239,11 @@
                     $("#jsGrid").jsGrid("refresh");
 
 
-                    alert("Success！");
+                    alert("{% trans "Form submitted successfully!" %}");
                     console.log(response);
                 },
                 error: function(xhr, status, error) {
-                    alert("Fail！");
+                    alert("{% trans "Form submission failed!" %}");
                     console.log(error);
                 }
             });
@@ -302,39 +252,5 @@
     });
 
 </script>
-{% endblock %}
-
-{% block content %}
-<div class="row p-3">
-    <div class="col-1"></div>
-    <div class="col-10">
-        <div class="row">
-            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Stock Out Form" %}</div>
-        </div>
-    <form id="myForm">
-        {% crispy form %}
-        <div id="jsGrid"></div>
-            <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-            <h3>{% trans "Choose Location" %}</h3>
-
-
-            {% for bin in bins %}
-                <button class="number-btn" data-value="{{ bin.bin_id }}" style="{% if bin.has_stock %}background-color: #d2e8b9{% else %}; background-color: #fff{% endif %}">{{ bin.bin_id }}</button>
-                {% endfor %}
-                <br><br>
-                <button id="closePicker">{% trans "Close" %}</button>
-            </div>
-        <hr />
-        <div style="text-align: center" class="p-3">
-            <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
-        </div>
-    </form>
-
-    <div class="col-1"></div>
-</div>
-</div>
-{% endblock %}
-
-{% block alert %}
 
 {% endblock %}

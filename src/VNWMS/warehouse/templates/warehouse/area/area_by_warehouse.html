@@ -12,13 +12,16 @@
         border-collapse: collapse;
     }
 
+    .btn-danger, .btn-primary, .btn-success {
+        width: auto;
+    }
+
     td {
         cursor: pointer; /* Thêm con trỏ chuột dạng pointer */
         transition: background-color 0.3s ease; /* Hiệu ứng nền khi hover */
     }
 
     td:hover {
-        {#background-color: #fdf0cb;#}
         color: #ff2b3b; /* Màu chữ khi hover */
     }
 </style>
@@ -29,10 +32,14 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-12">
-                <h2 class="mb-4">{% trans "Area List By Warehouse" %}</h2>
-                <div class="row d-flex justify-content-center">
-                    <a class="btn btn-primary mb-3" style="width: 80px" href="{% url 'area_create' wh_code %}" role="button">{% trans "Add" %}</a>
-                    <a class="btn btn-secondary mb-3 ms-5" style="width: auto" href="{% url 'warehouse_index' %}" role="button">{% trans "Back to List" %}</a>
+                <h2 class="mb-5" style="font-size: 2em;text-align: center;">{% trans "Area List By Warehouse" %}</h2>
+                <div style="width: 20%" class="d-flex justify-content-between mx-auto mb-4">
+                    <a class="btn btn-success" href="{% url 'area_create' wh_code %}" role="button">
+                        <i class="fas fa-plus"></i> {% trans "Add" %}
+                    </a>
+                    <a class="btn btn-secondary" style="height: 50%" href="{% url 'warehouse_index' %}" role="button">
+                        <i class="fas fa-arrow-left"></i> {% trans "Back to List" %}
+                    </a>
                 </div>
                 <!-- Kiểm tra nếu có dữ liệu -->
                 {% if areas %}
@@ -56,10 +63,12 @@
                             <td onclick="redirectToPage('{% url 'bin_by_area' area_code=area.area_id %}')">{{ area.warehouse }}</td>
                             <td>
                                 {% if area.area_id %}
-                                    <a class="btn btn-primary" style="width: 70px" href="{% url 'edit_area' area_code=area.area_id %}" role="button">{% trans "Edit" %}</a>
+                                    <a class="btn btn-primary" href="{% url 'edit_area' area_code=area.area_id %}" role="button">
+                                        <i class="fas fa-edit"></i> {% trans "Edit" %}
+                                    </a>
                                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                             data-area-id="{{ area.pk }}" data-area-name="{{ area.area_id }}">
-                                        {% trans "Delete" %}
+                                        <i class="fas fa-trash"></i> {% trans "Delete" %}
                                     </button>
 
                                 {% else %}
@@ -104,7 +113,7 @@
 {% endblock %}
 
 
-{% block alert %}
+{% block javascript %}
         <script>
         // Dynamic data injection into modal
         const deleteModal = document.getElementById('deleteModal');

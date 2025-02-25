@@ -279,10 +279,6 @@ def bin_search(request):
         query_from = form.cleaned_data.get('from_date')
         query_to = form.cleaned_data.get('to_date')
 
-    # message = ""
-    # records = None
-    # bin_values = None
-
         if query_bin or query_po_no or query_size:
             bin_hists = Bin_Value_History.objects.all()
             bin_values = Bin_Value.objects.all()
@@ -466,7 +462,9 @@ def dashboard(request):
 
 def warehouse_map(request, pk):
     warehouse = Warehouse.objects.get(wh_code__contains='PKG', wh_plant=request.user.plant)
-    bg = warehouse.wh_bg.url
+    # bg = warehouse.wh_bg.url
+
+    bg = warehouse.wh_bg.url if warehouse.wh_bg else None
     print(pk)
 
     return render(request, 'warehouse/warehouse_map.html', locals())
@@ -1421,8 +1419,8 @@ def get_bin_data(request):
 
 # -- END DATA --
 
-def download_excel_template(request, filename):
 
+def download_excel_template(request, filename):
     file_path = os.path.join(settings.BASE_DIR, 'static/excel', filename)
 
     if not os.path.exists(file_path):

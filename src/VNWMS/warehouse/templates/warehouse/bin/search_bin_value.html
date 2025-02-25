@@ -11,24 +11,26 @@
     <form method="GET" id="searchForm" class="mt-2">
         <div class="row g-2">
             <div class="col-2">
-                <label for="warehouse">Warehouse</label>
+                <label for="warehouse">{% trans "Warehouse" %}</label>
                 <select id="warehouse" name="warehouse" class="form-control">
-                    <option value="">Choose Warehouse</option>
+                    <option value="">{% trans "Choose Warehouse" %}</option>
                     {% for wh in warehouses %}
                     <option value="{{ wh.wh_code }}">{{ wh.wh_name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-2">
-                <label for="{{ form.area.id_for_label }}">Area</label>
+                <label for="{{ form.area.id_for_label }}">{% trans "Area" %}</label>
                 {{ form.area }}
             </div>
             <div class="col-2">
-                <label for="{{ form.bin.id_for_label }}">Location</label>
+                <label for="{{ form.bin.id_for_label }}">{% trans "Location" %}</label>
                 {{ form.bin }}
             </div>
             <div class="col-2 d-flex align-items-end">
-                <button type="button" class="btn btn-primary" id="Search"><i class="fas fa-search"></i> Search</button>
+                <button type="button" class="btn btn-primary" id="Search">
+                    <i class="fas fa-search"></i> {% trans "Search" %}
+                </button>
             </div>
             <div class="col-4 d-flex align-items-end justify-content-end">
                 <button id="exportExcel" type="button" class="btn btn-success"><i class="fas fa-download"></i></button>
@@ -40,139 +42,163 @@
     <div id="jsGrid" class="mt-4"></div>
 </div>
 
+{% endblock %}
+
+
+{% block javascript %}
 <script>
-$(document).ready(function () {
-    // Load động danh sách Area khi chọn Warehouse
-    $("#warehouse").change(function () {
-        var warehouseId = $(this).val();
-        $("#id_area").prop("disabled", true).html('<option value="">Choose Area</option>');
-        $("#id_bin").prop("disabled", true).html('<option value="">Choose Location</option>');
-        if (warehouseId) {
-            $.getJSON("{% url 'get_areas' %}", { warehouse: warehouseId }, function (data) {
-                $.each(data, function (index, obj) {
-                    $("#id_area").append('<option value="' + obj.area_id + '">' + obj.area_name + '</option>');
+
+    $(document).ready(function () {
+
+        var translations = {
+            notFound: "{% trans 'Not found' %}",
+            plant: "{% trans 'Plant' %}",
+            warehouse: "{% trans 'Warehouse' %}",
+            product_order: "{% trans 'Product Order' %}",
+            purchase_order: "{% trans 'Purchase Order' %}",
+            version_no: "{% trans 'Version No' %}",
+            version_seq: "{% trans 'Version Seq' %}",
+            size: "{% trans 'Size' %}",
+            location: "{% trans 'Location' %}",
+            qty: "{% trans 'Qty' %}",
+            unit: "{% trans 'Unit' %}"
+        };
+
+
+        // Load động danh sách Area khi chọn Warehouse
+        $("#warehouse").change(function () {
+            var warehouseId = $(this).val();
+            $("#id_area").prop("disabled", true).html('<option value="">{% trans "Choose Area" %}</option>');
+            $("#id_bin").prop("disabled", true).html('<option value="">{% trans "Choose Location" %}</option>');
+            if (warehouseId) {
+                $.getJSON("{% url 'get_areas' %}", { warehouse: warehouseId }, function (data) {
+                    $.each(data, function (index, obj) {
+                        $("#id_area").append('<option value="' + obj.area_id + '">' + obj.area_name + '</option>');
+                    });
+                    $("#id_area").prop("disabled", false);
                 });
-                $("#id_area").prop("disabled", false);
-            });
-        }
-    });
-
-    // Load động danh sách Bin khi chọn Area
-    $("#id_area").change(function () {
-        var areaId = $(this).val();
-        $("#id_bin").prop("disabled", true).html('<option value="">Choose Location</option>');
-        if (areaId) {
-            $.getJSON("{% url 'get_bins' %}", { area: areaId }, function (data) {
-                $.each(data, function (index, obj) {
-                    $("#id_bin").append('<option value="' + obj.bin_id + '">' + obj.bin_name + '</option>');
-                });
-                $("#id_bin").prop("disabled", false);
-            });
-        }
-    });
-
-
-    $("#Search").click(function () {
-        let warehouseId = $("#warehouse").val();
-        let areaId = $("#area").val();
-        let binId = $("#bin").val();
-
-        if (warehouseId || areaId || binId) {
-                $.getJSON("{% url 'get_bin_data' %}", { warehouse: warehouseId, area: areaId, bin: binId }, function (data) {
-                console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
-
-                $("#jsGrid").jsGrid("option", "data", data);
-            });
-        }
-    });
-
-
-
-    // Cấu hình jsGrid
-    $("#jsGrid").jsGrid({
-        width: "100%",
-        height: "600px",
-        sorting: true,
-        paging: true,
-        pageSize: 10,
-        pageButtonCount: 5,
-        data: [],
-        fields: [
-            { name: "bin__area__warehouse__wh_plant", title: "Plant", type: "text", width: 100 },
-            { name: "bin__area__warehouse__wh_name", title: "Warehouse", type: "text", width: 100 },
-            { name: "product_order", title: "Product Order", type: "text", width: 100 },
-            { name: "purchase_no", title: "Purchase Order", type: "text", width: 100 },
-            { name: "version_no", title: "Version No", type: "text", width: 100 },
-            { name: "version_seq", title: "Version Seq", type: "text", width: 50 },
-            { name: "size", title: "Size", type: "text", width: 50 },
-            { name: "bin_id", title: "Location", type: "text", width: 100 },
-            { name: "qty", title: "Qty", type: "number", width: 100 },
-            { name: "purchase_unit", title: "Unit", type: "text", width: 50 }
-        ]
-    });
-
-    $("#exportExcel").click(function () {
-    // Lấy dữ liệu từ jsGrid
-    var gridData = $("#jsGrid").jsGrid("option", "data");
-
-    // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
-    var fields = [
-        { name: "bin__area__warehouse__wh_plant", title: "Plant", type: "text", width: 100 },
-        { name: "bin__area__warehouse__wh_name", title: "Warehouse", type: "text", width: 100 },
-        { name: "product_order", title: "Product Order", type: "text", width: 100 },
-        { name: "purchase_no", title: "Purchase Order", type: "text", width: 100 },
-        { name: "version_no", title: "Version No", type: "text", width: 100 },
-        { name: "version_seq", title: "Version Seq", type: "text", width: 50 },
-        { name: "size", title: "Size", type: "text", width: 50 },
-        { name: "bin_id", title: "Location", type: "text", width: 100 },
-        { name: "qty", title: "Qty", type: "number", width: 100 },
-        { name: "purchase_unit", title: "Unit", type: "text", width: 50 }
-    ];
-
-    // Tạo một đối tượng map để ánh xạ từ name sang title
-    var titleMap = {};
-    fields.forEach(function (field) {
-        titleMap[field.name] = field.title;
-    });
-
-    // Chuyển đổi dữ liệu với cột là title thay vì name
-    var transformedData = gridData.map(function (item) {
-        var transformedItem = {};
-        for (var key in item) {
-            if (item.hasOwnProperty(key)) {
-                // Ánh xạ từ name sang title
-                var title = titleMap[key];
-                if (title) {
-                    transformedItem[title] = item[key];
-                }
             }
-        }
-        return transformedItem;
+        });
+
+        // Load động danh sách Bin khi chọn Area
+        $("#id_area").change(function () {
+            var areaId = $(this).val();
+            $("#id_bin").prop("disabled", true).html('<option value="">{% trans "Choose Location" %}</option>');
+            if (areaId) {
+                $.getJSON("{% url 'get_bins' %}", { area: areaId }, function (data) {
+                    $.each(data, function (index, obj) {
+                        $("#id_bin").append('<option value="' + obj.bin_id + '">' + obj.bin_name + '</option>');
+                    });
+                    $("#id_bin").prop("disabled", false);
+                });
+            }
+        });
+
+
+        $("#Search").click(function () {
+            let warehouseId = $("#warehouse").val();
+            let areaId = $("#id_area").val();
+            let binId = $("#id_bin").val();
+
+
+
+            if (warehouseId || areaId || binId) {
+                    $.getJSON("{% url 'get_bin_data' %}", { warehouse: warehouseId, area: areaId, bin: binId }, function (data) {
+                    console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
+
+                    $("#jsGrid").jsGrid("option", "data", data);
+                });
+            }
+
+        });
+
+
+
+        // Cấu hình jsGrid
+        $("#jsGrid").jsGrid({
+            width: "100%",
+            height: "600px",
+            sorting: true,
+            paging: true,
+            noDataContent: translations.notFound,
+            pageSize: 10,
+            pageButtonCount: 5,
+            data: [],
+            fields: [
+                { name: "bin__area__warehouse__wh_plant", title: translations.plant, type: "text", width: 100 },
+                { name: "bin__area__warehouse__wh_name", title: translations.warehouse, type: "text", width: 100 },
+                { name: "product_order", title: translations.product_order, type: "text", width: 100 },
+                { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100 },
+                { name: "version_no", title: translations.version_no, type: "text", width: 100 },
+                { name: "version_seq", title: translations.version_seq, type: "text", width: 50 },
+                { name: "size", title: translations.size, type: "text", width: 50 },
+                { name: "bin_id", title: translations.location, type: "text", width: 100 },
+                { name: "qty", title: translations.qty, type: "number", width: 100 },
+                { name: "purchase_unit", title: translations.unit, type: "text", width: 50 }
+            ]
+        });
+
+        $("#exportExcel").click(function () {
+            // Lấy dữ liệu từ jsGrid
+            var gridData = $("#jsGrid").jsGrid("option", "data");
+
+            // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
+            var fields = [
+                { name: "bin__area__warehouse__wh_plant", title: translations.plant, type: "text", width: 100 },
+                { name: "bin__area__warehouse__wh_name", title: translations.warehouse, type: "text", width: 100 },
+                { name: "product_order", title: translations.product_order, type: "text", width: 100 },
+                { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100 },
+                { name: "version_no", title: translations.version_no, type: "text", width: 100 },
+                { name: "version_seq", title: translations.version_seq, type: "text", width: 50 },
+                { name: "size", title: translations.size, type: "text", width: 50 },
+                { name: "bin_id", title: translations.location, type: "text", width: 100 },
+                { name: "qty", title: translations.qty, type: "number", width: 100 },
+                { name: "purchase_unit", title: translations.unit, type: "text", width: 50 }
+            ];
+
+            // Tạo một đối tượng map để ánh xạ từ name sang title
+            var titleMap = {};
+            fields.forEach(function (field) {
+                titleMap[field.name] = field.title;
+            });
+
+            // Chuyển đổi dữ liệu với cột là title thay vì name
+            var transformedData = gridData.map(function (item) {
+                var transformedItem = {};
+                for (var key in item) {
+                    if (item.hasOwnProperty(key)) {
+                        // Ánh xạ từ name sang title
+                        var title = titleMap[key];
+                        if (title) {
+                            transformedItem[title] = item[key];
+                        }
+                    }
+                }
+                return transformedItem;
+            });
+
+
+            // Chuyển đổi dữ liệu thành định dạng SheetJS
+            var ws = XLSX.utils.json_to_sheet(transformedData);
+
+
+
+            // Đặt độ rộng cho các cột
+            var colWidths = fields.map(function(field) {
+                return { wpx: field.width }; // Đặt độ rộng cột theo thuộc tính width trong fields
+            });
+            // Áp dụng độ rộng cho sheet
+            ws['!cols'] = colWidths;
+
+
+            // Tạo workbook và thêm sheet vào
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+            // Xuất file Excel
+            XLSX.writeFile(wb, "Bin_Data.xlsx");
+        });
+
     });
-
-
-    // Chuyển đổi dữ liệu thành định dạng SheetJS
-    var ws = XLSX.utils.json_to_sheet(transformedData);
-
-
-
-    // Đặt độ rộng cho các cột
-    var colWidths = fields.map(function(field) {
-        return { wpx: field.width }; // Đặt độ rộng cột theo thuộc tính width trong fields
-    });
-    // Áp dụng độ rộng cho sheet
-    ws['!cols'] = colWidths;
-
-
-    // Tạo workbook và thêm sheet vào
-    var wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Data");
-
-    // Xuất file Excel
-    XLSX.writeFile(wb, "Bin_Data.xlsx");
-});
-
-});
 </script>
-
 {% endblock %}

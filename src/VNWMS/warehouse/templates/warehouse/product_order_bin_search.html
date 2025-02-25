@@ -14,60 +14,11 @@
         }
     </style>
 
-    <script>
-    $(document).ready(function() {
 
-
-        $("#jsGrid").jsGrid({
-            width: "95%",
-            height: "480px",
-            noDataContent: "{% trans "Not found" %}",
-            inserting: false,
-            editing: false,
-            sorting: true,
-            paging: true,
-            pageSize: 20,
-            fields: [
-                { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 30, css: "text-center" },
-                { name: "purchase_no", title: "{% trans "Purchase Order" %}", type: "text", width: 35, css: "text-center" },
-                { name: "version_no", title: "{% trans "Version No" %}.", type: "text", width: 25, css: "text-center" },
-                { name: "version_seq", title: "{% trans "Version Seq" %}.", type: "text", width: 15, css: "text-center" },
-                { name: "size", title: "{% trans "Size" %}", type: "text", width: 25, css: "text-center" },
-                { name: "bin_id", title: "{% trans "Bin" %}", type: "text", width: 25, css: "text-center" },
-                { name: "mvt_id", title: "{% trans "Mvt" %}", type: "text", width: 25, css: "text-center" },
-                { name: "minus_qty", title: "-", type: "text", width: 25, css: "text-center" },
-                { name: "plus_qty", title: "+", type: "text", width: 25, css: "text-center" },
-                { name: "remain_qty", title: "{% trans "Qty" %}", type: "text", width: 25, css: "text-center" },
-                { name: "create_at", title: "{% trans "Create at" %}", type: "text", width: 40, css: "text-center" },
-                { name: "create_by__username", title: "{% trans "Create by" %}", type: "text", width: 25, css: "text-center" },
-            ]
-        });
-
-
-        $("#searchBtn").on("click", function() {
-            const productOrder = $("#productOrder").val();
-            const bin = $("#bin").val();
-
-            $.ajax({
-                url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin,
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    $("#jsGrid").jsGrid("option", "data", response);
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error: ' + error);
-                }
-            });
-
-        });
-    });
-
-</script>
 {% endblock %}
 
 {% block content %}
-    <h3 class="mt-5" style="font-size: 1.5em;text-align: center;">{% trans "Search Transaction History" %}</h3>
+    <h3 class="mt-5" style="font-size: 1.5em;text-align: center;">{% trans "Transaction History Search" %}</h3>
         <div style="padding-left: 5rem; padding-top: 1rem">
             <div class="row">
                 <div class="col-md-5">
@@ -85,6 +36,75 @@
 
             <div class="mt-2" id="jsGrid"></div>
         </div>
+
+    <script>
+        var translations = {
+            notFound: "{% trans 'Not found' %}",
+            productOrder: "{% trans 'Product Order' %}",
+            purchaseOrder: "{% trans 'Purchase Order' %}",
+            versionNo: "{% trans 'Version No' %}",
+            versionSeq: "{% trans 'Version Seq' %}",
+            size: "{% trans 'Size' %}",
+            bin: "{% trans 'Bin' %}",
+            mvt: "{% trans 'Mvt' %}",
+            minusQty: "-",
+            plusQty: "+",
+            qty: "{% trans 'Qty' %}",
+            createAt: "{% trans 'Create at' %}",
+            createBy: "{% trans 'Create by' %}"
+        };
+    </script>
+
+    <script>
+        $(document).ready(function() {
+
+
+            $("#jsGrid").jsGrid({
+                width: "95%",
+                height: "480px",
+                noDataContent: translations.notFound,
+                inserting: false,
+                editing: false,
+                sorting: true,
+                paging: true,
+                pageSize: 20,
+                fields: [
+                    { name: "product_order", title: translations.productOrder, type: "text", width: 30, css: "text-center" },
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 35, css: "text-center" },
+                    { name: "version_no", title: translations.versionNo, type: "text", width: 25, css: "text-center" },
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 15, css: "text-center" },
+                    { name: "size", title: translations.size, type: "text", width: 25, css: "text-center" },
+                    { name: "bin_id", title: translations.bin, type: "text", width: 25, css: "text-center" },
+                    { name: "mvt_id", title: translations.mvt, type: "text", width: 25, css: "text-center" },
+                    { name: "minus_qty", title: "-", type: "text", width: 25, css: "text-center" },
+                    { name: "plus_qty", title: "+", type: "text", width: 25, css: "text-center" },
+                    { name: "remain_qty", title: translations.qty, type: "text", width: 25, css: "text-center" },
+                    { name: "create_at", title: translations.createAt, type: "text", width: 40, css: "text-center" },
+                    { name: "create_by__username", title: translations.createBy, type: "text", width: 25, css: "text-center" },
+                ]
+            });
+
+
+            $("#searchBtn").on("click", function() {
+                const productOrder = $("#productOrder").val();
+                const bin = $("#bin").val();
+
+                $.ajax({
+                    url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        $("#jsGrid").jsGrid("option", "data", response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error: ' + error);
+                    }
+                });
+
+            });
+        });
+
+    </script>
 
 
 

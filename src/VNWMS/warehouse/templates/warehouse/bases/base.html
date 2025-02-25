@@ -12,6 +12,14 @@
 
     }
 
+
+    .dropdown-item i {
+        width: 20px; /* Hoặc giá trị khác phù hợp */
+        text-align: center;
+        margin-right: 8px; /* Giữ khoảng cách giữa icon và chữ */
+    }
+
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
@@ -28,8 +36,16 @@
                     {% trans "Transaction Function" %}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'packing_material_stock_in' %}">{% trans "Packing Material Stock In" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'packing_material_stock_out' %}">{% trans "Packing Material Stock Out" %}</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'packing_material_stock_in' %}">
+                                <i class="fas fa-truck-loading"></i> {% trans "Packing Material Stock In" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'packing_material_stock_out' %}">
+                                <i class="fas fa-dolly-flatbed"></i>  {% trans "Packing Material Stock Out" %}
+                            </a>
+                        </li>
                         <hr />
                         <li><a class="dropdown-item" href="{% url 'transfer_and_adjust' %}">{% trans "Quantity Transfer & Adjust Form" %}</a></li>
                     </ul>
@@ -39,9 +55,21 @@
                     {% trans "Search Function" %}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'bin_search' %}">{% trans "Inventory Search" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'product_order_bin_search' %}">{% trans "Transaction History" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'inventory_sheet' %}">{% trans "Inventory Sheet" %}</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'bin_search' %}">
+                                <i class="fas fa-search"></i> {% trans "Inventory Search" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'product_order_bin_search' %}">
+                                <i class="fas fa-search"></i> {% trans "Transaction History" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'inventory_sheet' %}">
+                                <i class="fas fa-search"></i> {% trans "Inventory Sheet" %}
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="btn-group">
@@ -49,9 +77,21 @@
                     {% trans "Basic Data" %}
                     </button>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="{% url 'warehouse_list' %}">{% trans "Storage Setting" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'upload_excel' %}">{% trans "Location Importing" %}</a></li>
-                        <li><a class="dropdown-item" href="{% url 'open_data_import' %}">{% trans "Open Data Importing" %}</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'warehouse_list' %}">
+                                <i class="fas fa-warehouse"></i> {% trans "Storage Setting" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'upload_excel' %}">
+                                <i class="fas fa-cloud-upload-alt"></i> {% trans "Location Importing" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'open_data_import' %}">
+                                <i class="fas fa-cloud-upload-alt"></i> {% trans "Open Data Importing" %}
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -60,7 +100,7 @@
     {% block content %} {% endblock %}
 {% endblock %}
 
-{% block alert %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-{% endblock %}
+{#{% block javascript %}#}
+{#<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>#}
+{#{% endblock %}#}
 

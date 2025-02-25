@@ -29,8 +29,12 @@
                     {{ form.area }}
                     <div class="text-danger">{{ form.area.errors }}</div>
                 </div>
-                <button type="submit" class="btn btn-success">{% trans "Save Changes" %}</button>
-                <a href="{% url 'bin_by_area' area_code %}" class="btn btn-secondary mt-3">{% trans "Back to List" %}</a>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> {% trans "Save Changes" %}
+                </button>
+                <a href="{% url 'bin_by_area' area_code %}" class="btn btn-secondary mt-3">
+                    <i class="fas fa-reply"></i> {% trans "Back to List" %}
+                </a>
             </div>
         </form>
     </div>

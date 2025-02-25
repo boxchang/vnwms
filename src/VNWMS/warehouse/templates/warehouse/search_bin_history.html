@@ -3,28 +3,43 @@
 {% load static %}
 {% load i18n %}
 {% load humanize %}
-{% block head %}{% endblock %}
-{% block title %}Search Bin Value History{% endblock title %}
-{% block breadcrumb %}{% endblock %}
+{% block title %}{% trans "Search Bin Value History" %}{% endblock title %}
 {% block base_js %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
 
-        form {
-            padding: 10px;
-            margin-bottom: 10px;
+        body {
+            background-color: #f8f9fa;
         }
+        
+
+        label {
+            width: 110px;
+            font-weight: bold;
+            color: #333;
+        }
+
+
+
+
         th input {
             width: 100%;
             box-sizing: border-box;
             padding: 3px;
         }
 
+
         table thead th {
             position: sticky;
             top: 0; /* Vị trí dính trên cùng */
             background-color: #fff;
+
         }
+
+        .scroll {
+            border: 1px solid #ddd;
+        }
+
+
 
         .bin_value {
             margin-bottom: 5px;
@@ -40,54 +55,75 @@
     <!-- Form for search -->
     <div class="table-container mt-4">
         <form method="get" action="{% url 'bin_search' %}">
+
             <div class="row">
                 {{ form.bin.errors }}
-                <div class="col-md-3">
+                <div class="col-3">
                     <div class="form-group d-flex align-items-center">
                         {{ form.bin.label_tag }}
-                        {{ form.bin }}
+                        <div class="w-50">
+                            {{ form.bin }}
+                        </div>
                     </div>
                 </div>
+
                 {{ form.po_no.errors }}
-                <div class="col-md-3">
+                <div class="col-3">
                     <div class="form-group d-flex align-items-center">
                         {{ form.po_no.label_tag }}
-                        {{ form.po_no }}
+                        <div class="w-50">
+                            {{ form.po_no }}
+                        </div>
                     </div>
                 </div>
+
                 {{ form.size.errors }}
-                <div class="col-md-3">
+                <div class="col-3">
                     <div class="form-group d-flex align-items-center">
                         {{ form.size.label_tag }}
-                        {{ form.size }}
+                        <div class="w-50">
+                            {{ form.size }}
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> {% trans "Search" %}
+                    </button>
                 </div>
 
             </div>
+
             <div class="row">
                 {{ form.from_date.errors }}
-                <div class="col-md-3">
+                <div class="col-3">
                     <div class="form-group d-flex align-items-center mt-3">
                         {{ form.from_date.label_tag }}
-                        {{ form.from_date }}
+                        <div class="w-50">
+                            {{ form.from_date }}
+                        </div>
                     </div>
                 </div>
+
                 {{ form.to_date.errors }}
-                <div class="col-md-3">
+                <div class="col-3">
                     <div class="form-group d-flex align-items-center mt-3">
                         {{ form.to_date.label_tag }}
-                        {{ form.to_date }}
+                        <div class="w-50">
+                            {{ form.to_date }}
+                        </div>
                     </div>
                 </div>
+
+                <div class="col-3"></div>
+                <div class="col-2"></div>
             </div>
         </form>
     </div>
 
     <!-- Table for displaying results -->
-    <div class="table-container justify-content-center">
+    <div class="table-container justify-content-center mt-5">
         <h2 style="font-size: 1.5em;">{% trans "Current Inventory" %}</h2>
         <!-- BIN VALUES TABLE -->
         <div style="overflow-y: auto; height: 200px;" class="scroll bin_value">
