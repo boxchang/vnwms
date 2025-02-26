@@ -170,6 +170,11 @@ class Bin_Value(models.Model):
     update_at = models.DateTimeField(default=timezone.now)
     update_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
                                   related_name='bin_value_update_by')
+    # customer_no = models.CharField(max_length=20, blank=True, null=True)
+    # lot_no = models.CharField(max_length=20, blank=True, null=True)
+    # item_type = models.ForeignKey('ItemType', related_name='bin_value_itemtype', on_delete=models.DO_NOTHING)
+    # supplier = models.CharField(max_length=20, blank=True, null=True)
+
 
     def __str__(self):
         return self.bin.bin_id
@@ -254,7 +259,6 @@ class StockInFormDetail(models.Model):
     version_seq = models.CharField(max_length=20, blank=True, null=True)
     lot_no = models.CharField(max_length=20, blank=True, null=True)
     item_type = models.ForeignKey('ItemType', related_name='stockin_itemtype', on_delete=models.DO_NOTHING)
-    packing_type = models.CharField(max_length=20, blank=True, null=True)
     purchase_no = models.CharField(max_length=20, blank=True, null=True)
     purchase_qty = models.IntegerField(default=0, blank=True, null=True)
     size = models.CharField(max_length=20, blank=True, null=True)
