@@ -268,7 +268,7 @@ class StockInPForm(forms.Form):
     version_no = forms.CharField(max_length=20, label=_("Version No"), required=True,)  # ZZVERSION
     version_seq = forms.CharField(max_length=20, label=_("Version Sequence"), required=True, )  # ZZVERSION_SEQ
     lot_no = forms.CharField(max_length=20, label=_("Lot Number"), required=False, )  # LOTNO
-    item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Receive Type"), required=False)
+    item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=False)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
     purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, )  # MENGE_PO 採購數量
     size = forms.CharField(max_length=20, label=_("Size"), required=True, )  # ZSIZE 尺寸
