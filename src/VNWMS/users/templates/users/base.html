@@ -11,7 +11,7 @@
 <div class="card-header">
     <div class="row">
         <div class="col">
-            {% if user.is_superuser %}
+            {% if request.user.user_type.type_name == "Administrator" %}
             <button type="button" class="btn btn-success" onclick="location.href='{% url 'user_create' %}'">{% trans "Add User" %}</button>
             <button type="button" class="btn btn-success" onclick="location.href='{% url 'user_list' %}'">{% trans "User List" %}</button>
             {% endif %}
