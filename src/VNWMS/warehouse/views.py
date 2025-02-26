@@ -1372,7 +1372,7 @@ def get_bins(request):
 
 def check_bin_exists(request):
     area_id = request.GET.get('area')
-    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name')
+    bins = Bin.objects.filter(area_id=area_id).values('bin_id', 'bin_name').order_by('create_at')
 
     bin_data = []
 
