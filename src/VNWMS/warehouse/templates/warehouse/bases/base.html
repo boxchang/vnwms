@@ -47,6 +47,7 @@
                             </a>
                         </li>
                         <hr />
+                        {{ request.user.user_type.type_name }}
                         {% if request.user.user_type.type_name == "Administrator" %}
                         <li>
                             <a class="dropdown-item" href="{% url 'transfer_and_adjust' %}">
