@@ -272,7 +272,7 @@ def bin_search(request):
 
     form = BinSearchForm(request.GET or None)
 
-    if form.is_valid():
+    if request.GET and form.is_valid():
         query_bin = form.cleaned_data.get('bin')
         query_po_no = form.cleaned_data.get('po_no')
         query_size = form.cleaned_data.get('size')
@@ -1360,7 +1360,7 @@ def get_areas(request):
 
 
 def get_all_areas(request):
-    areas = Area.objects.all().values('area_id', 'area_name', 'pos_y', 'pos_x', 'area_l', 'area_w')
+    areas = Area.objects.all().values('area_id', 'area_name', 'pos_y', 'pos_x', 'area_l', 'area_w', 'layer')
     return JsonResponse(list(areas), safe=False)
 
 

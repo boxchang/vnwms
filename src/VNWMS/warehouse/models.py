@@ -60,6 +60,7 @@ class Area(models.Model):
     pos_y = models.IntegerField(blank=True, null=True)  # Toạ độ Y, có thể null
     area_w = models.IntegerField(blank=True, null=True)  # Bin Width
     area_l = models.IntegerField(blank=True, null=True)  # Bin Length
+    layer = models.CharField(max_length=10, blank=True, null=True)
     create_at = models.DateTimeField(default=timezone.now)
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
                                   related_name='area_create_by')

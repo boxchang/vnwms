@@ -93,6 +93,8 @@
 
                 // Set data-zone với tên khu vực
                 rect.setAttribute("data-zone", area.area_id);
+                rect.setAttribute("data-layer", area.layer);
+
 
                 // Thêm div.rectangle vào trong warehouse_map
                 warehouseMap.appendChild(rect);
@@ -109,6 +111,7 @@
             document.querySelectorAll(".rectangle").forEach(rect => {
                 rect.addEventListener("click", async function () {
                     let area_id = this.getAttribute("data-zone"); // Lấy giá trị data-zone
+                    let area_layer = this.getAttribute("data-layer");
                     console.log("Selected Area ID:", area_id);
 
                     try {
@@ -122,7 +125,17 @@
                             return;
                         }
 
-                        let maxHeight = 850; // Chiều cao tối đa cho mỗi cột
+                        let maxHeight = 850;
+                        let colorIndex;
+
+
+                        if (area_layer === '3') {
+                            maxHeight = 820;
+                        } else if (area_layer === '5') {
+                            maxHeight = 700;
+                        }
+
+
                         let topOffset = 50;
                         let leftOffset = 108; // Vị trí cột đầu tiên (%)
                         let colIndex = 0; // Theo dõi số cột
@@ -132,8 +145,25 @@
 
                         const warehouseMap = document.querySelector(".warehouse_map");
 
+                        const colors = [
+                                "rgba(255, 255, 0, 0.8)", // Vàng
+                                "rgba(0, 255, 255, 0.8)", // Xanh cyan
+                            ];
+
                         // Duyệt qua danh sách bins và tạo div tương ứng
-                        bins.forEach(bin => {
+                        bins.forEach((bin, index) => {
+                            
+                            if (area_layer === '2') {
+                                colorIndex = Math.floor(index / 2) % colors.length;
+
+                            } else if (area_layer === '3') {
+                                colorIndex = Math.floor(index / 3) % colors.length;
+                            } else if (area_layer === '4') {
+                                colorIndex = Math.floor(index / 4) % colors.length;
+                            } else if (area_layer === '5') {
+                                colorIndex = Math.floor(index / 5) % colors.length;
+                            }
+
                             const binDiv = document.createElement("div");
                             binDiv.classList.add("bin");
 
@@ -145,9 +175,11 @@
                             binDiv.style.height = "50px";
                             binDiv.style.cursor = "pointer";
 
-
                             binDiv.style.backgroundColor = bin.status === "red" ? "rgba(255, 0, 0, 0.5)" : "rgba(0, 255, 0, 0.5)";
                             binDiv.style.border = bin.status === "red" ? "2px solid red" : "2px solid green";
+                            binDiv.style.boxShadow = `0px 0px 10px ${colors[colorIndex]}`; // Đổ bóng nổi bật
+                            binDiv.style.outline = `3px solid ${colors[colorIndex]}`; // Viền ngoài không ảnh hưởng layout
+
 
                             binDiv.style.display = "flex";
                             binDiv.style.alignItems = "center";

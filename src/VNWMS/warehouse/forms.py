@@ -61,9 +61,17 @@ class WarehouseForm(forms.ModelForm):
 
 
 class AreaForm(forms.ModelForm):
+    LAYER_CHOICES = [
+        (None, "------"),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5)
+    ]
+
     class Meta:
         model = Area  # Chỉ định model mà form này sẽ sử dụng
-        fields = ['area_id', 'area_name', 'pos_x', 'pos_y', 'area_w', 'area_l', 'warehouse']
+        fields = ['area_id', 'area_name', 'pos_x', 'pos_y', 'area_w', 'area_l', 'warehouse', 'layer']
 
     area_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     area_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -73,6 +81,12 @@ class AreaForm(forms.ModelForm):
     area_l = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control'}))
     warehouse = forms.ModelChoiceField(
         queryset=Warehouse.objects.all(),  # Lấy tất cả các đối tượng Warehouse
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    layer = forms.ChoiceField(
+        choices=LAYER_CHOICES,
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
@@ -213,6 +227,18 @@ class BinSearchForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['from_date'].initial = day7_ago
         self.fields['to_date'].initial = today
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        _bin = cleaned_data.get("bin")
+        po_no = cleaned_data.get("po_no")
+        size = cleaned_data.get("size")
+
+        if not(_bin or po_no or size):
+            raise forms.ValidationError(_("Location, Product Order, and Size cannot all be null!"))
+
+        return cleaned_data
 
 
 class BinTransferForm(forms.Form):
