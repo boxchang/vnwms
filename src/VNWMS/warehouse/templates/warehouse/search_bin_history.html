@@ -13,7 +13,7 @@
         
 
         label {
-            width: 110px;
+            width: 127px;
             font-weight: bold;
             color: #333;
         }
@@ -56,6 +56,12 @@
     <div class="table-container mt-4">
         <form method="get" action="{% url 'bin_search' %}">
 
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
             <div class="row">
                 {{ form.bin.errors }}
                 <div class="col-3">
@@ -88,7 +94,7 @@
                 </div>
 
                 <div class="col-2">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="search">
                         <i class="fas fa-search"></i> {% trans "Search" %}
                     </button>
                 </div>
@@ -212,6 +218,25 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('search').addEventListener('click', function(event) {
+
+                let bin = document.getElementById('id_bin').value.trim();
+                let po_no = document.getElementById('id_po_no').value.trim();
+                let size = document.getElementById('id_size').value.trim();
+
+                if (!bin && !po_no && !size) {
+                    event.preventDefault(); // Ngăn gửi request lên server
+                    alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
+
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 

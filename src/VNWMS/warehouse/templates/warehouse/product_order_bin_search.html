@@ -89,6 +89,12 @@
                 const productOrder = $("#productOrder").val();
                 const bin = $("#bin").val();
 
+                if (!productOrder && !bin) {
+                    event.preventDefault(); // Ngăn gửi request lên server
+                    alert("{% trans 'Product Order/Location cannot all be null!' %}");
+                    return;
+                }
+
                 $.ajax({
                     url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin,
                     method: 'GET',
@@ -102,7 +108,24 @@
                 });
 
             });
+
+
         });
+
+
+        document.getElementById('search').addEventListener('click', function(event) {
+
+            let bin = document.getElementById('id_bin').value.trim();
+            let po_no = document.getElementById('id_po_no').value.trim();
+            let size = document.getElementById('id_size').value.trim();
+
+            if (!bin && !po_no && !size) {
+                event.preventDefault(); // Ngăn gửi request lên server
+                alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
+
+            }
+        });
+
 
     </script>
 
