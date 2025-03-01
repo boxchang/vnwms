@@ -125,84 +125,85 @@
                             return;
                         }
 
-                        let maxHeight = 850;
-                        let colorIndex;
-
-
-                        if (area_layer === '3') {
-                            maxHeight = 820;
-                        } else if (area_layer === '5') {
-                            maxHeight = 700;
-                        }
-
-
-                        let topOffset = 50;
-                        let leftOffset = 108; // Vị trí cột đầu tiên (%)
-                        let colIndex = 0; // Theo dõi số cột
-
                         // Xóa các bins cũ trước khi thêm mới
-                        document.querySelectorAll(".bin").forEach(bin => bin.remove());
+                        // Xóa các bins cũ trước khi thêm mới
+                        document.querySelectorAll(".bin_container").forEach(container => container.remove());
 
                         const warehouseMap = document.querySelector(".warehouse_map");
 
-                        const colors = [
-                                "rgba(255, 255, 0, 0.8)", // Vàng
-                                "rgba(0, 255, 255, 0.8)", // Xanh cyan
-                            ];
+                        // Tạo div chứa toàn bộ nhóm bin
+                        const binContainer = document.createElement("div");
+                        binContainer.classList.add("bin_container");
+                        binContainer.style.position = "absolute";
+                        binContainer.style.top = "50px";
+                        binContainer.style.left = "1218px";
+                        binContainer.style.transform = "translateX(-50%)";
+                        binContainer.style.display = "flex";
+                        binContainer.style.alignItems = "flex-start";
+                        warehouseMap.appendChild(binContainer);
 
-                        // Duyệt qua danh sách bins và tạo div tương ứng
+                        let binGroup = document.createElement("div");
+                        binGroup.classList.add("bin_group");
+                        binGroup.style.display = "flex";
+                        binGroup.style.flexDirection = "column";
+                        binGroup.style.justifyContent = "center";
+                        binGroup.style.marginBottom = "10px";
+
+                        binContainer.appendChild(binGroup);
+
                         bins.forEach((bin, index) => {
-
-                            if (area_layer === '2') {
-                                colorIndex = Math.floor(index / 2) % colors.length;
-
-                            } else if (area_layer === '3') {
-                                colorIndex = Math.floor(index / 3) % colors.length;
-                            } else if (area_layer === '4') {
-                                colorIndex = Math.floor(index / 4) % colors.length;
-                            } else if (area_layer === '5') {
-                                colorIndex = Math.floor(index / 5) % colors.length;
+                            if (area_layer === '3' && index % 9 === 0 && index !== 0) {
+                                // Khi đủ 9 phần tử, tạo nhóm mới
+                                binGroup = document.createElement("div");
+                                binGroup.classList.add("bin_group");
+                                binGroup.style.display = "flex";
+                                binGroup.style.flexDirection = "column";
+                                binGroup.style.justifyContent = "center";
+                                binGroup.style.marginBottom = "10px";
+                                binContainer.appendChild(binGroup);
+                            } else if ((area_layer === '2' || area_layer =='4') && index % 12 === 0 && index !== 0) {
+                                // Khi đủ 9 phần tử, tạo nhóm mới
+                                binGroup = document.createElement("div");
+                                binGroup.classList.add("bin_group");
+                                binGroup.style.display = "flex";
+                                binGroup.style.flexDirection = "column";
+                                binGroup.style.justifyContent = "center";
+                                binGroup.style.marginBottom = "10px";
+                                binContainer.appendChild(binGroup);
+                            } else if (area_layer === '5' && index % 10 === 0 && index !== 0) {
+                                // Khi đủ 9 phần tử, tạo nhóm mới
+                                binGroup = document.createElement("div");
+                                binGroup.classList.add("bin_group");
+                                binGroup.style.display = "flex";
+                                binGroup.style.flexDirection = "column";
+                                binGroup.style.justifyContent = "center";
+                                binGroup.style.marginBottom = "10px";
+                                binContainer.appendChild(binGroup);
                             }
 
                             const binDiv = document.createElement("div");
                             binDiv.classList.add("bin");
 
                             // Set CSS
-                            binDiv.style.position = "absolute";
-                            binDiv.style.top = topOffset + "px";
-                            binDiv.style.left = `${leftOffset}%`;
                             binDiv.style.width = "90px";
                             binDiv.style.height = "50px";
-                            binDiv.style.cursor = "pointer";
-
-                            binDiv.style.backgroundColor = bin.status === "red" ? "rgba(255, 0, 0, 0.5)" : "rgba(0, 255, 0, 0.5)";
-                            binDiv.style.border = bin.status === "red" ? "2px solid red" : "2px solid green";
-                            binDiv.style.boxShadow = `0px 0px 10px ${colors[colorIndex]}`; // Đổ bóng nổi bật
-                            binDiv.style.outline = `3px solid ${colors[colorIndex]}`; // Viền ngoài không ảnh hưởng layout
-
-
+                            binDiv.style.margin = "5px";
                             binDiv.style.display = "flex";
                             binDiv.style.alignItems = "center";
                             binDiv.style.justifyContent = "center";
+                            binDiv.style.cursor = "pointer";
+                            binDiv.style.backgroundColor = bin.status === "red" ? "rgba(255, 0, 0, 0.5)" : "rgba(0, 255, 0, 0.5)";
+                            binDiv.style.border = bin.status === "red" ? "2px solid red" : "2px solid green";
 
                             binDiv.textContent = bin.bin_id;
                             binDiv.setAttribute("data-zone", bin.bin_id);
 
-                            // Thêm div bin vào warehouse_map
-                            warehouseMap.appendChild(binDiv);
-
-                            // Cập nhật vị trí
-                            topOffset += 70;
-
-                            // Nếu vượt quá chiều cao, xuống cột mới
-                            if (topOffset > maxHeight) {
-                                topOffset = 50; // Reset vị trí hàng đầu tiên
-                                colIndex++;
-                                leftOffset = 108 + colIndex * 10; // Dời cột sang phải
-                            }
-
-                            addClickEventToBins();
+                            binGroup.appendChild(binDiv);
                         });
+
+                        addClickEventToBins();
+
+
 
                     } catch (error) {
                         console.error("Error fetching data:", error);
