@@ -262,6 +262,7 @@ class StockInFormDetail(models.Model):
     item_type = models.ForeignKey('ItemType', related_name='stockin_itemtype', on_delete=models.DO_NOTHING)
     purchase_no = models.CharField(max_length=20, blank=True, null=True)
     purchase_qty = models.IntegerField(default=0, blank=True, null=True)
+    packing_type = models.CharField(max_length=20, blank=True, null=True)
     size = models.CharField(max_length=20, blank=True, null=True)
     purchase_unit = models.CharField(max_length=20, blank=True, null=True)
     post_date = models.CharField(max_length=20, blank=True, null=True)

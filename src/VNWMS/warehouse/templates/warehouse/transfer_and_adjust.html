@@ -19,129 +19,143 @@
 
 
     </style>
-
-    <script>
-    $(document).ready(function() {
-
-        const searchParams = new URLSearchParams(window.location.search);
-        const productOrder = searchParams.get("product_order");
-
-        if (productOrder) {
-            // Tự động điền vào thanh tìm kiếm
-            $("#productOrder").val(productOrder);
-
-            $.ajax({
-            url: `{% url 'product_order_search' %}`,
-            method: 'GET',
-            data: {
-                search: productOrder,
-                product_order: searchParams.get('product_order'),
-            },
-            success: function(response) {
-                // Cập nhật dữ liệu cho jsGrid
-                $("#jsGrid").jsGrid("option", "data", response);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error fetching data:", error);
-            }
-        });
-        }
-
-        $("#jsGrid").jsGrid({
-            width: "95%",
-            height: "500px",
-            noDataContent: "{% trans "Not found" %}",
-            inserting: false,
-            editing: false,
-            sorting: true,
-            paging: true,
-            pageSize: 20,
-            fields: [
-                { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", css: "text-center", width: 30 },
-                { name: "product_order", title: "{% trans "Product Order" %}", type: "text", css: "text-center", width: 30 },
-                { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", css: "text-center", width: 40 },
-                { name: "version_no", title: "{% trans "Version No" %}", type: "text", css: "text-center", width: 25 },
-                { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", css: "text-center", width: 25 },
-                { name: "size", title: "{% trans "Size" %}", type: "text", css: "text-center", width: 25 },
-                { name: "bin", title: "{% trans "Bin" %}", type: "text", css: "text-center", width: 25 },
-                { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 25 },
-                {
-                    type: "control",
-                    itemTemplate: function(_, item) {
-                        return $("<button>").text("{% trans "Transfer" %}")
-                            .addClass("btn btn-warning")
-                            .on("click", function() {
-                                let queryParams = $.param({
-                                    warehouse: item.bin__area__warehouse__wh_code,
-                                    product_order: item.product_order,
-                                    purchase_no: item.purchase_no,
-                                    version_no: item.version_no,
-                                    version_seq: item.version_seq,
-                                    size: item.size,
-                                    bin: item.bin,
-                                    qty: item.qty,
-                                    search: $("#productOrder").val()
-                                });
-
-                                window.open("/warehouse/bin_transfer_page?" + queryParams, "");
-                        });
-                    }
-                },
-                {
-                    type: "control",
-                    width: 30,
-                    itemTemplate: function(_, item) {
-                        return $("<button>").text("{% trans "Adjust" %}")
-                            .addClass("btn btn-warning")
-                            .on("click", function() {
-                                let queryParams = $.param({
-                                    warehouse: item.bin__area__warehouse__wh_code,
-                                    product_order: item.product_order,
-                                    purchase_no: item.purchase_no,
-                                    version_no: item.version_no,
-                                    version_seq: item.version_seq,
-                                    size: item.size,
-                                    bin: item.bin,
-                                    qty: item.qty,
-                                    search: $("#productOrder").val()
-                                });
-
-                                window.open("/warehouse/bin_adjust_page?" + queryParams, "");
-                        });
-                    }
-                }
-            ]
-        });
+{% endblock css %}
 
 
-        $("#searchBtn").on("click", function() {
-            const productOrder = $("#productOrder").val();
-
-            $.ajax({
-                url: '{% url "product_order_search" %}?product_order=' + encodeURIComponent(productOrder),
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    $("#jsGrid").jsGrid("option", "data", response);
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error: ' + error);
-                }
-            });
-
-        });
-    });
-
-</script>
-{% endblock %}
 {% block content %}
-    <div style="padding-left: 7rem; padding-right: 7rem;">
-        <h3 style="font-size: 1.5em;text-align: center;" class="mt-4">{% trans "Quantity Transfer & Adjust Form" %}</h3>
-        <div class="mt-5">
-            <input type="text" id="productOrder" placeholder="{% trans "Product Order" %}">
-            <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"></i> {% trans "Search" %}</button>
+    <div class="row p-0 mt-4">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <h3 class="text-center">{% trans "Quantity Transfer & Adjust Form" %}</h3>
+            <div class="mt-5">
+                <div class="row p-0 m-0">
+                    <input type="text" class="form-control" id="productOrder" placeholder="{% trans "Product Order" %}" >
+                    <button id="searchBtn" type="button" class="btn btn-primary ml-2"><i class="fas fa-search"></i> {% trans "Search" %}</button>
+                </div>
+            </div>
+            <div class="mt-2" id="jsGrid"></div>
         </div>
-        <div class="mt-2" id="jsGrid"></div>
+        <div class="col-1"></div>
     </div>
 
-{% endblock %}
+
+{% endblock content %}
+
+
+{% block javascript %}
+    <script>
+        $(document).ready(function() {
+
+            const searchParams = new URLSearchParams(window.location.search);
+            const productOrder = searchParams.get("product_order");
+
+            if (productOrder) {
+                // Tự động điền vào thanh tìm kiếm
+                $("#productOrder").val(productOrder);
+
+                $.ajax({
+                    url: `{% url 'product_order_search' %}`,
+                    method: 'GET',
+                    data: {
+                        search: productOrder,
+                        product_order: searchParams.get('product_order'),
+                    },
+                    success: function(response) {
+                        // Cập nhật dữ liệu cho jsGrid
+                        $("#jsGrid").jsGrid("option", "data", response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            }
+
+            $("#jsGrid").jsGrid({
+                width: "95%",
+                height: "500px",
+                noDataContent: "{% trans "Not found" %}",
+                inserting: false,
+                editing: false,
+                sorting: true,
+                paging: true,
+                pageSize: 20,
+                fields: [
+                    { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", css: "text-center", width: 30 },
+                    { name: "product_order", title: "{% trans "Product Order" %}", type: "text", css: "text-center", width: 30 },
+                    { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", css: "text-center", width: 40 },
+                    { name: "version_no", title: "{% trans "Version No" %}", type: "text", css: "text-center", width: 25 },
+                    { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", css: "text-center", width: 25 },
+                    { name: "size", title: "{% trans "Size" %}", type: "text", css: "text-center", width: 25 },
+                    { name: "bin", title: "{% trans "Bin" %}", type: "text", css: "text-center", width: 25 },
+                    { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 25 },
+                    {
+                        type: "control",
+                        itemTemplate: function(_, item) {
+                            return $("<button>").text("{% trans "Transfer" %}")
+                                .addClass("btn btn-warning")
+                                .on("click", function() {
+                                    let queryParams = $.param({
+                                        warehouse: item.bin__area__warehouse__wh_code,
+                                        product_order: item.product_order,
+                                        purchase_no: item.purchase_no,
+                                        version_no: item.version_no,
+                                        version_seq: item.version_seq,
+                                        size: item.size,
+                                        bin: item.bin,
+                                        qty: item.qty,
+                                        search: $("#productOrder").val()
+                                    });
+
+                                    window.open("/warehouse/bin_transfer_page?" + queryParams, "");
+                            });
+                        }
+                    },
+                    {
+                        type: "control",
+                        width: 30,
+                        itemTemplate: function(_, item) {
+                            return $("<button>").text("{% trans "Adjust" %}")
+                                .addClass("btn btn-warning")
+                                .on("click", function() {
+                                    let queryParams = $.param({
+                                        warehouse: item.bin__area__warehouse__wh_code,
+                                        product_order: item.product_order,
+                                        purchase_no: item.purchase_no,
+                                        version_no: item.version_no,
+                                        version_seq: item.version_seq,
+                                        size: item.size,
+                                        bin: item.bin,
+                                        qty: item.qty,
+                                        search: $("#productOrder").val()
+                                    });
+
+                                    window.open("/warehouse/bin_adjust_page?" + queryParams, "");
+                            });
+                        }
+                    }
+                ]
+            });
+
+
+            $("#searchBtn").on("click", function() {
+                const productOrder = $("#productOrder").val();
+
+                $.ajax({
+                    url: '{% url "product_order_search" %}?product_order=' + encodeURIComponent(productOrder),
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        $("#jsGrid").jsGrid("option", "data", response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('Error: ' + error);
+                    }
+                });
+
+            });
+
+
+        });
+
+    </script>
+{% endblock javascript %}

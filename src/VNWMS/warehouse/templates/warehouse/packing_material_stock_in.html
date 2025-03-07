@@ -3,94 +3,35 @@
 {% load static %}
 {% load i18n %}
 {% block title %} {% trans "Stock In" %} {% endblock %}
-{% block css %}
+{% block base_js %}
 <style>
-.item_list {
-    background: #ffffe7;
-    border-color: #f7e1b5;
-    border-width: 1px;
-    border-style: dashed solid;
-}
 
 .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
     display: none !important;
 }
 
-/* Hình ảnh trong popup */
-#zoneImage {
-  width: auto;
-  height: 100%;
-  position: relative;
-
-}
-
-.zone {
-    position: absolute; /* Cần để các zone có thể được định vị chính xác */
-
-}
-/* Overlay che toàn màn hình */
-#popupOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
-}
-
-/* Nội dung popup */
-#popupContent {
-  position: fixed;
-  top: 50%;
-  left: 53%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  padding: 20px;
-  z-index: 9999;
-  border-radius: 8px;
-  text-align: center;
-  width: auto; /* Điều chỉnh phần rộng tối đa của popup */
-  height: 100%; /* Điều chỉnh chiều cao tối đa của popup */
-  overflow: auto; /* Nếu cần cuộn, nếu hình ảnh quá lớn */
-}
-
-
-
-/* Nút đóng */
-#closePopup {
-  display: inline-block;
-  padding: 5px 10px;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.green{
-            border: 2px solid rgba(0, 255, 0, 0.7);  /* Màu xanh lá cây với độ trong suốt 70% */
-            background-color: rgba(0, 255, 0, 0.3);  /* Màu xanh lá cây với độ trong suốt 30% */
-}
-
-
-
-
 .input-custom {
     --bs-gutter-x: 0;
 }
+
+h3 {
+    text-align: center;
+}
+
+
 </style>
 
-{% endblock css %}
+{% endblock base_js %}
 
 
 {% block content %}
 <div class="row p-3">
     <div class="col-1"></div>
     <div class="col-10">
-        <div class="row">
-            <div class="col p-3" style="font-size: 1.5em;text-align: center;">{% trans "Warehouse Stock In Form" %}</div>
-        </div>
+{#        <div class="row">#}
+{#        </div>#}
+        <h3 class="col p-3">{% trans "Warehouse Stock In Form" %}</h3>
+
     <form id="myForm">
         {% crispy form %}
         <div id="jsGrid"></div>
@@ -119,7 +60,7 @@
     <div class="col-1"></div>
 </div>
 </div>
-{% endblock %}
+{% endblock content %}
 
 {% block javascript %}
 
@@ -188,7 +129,17 @@
 
 
         $("#_product_order").on("click", function() {
-            get_order_info();
+
+            let product_order = document.getElementById('id_product_order').value.trim();
+
+            if (!product_order) {
+                event.preventDefault(); // Ngăn gửi request lên server
+                alert("{% trans 'Product Order cannot be null!' %}");
+
+            } else {
+                get_order_info();
+            }
+
         });
 
 
@@ -218,7 +169,16 @@
         // already fix
         $("#_purchase_no").on("click", function() {
 
-            get_no_info();
+            let purchase_no = document.getElementById('id_purchase_no').value.trim();
+
+            if (!purchase_no) {
+                event.preventDefault(); // Ngăn gửi request lên server
+                alert("{% trans 'Purchase Order cannot be null!' %}");
+
+            } else {
+                get_no_info();
+            }
+
         });
 
 
@@ -389,8 +349,6 @@
                     }
                 },
                 { name: "id", type: "number", width: 50, title: "ID", align: "center", readOnly: true, visible: false },
-                {#{ name: "order_qty", type: "text", width: 125, title: translations.qty, align: "center" },#}
-
                 {
                     name: "order_qty",
                     type: "text",
@@ -511,6 +469,7 @@
 
         });
 
+
         // 當按下過帳按鈕時
         $('#postDataButton').click(function(event) {
             event.preventDefault();
@@ -568,4 +527,4 @@
 
 </script>
 
-{% endblock %}
+{% endblock javascript %}

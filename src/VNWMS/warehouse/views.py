@@ -942,7 +942,7 @@ def bin_transfer_page(request):
                 'bin': bin,
                 'qty': qty
             }
-            return render(request, 'warehouse/work_order_search.html', locals())
+            return render(request, 'warehouse/transfer_and_adjust.html', locals())
     form = BinTransferForm()
 
     return render(request, 'warehouse/bin/bin_transfer.html', locals())
@@ -1033,7 +1033,7 @@ def bin_adjust_page(request):
                 'bin': bin,
                 'qty': qty
             }
-            return render(request, 'warehouse/work_order_search.html', locals())
+            return render(request, 'warehouse/transfer_and_adjust.html', locals())
     form = QuantityAdjustForm()
 
     return render(request, 'warehouse/bin/bin_adjust.html', locals())

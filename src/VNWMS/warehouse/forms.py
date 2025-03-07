@@ -53,7 +53,7 @@ class WarehouseForm(forms.ModelForm):
         plant_choices = Plant.objects.values_list('plant_code', 'plant_name')
 
         # Gán danh sách lựa chọn vào ChoiceField
-        self.fields['wh_plant'].choices = [('', 'Choose Plant')] + list(plant_choices)
+        self.fields['wh_plant'].choices = [('', _('Choose Plant'))] + list(plant_choices)
 
         # Kiểm tra nếu là form chỉnh sửa
         if self.instance and self.instance.pk:  # Kiểm tra nếu đối tượng đã tồn tại
@@ -260,16 +260,16 @@ class BinTransferForm(forms.Form):
             Div(
                 Div('bin', css_class='col-md-6'),
                 Div('qty', css_class='col-md-5'),
-                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
-                                                                                        'padding-right: 10px'),
-                css_class='row'
+                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-1', style='margin-top: 29px;'
+                                                                                           ' height: 42px'),
+                css_class='row m-0'
             ),
         )
 
 
 class QuantityAdjustForm(forms.Form):
 
-    qty = forms.IntegerField(label=_("Quantity"), required=True)
+    qty = forms.IntegerField(label=_("New Quantity"), required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -281,9 +281,9 @@ class QuantityAdjustForm(forms.Form):
             Div(
                 HTML("<div class='col-md-5'></div>"),  # Sửa lỗi này
                 Div('qty', css_class='col-md-5'),
-                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-1', style='height: 50%; margin-top: 2.5%;'
-                                                                                        'padding-right: 10px'),
-                css_class='row'
+                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-2', style='margin-top: 16px; '
+                                                                                           'height: 40px'),
+                css_class='row d-flex align-items-center m-0'
             ),
         )
 
@@ -319,7 +319,8 @@ class StockInPForm(forms.Form):
                 Div(AppendedText(
                     'purchase_no',
                     '<button type="button" id="_purchase_no" class="btn btn-sm btn-outline-secondary p-0" '
-                    'style="height: 24px; width: 25px; display: flex; align-items: center; justify-content: center;">'
+                    'style="height: 24px; width: 25px; display: flex; '
+                    'align-items: center; justify-content: center;" aria-label="Purchase Order">'
                     '<i class="fas fa-search"></i>'
                     '</button>'
                 ), css_class='col-md-3'),
@@ -332,7 +333,8 @@ class StockInPForm(forms.Form):
                 Div(AppendedText(
                     'product_order',
                     '<button type="button" id="_product_order" class="btn btn-sm btn-outline-secondary p-0" '
-                    'style="height: 24px; width: 25px; display: flex; align-items: center; justify-content: center;">'
+                    'style="height: 24px; width: 25px; '
+                    'display: flex; align-items: center; justify-content: center;" aria-label="Product Order">'
                     '<i class="fas fa-search"></i>'
                     '</button>'
                 ), css_class='col-md-3'),

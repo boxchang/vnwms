@@ -42,7 +42,7 @@
         </div>
 
 
-        <h2 class="col p-3 mt-4" style="font-size: 1.5em;text-align: center;">{% trans "Upload Location Excel File" %}</h2>
+        <h3 class="mt-5 text-center">{% trans "Upload Location Excel File" %}</h3>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row d-flex justify-content-center">
@@ -50,14 +50,18 @@
                     {% crispy form %}
                 </div>
 
-                <div class="col-md-1 d-flex align-items-end upload">
+                <div class="col-12 col-md-1 text-center upload">
                     <button type="submit" class="btn btn-success">
                         <i class="fa fa-upload"></i> {% trans "Upload" %}
                     </button>
                 </div>
 
-                <a href="{% url 'download_excel_template' 'Location_basic_data_import.xlsx' %}" class="download">
-                    <button id="exportExcel" type="button" class="btn btn-info"><i class="fas fa-download"></i></button>
+                <a href="{% url 'download_excel_template' 'Location_basic_data_import.xlsx' %}"
+                   class="download col-12 col-md-1 text-center">
+                    <button id="exportExcel" type="button" class="btn btn-info" aria-label="template">
+                        <i class="fas fa-download">
+                        </i>
+                    </button>
                 </a>
 
             </div>
@@ -65,3 +69,4 @@
 
 
 {% endblock %}
+

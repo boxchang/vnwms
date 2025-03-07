@@ -3,60 +3,47 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 {% block title %} {% trans "Transaction" %} {% endblock %}
-
-{% block css %}
-    <style>
-
-        #searchBtn {
-            align-items: center;
-            bottom: 1px;
-
-        }
-    </style>
-
-
-{% endblock %}
-
 {% block content %}
-    <h3 class="mt-5" style="font-size: 1.5em;text-align: center;">{% trans "Transaction History Search" %}</h3>
-        <div style="padding-left: 5rem; padding-top: 1rem">
-            <div class="row">
-                <div class="col-md-5">
-                    <label for="productOrder" class="mr-2">{% trans "Product Order" %}:</label>
-                    <input type="text" id="productOrder" class="form-control" placeholder="{% trans "Enter Product Order" %}">
-                </div>
-                <div class="col-md-5">
-                    <label for="Bin" class="mr-2">{% trans "Location" %}:</label>
-                    <input type="text" id="bin" class="form-control" placeholder="{% trans "Enter Location" %}">
-                </div>
-                <div class="col-2 d-flex align-items-end p-0">
-                    <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"> {% trans "Search" %}</i></button>
-                </div>
+    <h3 class="mt-5" style="text-align: center">{% trans "Transaction History Search" %}</h3>
+    <div style="padding-left: 5rem; padding-top: 1rem">
+        <div class="row">
+            <div class="col-md-5">
+                <label for="productOrder" class="mr-2">{% trans "Product Order" %}:</label>
+                <input type="text" id="productOrder" class="form-control" placeholder="{% trans "Enter Product Order" %}">
             </div>
-
-            <div class="mt-2" id="jsGrid"></div>
+            <div class="col-md-5">
+                <label for="Bin" class="mr-2">{% trans "Location" %}:</label>
+                <input type="text" id="bin" class="form-control" placeholder="{% trans "Enter Location" %}">
+            </div>
+            <div class="col-2 d-flex align-items-end p-0">
+                <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"> {% trans "Search" %}</i></button>
+            </div>
         </div>
 
-    <script>
-        var translations = {
-            notFound: "{% trans 'Not found' %}",
-            productOrder: "{% trans 'Product Order' %}",
-            purchaseOrder: "{% trans 'Purchase Order' %}",
-            versionNo: "{% trans 'Version No' %}",
-            versionSeq: "{% trans 'Version Seq' %}",
-            size: "{% trans 'Size' %}",
-            bin: "{% trans 'Bin' %}",
-            mvt: "{% trans 'Mvt' %}",
-            minusQty: "-",
-            plusQty: "+",
-            qty: "{% trans 'Qty' %}",
-            createAt: "{% trans 'Create at' %}",
-            createBy: "{% trans 'Create by' %}"
-        };
-    </script>
+        <div class="mt-2" id="jsGrid"></div>
+    </div>
+{% endblock %}
 
+
+{% block javascript %}
     <script>
         $(document).ready(function() {
+
+            var translations = {
+                notFound: "{% trans 'Not found' %}",
+                productOrder: "{% trans 'Product Order' %}",
+                purchaseOrder: "{% trans 'Purchase Order' %}",
+                versionNo: "{% trans 'Version No' %}",
+                versionSeq: "{% trans 'Version Seq' %}",
+                size: "{% trans 'Size' %}",
+                bin: "{% trans 'Bin' %}",
+                mvt: "{% trans 'Mvt' %}",
+                minusQty: "-",
+                plusQty: "+",
+                qty: "{% trans 'Qty' %}",
+                createAt: "{% trans 'Create at' %}",
+                createBy: "{% trans 'Create by' %}"
+            };
 
 
             $("#jsGrid").jsGrid({
@@ -113,7 +100,7 @@
         });
 
 
-        document.getElementById('search').addEventListener('click', function(event) {
+        document.getElementById('searchBtn').addEventListener('click', function(event) {
 
             let bin = document.getElementById('id_bin').value.trim();
             let po_no = document.getElementById('id_po_no').value.trim();
@@ -128,7 +115,4 @@
 
 
     </script>
-
-
-
-{% endblock %}
+{% endblock javascript %}

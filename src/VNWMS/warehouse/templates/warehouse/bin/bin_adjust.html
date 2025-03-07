@@ -5,6 +5,9 @@
 {% block title %} {% trans "Quantity Adjust" %} {% endblock %}
 {% block css %}
     <style>
+
+
+
         form {
             margin-top: 3%;
         }
@@ -21,16 +24,16 @@
     </style>
 
 
-{% endblock %}
+{% endblock css %}
 {% block content %}
-    <div class="container">
+    <div class="mt-4">
         <h3 style="font-size: 1.5em;text-align: center;">{% trans "Quantity Adjust" %}</h3>
         <div id="jsGrid"></div>
         <form method="post">
             {% crispy form %}
         </form>
     </div>
-{% endblock %}
+{% endblock content %}
 
 {% block javascript %}
 
@@ -97,4 +100,4 @@
 
 
 
-{% endblock %}
+{% endblock javascript %}

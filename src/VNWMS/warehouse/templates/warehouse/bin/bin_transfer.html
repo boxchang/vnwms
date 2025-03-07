@@ -5,14 +5,10 @@
 {% block title %} {% trans "Location Transfer" %} {% endblock %}
 {% block css %}
     <style>
+
         form {
             margin-top: 3%;
         }
-
-        .container {
-            margin-top: 2%;
-        }
-
 
 
         #jsGrid {
@@ -23,10 +19,12 @@
     </style>
 
 
-{% endblock %}
+{% endblock css %}
+
 {% block content %}
-    <div class="container">
-        <h3 style="font-size: 1.5em;text-align: center;">{% trans "Location Transfer" %}</h3>
+
+    <div class="container mt-4">
+        <h3 class="text-center">{% trans "Location Transfer" %}</h3>
         <div id="jsGrid"></div>
         <form method="post">
             {% crispy form %}
@@ -34,26 +32,26 @@
     </div>
 
 
-{% endblock %}
+{% endblock content %}
+
 
 {% block javascript %}
 
     <script>
-        var translations = {
-            warehouse: "{% trans "Warehouse" %}",
-            productOrder: "{% trans "Product Order" %}",
-            purchaseNo: "{% trans "Purchase No" %}",
-            versionNo: "{% trans "Version No" %}",
-            versionSeq: "{% trans "Version Seq" %}",
-            size: "{% trans "Size" %}",
-            bin: "{% trans "Bin" %}",
-            qty: "{% trans "Quantity" %}"
-        };
 
-    </script>
-
-    <script>
         $(document).ready(function() {
+
+            var translations = {
+                warehouse: "{% trans "Warehouse" %}",
+                productOrder: "{% trans "Product Order" %}",
+                purchaseNo: "{% trans "Purchase No" %}",
+                versionNo: "{% trans "Version No" %}",
+                versionSeq: "{% trans "Version Seq" %}",
+                size: "{% trans "Size" %}",
+                bin: "{% trans "Bin" %}",
+                qty: "{% trans "Quantity" %}"
+            };
+
             // Parse URL parameters
             let params = new URLSearchParams(window.location.search);
             let warehouse = params.get("warehouse");
@@ -65,17 +63,6 @@
             let bin = params.get("bin");
             let qty = params.get("qty");
 
-            // Prepare data for transfer
-            let itemData = {
-                warehouse,
-                productOrder,
-                purchaseNo,
-                versionNo,
-                versionSeq,
-                size,
-                bin,
-                qty
-            };
 
             console.log("Loaded Data:", {
                 warehouse, productOrder, purchaseNo, versionNo, versionSeq, size, bin, qty
@@ -108,9 +95,8 @@
                 }
             });
 
-
         });
 
     </script>
 
-{% endblock %}
+{% endblock javascript %}
