@@ -619,7 +619,7 @@ def stockin_filter(raws):
             qty = int(order_qty)
 
         if qty > 0:
-            data_list.append({'product_order': product_order, 'customer_no': '', 'version_no': version_no,
+            data_list.append({'product_order': product_order, 'customer_no': raw['LIFNR'], 'version_no': version_no,
                               'version_seq': version_seq, 'lot_no': raw['LOTNO'], 'item_type': raw['WGBEZ'],
                               'packing_type': '', 'purchase_no': purchase_no, 'purchase_qty': raw['MENGE_PO'],
                               'size': size, 'purchase_unit': raw['MEINS'], 'post_date': raw['BUDAT'],
@@ -638,7 +638,7 @@ def get_product_order_info(request):
             return JsonResponse({"status": "no_change"}, status=200)
         else:
             sql = f"""
-            SELECT VBELN, ZZVERSION, ZZVERSION_SEQ, LOTNO, WGBEZ, EBELN, MENGE_PO, ZSIZE, MEINS, BUDAT, MENGE,
+            SELECT VBELN, ZZVERSION, ZZVERSION_SEQ, LOTNO, WGBEZ, EBELN, MENGE_PO, ZSIZE, MEINS, BUDAT, MENGE, LIFNR,
             NAME1, MBLNR
             FROM [PMG_SAP].[dbo].[ZMMT4001] WHERE VBELN = '{product_order}'
             """
@@ -661,7 +661,7 @@ def get_purchase_no_info(request):
         else:
             sql = f"""
                     SELECT VBELN, ZZVERSION, ZZVERSION_SEQ, LOTNO, WGBEZ, EBELN, MENGE_PO, ZSIZE, MEINS, BUDAT, MENGE,
-                    NAME1, MBLNR
+                    LIFNR, NAME1, MBLNR
                     FROM [PMG_SAP].[dbo].[ZMMT4001] WHERE EBELN = '{purchase_no}'
                     """
 
@@ -1042,19 +1042,24 @@ def bin_adjust_page(request):
 def product_order_hist_data(request):
     product_order = request.GET.get('product_order')
     bin_id = request.GET.get('bin_id')
+    size = request.GET.get('size')
+    comment = request.GET.get('comment')
 
-    if not (product_order or bin_id):
+    if not (product_order or bin_id or size or comment):
         return JsonResponse({"status": "blank"}, status=200)
 
     bin_values = Bin_Value_History.objects.filter(
         (Q(product_order__icontains=product_order) if product_order else Q()) &
-        (Q(bin__bin_id__icontains=bin_id) if bin_id else Q())
+        (Q(bin__bin_id__icontains=bin_id) if bin_id else Q()) &
+        (Q(size__icontains=size) if size else Q()) &
+        (Q(comment__icontains=comment) if comment else Q())
     ).values(
         'product_order',
         'purchase_no',
         'version_no',
         'version_seq',
         'size',
+        'comment',
         'mvt_id',
         'bin_id',
         'plus_qty',
@@ -1064,7 +1069,6 @@ def product_order_hist_data(request):
         'create_by__username'
     )
 
-    # data = list(bin_values)
     data = [
         {
             "product_order": item["product_order"],
@@ -1072,6 +1076,7 @@ def product_order_hist_data(request):
             "version_no": item["version_no"],
             "version_seq": item["version_seq"],
             "size": item["size"],
+            "comment": item["comment"],
             "mvt_id": item["mvt_id"],
             "bin_id": item["bin_id"],
             "plus_qty": intcomma(item["plus_qty"]),

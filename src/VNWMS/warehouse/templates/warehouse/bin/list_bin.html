@@ -44,15 +44,6 @@
                         <td>{{ bin.bin_id }}</td>
                         <td>{{ bin.bin_name }}</td>
                         <td>{{ bin.wh_code }}</td>
-
-    {#                    <td>{{ warehouse.wh_comment }}</td>#}
-    {#                    <td>#}
-    {#                        {% if warehouse.wh_bg %}#}
-    {#                        <img src="{{ warehouse.wh_bg.url }}" alt="Background Image" style="max-width: 100px;">#}
-    {#                        {% else %}#}
-    {#                        <em>No Image</em>#}
-    {#                        {% endif %}#}
-    {#                    </td>#}
                         <td>
                             {% if bin.bin_id %}
                                 <a class="btn btn-primary" style="width: 70px" href="{% url 'edit_bin' bin_code=bin.bin_id %}" role="button">Edit</a>

@@ -10,7 +10,6 @@
         body {
             background-color: #f8f9fa;
         }
-        
 
         label {
             width: 127px;
@@ -18,15 +17,11 @@
             color: #333;
         }
 
-
-
-
         th input {
             width: 100%;
             box-sizing: border-box;
             padding: 3px;
         }
-
 
         table thead th {
             position: sticky;
@@ -39,17 +34,14 @@
             border: 1px solid #ddd;
         }
 
-
-
         .bin_value {
             margin-bottom: 5px;
         }
 
     </style>
-{% endblock %}
+{% endblock base_js %}
 
 {% block content %}
-
 <div class="container-fluid">
 
     <!-- Form for search -->
@@ -217,8 +209,7 @@
         </div>
     </div>
 </div>
-
-{% endblock %}
+{% endblock content %}
 
 {% block javascript %}
     <script>
@@ -237,6 +228,6 @@
             });
         });
     </script>
-{% endblock %}
+{% endblock javascript %}
 
 

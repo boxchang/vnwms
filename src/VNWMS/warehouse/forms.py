@@ -490,5 +490,3 @@ class BinValueSearchForm(forms.Form):
                                                                                                            "wh_name"))
         self.fields["area"].choices = [("", _("Choose Area"))]
         self.fields["bin"].choices = [("", _("Choose Location"))]
-
-

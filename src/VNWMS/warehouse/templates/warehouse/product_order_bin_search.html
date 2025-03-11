@@ -2,30 +2,51 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% load i18n %}
-{% block title %} {% trans "Transaction" %} {% endblock %}
+{% block title %} {% trans "Transaction" %} {% endblock title %}
 {% block content %}
-    <h3 class="mt-5" style="text-align: center">{% trans "Transaction History Search" %}</h3>
-    <div style="padding-left: 5rem; padding-top: 1rem">
-        <div class="row">
-            <div class="col-md-5">
-                <label for="productOrder" class="mr-2">{% trans "Product Order" %}:</label>
-                <input type="text" id="productOrder" class="form-control" placeholder="{% trans "Enter Product Order" %}">
+    <h3 class="mt-4 mb-5 text-center">{% trans "Transaction History Search" %}</h3>
+    <div class="row d-flex justify-content-center p-0">
+        <div class="row d-flex justify-content-center p-0 m-0" style="width: 95%">
+            <div class="d-flex justify-content-start flex-grow-1">
+                <div class="col-md-2 pl-1">
+                    <label for="productOrder" class="mr-2">{% trans "Product Order" %}</label>
+                    <input type="text" id="productOrder" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label for="bin" class="mr-2">{% trans "Location" %}</label>
+                    <input type="text" id="bin" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label for="size" class="mr-2">{% trans "Size" %}</label>
+                    <input type="text" id="size" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label for="comment" class="mr-2">{% trans "Comment" %}</label>
+                    <input type="text" id="comment" class="form-control">
+                </div>
+                <div class="col-2 d-flex align-items-end">
+                    <button id="searchBtn" class="btn btn-primary btn-lg"><i class="fas fa-search"> {% trans "Search" %}</i></button>
+                </div>
             </div>
-            <div class="col-md-5">
-                <label for="Bin" class="mr-2">{% trans "Location" %}:</label>
-                <input type="text" id="bin" class="form-control" placeholder="{% trans "Enter Location" %}">
-            </div>
-            <div class="col-2 d-flex align-items-end p-0">
-                <button id="searchBtn" class="btn btn-primary"><i class="fas fa-search"> {% trans "Search" %}</i></button>
+
+            <div class="col-2 d-flex align-items-end p-0 m-0 justify-content-end">
+                <a class="download">
+                    <button id="exportExcel" type="button" class="btn btn-info" aria-label="template">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </a>
             </div>
         </div>
 
         <div class="mt-2" id="jsGrid"></div>
     </div>
-{% endblock %}
+{% endblock content %}
 
 
 {% block javascript %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
         $(document).ready(function() {
 
@@ -36,6 +57,7 @@
                 versionNo: "{% trans 'Version No' %}",
                 versionSeq: "{% trans 'Version Seq' %}",
                 size: "{% trans 'Size' %}",
+                comment: "{% trans 'Comment' %}",
                 bin: "{% trans 'Bin' %}",
                 mvt: "{% trans 'Mvt' %}",
                 minusQty: "-",
@@ -57,11 +79,12 @@
                 pageSize: 20,
                 fields: [
                     { name: "product_order", title: translations.productOrder, type: "text", width: 30, css: "text-center" },
-                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 35, css: "text-center" },
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 25, css: "text-center" },
                     { name: "version_no", title: translations.versionNo, type: "text", width: 25, css: "text-center" },
-                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 15, css: "text-center" },
-                    { name: "size", title: translations.size, type: "text", width: 25, css: "text-center" },
-                    { name: "bin_id", title: translations.bin, type: "text", width: 25, css: "text-center" },
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 10, css: "text-center" },
+                    { name: "size", title: translations.size, type: "text", width: 15, css: "text-center" },
+                    { name: "comment", title: translations.comment, type: "text", width: 35, css: "text-center" },
+                    { name: "bin_id", title: translations.bin, type: "text", width: 15, css: "text-center" },
                     { name: "mvt_id", title: translations.mvt, type: "text", width: 25, css: "text-center" },
                     { name: "minus_qty", title: "-", type: "text", width: 25, css: "text-center" },
                     { name: "plus_qty", title: "+", type: "text", width: 25, css: "text-center" },
@@ -75,15 +98,18 @@
             $("#searchBtn").on("click", function() {
                 const productOrder = $("#productOrder").val();
                 const bin = $("#bin").val();
+                const size = $("#size").val();
+                const comment = $("#comment").val();
 
-                if (!productOrder && !bin) {
+                if (!productOrder && !bin && !size && !comment) {
                     event.preventDefault(); // Ngăn gửi request lên server
-                    alert("{% trans 'Product Order/Location cannot all be null!' %}");
+                    alert("{% trans '(Product Order/Location/Size/Comment) cannot all be null!' %}");
                     return;
                 }
 
                 $.ajax({
-                    url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin,
+                    url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin +
+                        '&size=' + size + '&comment=' + comment,
                     method: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -97,20 +123,70 @@
             });
 
 
-        });
+            $("#exportExcel").click(function () {
+                // Lấy dữ liệu từ jsGrid
+                var gridData = $("#jsGrid").jsGrid("option", "data");
+
+                // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
+                var fields = [
+                    { name: "product_order", title: translations.productOrder, type: "text", width: 100},
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 100},
+                    { name: "version_no", title: translations.versionNo, type: "text", width: 100},
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 60},
+                    { name: "size", title: translations.size, type: "text", width: 45},
+                    { name: "comment", title: translations.comment, type: "text", width: 100},
+                    { name: "bin_id", title: translations.bin, type: "text", width: 55},
+                    { name: "mvt_id", title: translations.mvt, type: "text", width: 55},
+                    { name: "minus_qty", title: "-", type: "text", width: 55},
+                    { name: "plus_qty", title: "+", type: "text", width: 55},
+                    { name: "remain_qty", title: translations.qty, type: "text", width: 55},
+                    { name: "create_at", title: translations.createAt, type: "text", width: 100},
+                    { name: "create_by__username", title: translations.createBy, type: "text", width: 55},
+                ];
+
+                // Tạo một đối tượng map để ánh xạ từ name sang title
+                var titleMap = {};
+                fields.forEach(function (field) {
+                    titleMap[field.name] = field.title;
+                });
+
+                // Chuyển đổi dữ liệu với cột là title thay vì name
+                var transformedData = gridData.map(function (item) {
+                    var transformedItem = {};
+                    for (var key in item) {
+                        if (item.hasOwnProperty(key)) {
+                            // Ánh xạ từ name sang title
+                            var title = titleMap[key];
+                            if (title) {
+                                transformedItem[title] = item[key];
+                            }
+                        }
+                    }
+                    return transformedItem;
+                });
 
 
-        document.getElementById('searchBtn').addEventListener('click', function(event) {
+                // Chuyển đổi dữ liệu thành định dạng SheetJS
+                var ws = XLSX.utils.json_to_sheet(transformedData);
 
-            let bin = document.getElementById('id_bin').value.trim();
-            let po_no = document.getElementById('id_po_no').value.trim();
-            let size = document.getElementById('id_size').value.trim();
 
-            if (!bin && !po_no && !size) {
-                event.preventDefault(); // Ngăn gửi request lên server
-                alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
+                // Đặt độ rộng cho các cột
+                var colWidths = fields.map(function(field) {
+                    return { wpx: field.width }; // Đặt độ rộng cột theo thuộc tính width trong fields
+                });
+                // Áp dụng độ rộng cho sheet
+                ws['!cols'] = colWidths;
 
-            }
+
+                // Tạo workbook và thêm sheet vào
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+                // Xuất file Excel
+                XLSX.writeFile(wb, "Transaction_History.xlsx");
+            });
+
+
         });
 
 

@@ -4,7 +4,6 @@
 {% load i18n %}
 {% block title %} {% trans "Upload Location Excel File" %} {% endblock %}
 {% block js %}
-
 <style>
     .alert-align{
         width: 15%;
@@ -15,10 +14,9 @@
         margin-top: 32px;
         height: 51%;
     }
-
-
 </style>
-{% endblock %}
+{% endblock js %}
+
 {% block content %}
         <div class="alert-align d-flex justify-content-start">
         {% if message %}
@@ -68,5 +66,5 @@
         </form>
 
 
-{% endblock %}
+{% endblock content %}
 
