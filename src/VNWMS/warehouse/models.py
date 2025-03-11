@@ -149,6 +149,7 @@ class Bin_Attr_Value(models.Model):
 class MovementType(models.Model):
     mvt_code = models.CharField(max_length=20, primary_key=True)
     mvt_name = models.CharField(max_length=20, blank=False, null=False)
+    mvt_vn_name = models.CharField(max_length=20, blank=True, null=True)
     desc = models.CharField(max_length=200, blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
@@ -209,6 +210,7 @@ class Bin_Value_History(models.Model):
 class ItemType(models.Model):
     type_code = models.CharField(max_length=20, primary_key=True)
     type_name = models.CharField(max_length=20, blank=False, null=False)
+    type_vn_name = models.CharField(max_length=20, blank=True, null=True)
     desc = models.CharField(max_length=200, blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
