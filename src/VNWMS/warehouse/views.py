@@ -3,7 +3,7 @@ import os
 
 import pandas as pd
 from datetime import datetime
-
+from django.utils.translation import get_language
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.humanize.templatetags.humanize import intcomma
@@ -1053,6 +1053,14 @@ def product_order_hist_data(request):
     if not (product_order or bin_id or size or comment):
         return JsonResponse({"status": "blank"}, status=200)
 
+    current_language = get_language()
+    if current_language == "zh-hant":
+        _mvt = 'mvt__desc'
+    elif current_language == "vi":
+        _mvt = 'mvt__mvt_vn_name'
+    else:
+        _mvt = 'mvt_id'
+
     bin_values = Bin_Value_History.objects.filter(
         (Q(product_order__icontains=product_order) if product_order else Q()) &
         (Q(bin__bin_id__icontains=bin_id) if bin_id else Q()) &
@@ -1065,7 +1073,7 @@ def product_order_hist_data(request):
         'version_seq',
         'size',
         'comment',
-        'mvt_id',
+        _mvt,
         'bin_id',
         'plus_qty',
         'minus_qty',
@@ -1082,7 +1090,7 @@ def product_order_hist_data(request):
             "version_seq": item["version_seq"],
             "size": item["size"],
             "comment": item["comment"],
-            "mvt_id": item["mvt_id"],
+            "mvt_id": item[_mvt],
             "bin_id": item["bin_id"],
             "plus_qty": intcomma(item["plus_qty"]),
             "minus_qty": intcomma(item["minus_qty"]),
