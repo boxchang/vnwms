@@ -10,6 +10,10 @@
     display: none !important;
 }
 
+.jsgrid-grid-body::-webkit-scrollbar {
+    height: 16px !important;
+}
+
 .input-custom {
     --bs-gutter-x: 0;
 }
@@ -208,6 +212,13 @@ h3 {
 
         $("#create").on("click", function() {
             add_item();
+            $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
+            $("#id_purchase_qty").val(0);
+            $("#id_order_qty").val(0);
+            $("#id_purchase_qty").val(0);
+            $("#id_item_type").val(0);
+            $("#id_purchase_unit").val(0);
+
         });
 
         function add_item() {
