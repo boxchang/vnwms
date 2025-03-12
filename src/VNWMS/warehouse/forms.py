@@ -7,7 +7,7 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput
 from warehouse.models import Warehouse, Area, Bin, ItemType, PackMethod, UnitType, Bin_Value, Plant
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Button, Submit, HTML
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, get_language
 from django import forms
 
 
@@ -246,9 +246,14 @@ class BinTransferForm(forms.Form):
         queryset=Bin.objects.all().order_by('bin_id'),
         label=_("Location:"),
         required=True,
+        widget=forms.Select(attrs={'class': 'form-control select2-bin'})
     )
 
-    qty = forms.IntegerField(label=_("Quantity"), required=True)
+    qty = forms.IntegerField(
+        label=_("Quantity"),
+        required=True,
+        widget=forms.NumberInput(attrs={'class': 'form-control'})  # Đảm bảo có 'form-control'
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -309,6 +314,22 @@ class StockInPForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # 📌 Lấy ngôn ngữ hiện tại
+        lang = get_language()
+
+        # 📌 Tuỳ chỉnh `queryset` của `item_type`
+        if lang == 'vi':
+            self.fields['item_type'].queryset = ItemType.objects.filter(type_vn_name__isnull=False)\
+                .order_by('type_vn_name')
+            self.fields['item_type'].label_from_instance = lambda obj: obj.type_vn_name
+        elif lang == 'zh-hant':
+            self.fields['item_type'].queryset = ItemType.objects.filter(type_name__isnull=False).order_by('type_name')
+            self.fields['item_type'].label_from_instance = lambda obj: obj.type_name
+        else:
+            self.fields['item_type'].queryset = ItemType.objects.filter(type_code__isnull=False).order_by('type_code')
+            self.fields['item_type'].label_from_instance = lambda obj: obj.type_code
+
+        # 📌 Cấu hình Crispy Forms
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_errors = True

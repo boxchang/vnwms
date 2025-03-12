@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
+from django.utils.translation import get_language
 
 
 class Plant(models.Model):
@@ -155,8 +156,17 @@ class MovementType(models.Model):
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
                                   related_name='mvt_create_by')  # 建立者
 
+    def get_translated_name(self):
+        lang = get_language()
+        if lang == 'vi' and self.mvt_vn_name:
+            return self.mvt_vn_name
+        elif lang == 'zh-hant' and self.desc:
+            return self.desc
+        return self.mvt_name
+
     def __str__(self):
         return self.mvt_code
+
 
 
 class Bin_Value(models.Model):

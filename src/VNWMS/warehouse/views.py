@@ -711,7 +711,13 @@ def packing_material_stock_in_post(request):
 
                 if 'item_type' in item and item['item_type']:
                     try:
-                        item_type = ItemType.objects.get(type_name=item['item_type'])
+                        # item_type = ItemType.objects.get(type_name=item['item_type'])
+                        item_type = ItemType.objects.get(
+                            Q(type_code=item['item_type']) |
+                            Q(type_name=item['item_type']) |
+                            Q(type_vn_name=item['item_type'])
+                        )
+                        item['item_type'] = item_type.type_code
 
                         stockin_form_detail = StockInFormDetail(
                             form_no=stockin_form,

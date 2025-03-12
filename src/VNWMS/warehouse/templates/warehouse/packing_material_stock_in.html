@@ -269,6 +269,7 @@ h3 {
 
 
         data: []; // 初始為空，將透過 AJAX 加載資料
+        var currentLang = "{{ request.LANGUAGE_CODE }}";
 
         // 初始化 jsGrid
         $("#jsGrid").jsGrid({
@@ -281,7 +282,6 @@ h3 {
             paging: true,     // 啟用分頁功能
             noDataContent: "{% trans "Not found" %}",
             confirmDeleting: false,
-
 
             rowClick: function (args) {
                 this.editItem(args.item);
@@ -426,7 +426,7 @@ h3 {
                 { name: "lot_no", type: "text", width: 130, title: translations.lotNo, align: "center", editing: false },
                 { name: "purchase_qty", type: "text", width: 120, title: translations.purchaseQty, align: "center", editing: false },
                 { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, align: "center", editing: false },
-                { name: "item_type", type: "text", width: 120, title: translations.itemType, align: "center", editing: false },
+                { name: "item_type", type: "text", width: 200, title: translations.itemType, align: "center", editing: false },
                 { name: "post_date", type: "text", width: 150, title: translations.postDate, align: "center", editing: false },
                 { name: "supplier", type: "text", width: 120, title: translations.supplier, align: "center", editing: false },
                 { name: "customer_no", type: "text", width: 120, title: translations.customerNo, align: "center", editing: false },
