@@ -217,7 +217,8 @@ h3 {
             const product_order =$("#id_product_order").val();
             const version_no =$("#id_version_no").val();
             const lot_no =$("#id_lot_no").val();
-            const item_type =$("#id_item_type").val();
+            const item_type =$("#id_item_type option:selected").text();
+            const item_type_val =$("#id_item_type").val();
             const purchase_no =$("#id_purchase_no").val();
             const purchase_qty =$("#id_purchase_qty").val();
             const size =$("#id_size").val();
@@ -228,8 +229,8 @@ h3 {
             const customer_no =$("#id_customer_no").val();
             const version_seq = $("#id_version_seq").val();
 
-            if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "") {
-                alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %} {% trans "are required" %}");
+            if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "" || item_type_val == "") {
+                alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %} {% trans "are required" %}");
                 return false;
             }
 

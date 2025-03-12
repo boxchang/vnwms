@@ -299,9 +299,9 @@ class StockInPForm(forms.Form):
     version_no = forms.CharField(max_length=20, label=_("Version No"), required=True,)  # ZZVERSION
     version_seq = forms.CharField(max_length=20, label=_("Version Sequence"), required=True, )  # ZZVERSION_SEQ
     lot_no = forms.CharField(max_length=20, label=_("Lot Number"), required=False, )  # LOTNO
-    item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=False)
+    item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=True)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
-    purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, )  # MENGE_PO 採購數量
+    purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, initial=0)  # MENGE_PO 採購數量
     size = forms.CharField(max_length=20, label=_("Size"), required=True, )  # ZSIZE 尺寸
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
@@ -374,78 +374,6 @@ class StockInPForm(forms.Form):
                 Div('desc', css_class='col-md-10'),
                 Div(HTML(
                     '<a href="#" class="btn btn-info" id="create""><i class="fas fa-plus-circle"></i> '+_('Add')+'</a>'),
-                    css_class='col-md-2 d-flex align-items-center pt-3'),
-                css_class='row'),
-        )
-
-        self.fields['post_date'].widget = DatePickerInput(
-            attrs={'value': (datetime.now()).strftime('%Y-%m-%d')},
-            options={
-                "format": "YYYY-MM-DD",
-                "showClose": False,
-                "showClear": False,
-                "showTodayButton": False,
-            }
-        )
-
-
-class StockInPForm2(forms.Form):
-    product_order = forms.CharField(max_length=20, label=_("Product Order"), required=False, )  # VBELN 訂單單號
-    customer_no = forms.CharField(max_length=20, label=_("Customer"), required=False,)  # 無
-    version_no = forms.CharField(max_length=20, label=_("Version No"), required=False,)  # ZZVERSION
-    version_seq = forms.CharField(max_length=20, label=_("Version Sequence"), required=False, )  # ZZVERSION_SEQ
-    lot_no = forms.CharField(max_length=20, label=_("Lot Number"), required=False, )  # LOTNO
-    item_type = forms.CharField(max_length=20, label=_("Receive Type"), required=False, )  # WGBEZ 物料群組說明
-    packing_type = forms.CharField(max_length=20, label=_("Packing Type"), required=False, )  # 包裝方式
-    purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=False, )  # EBELN 採購單號
-    purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, )  # MENGE_PO 採購數量
-    size = forms.CharField(max_length=20, label=_("Size"), required=False, )  # ZSIZE 尺寸
-    purchase_unit = forms.CharField(max_length=20, label=_("Unit"), required=False, )  # MEINS 數量單位
-    post_date = forms.DateField(label=_("Post Date"))  # BUDAT收貨日期
-    order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
-    order_bin = forms.CharField(max_length=20, label=_("Location"), required=False, )
-    gift_qty = forms.CharField(max_length=20, label=_("Complimentary Quantity"), required=False, initial=0)
-    gift_bin = forms.CharField(max_length=20, label=_("Complimentary Location"), required=False, )
-    supplier = forms.CharField(max_length=10, label=_("Supplier"), required=False)  # NAME1
-    sap_mtr_no = forms.CharField(max_length=20, label=_("SAP Material Number"), required=False, )  # MBLNR
-    desc = forms.CharField(max_length=2000, label=_("Comment"), required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}))
-    comment = forms.CharField(max_length=200, label=_("Comment"), required=False, )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.form_show_errors = True
-
-        self.helper.layout = Layout(
-            Div(
-                Div('product_order', css_class='col-md-3'),
-                Div('customer_no', css_class='col-md-3'),
-                Div('version_no', css_class='col-md-3'),
-                Div('version_seq', css_class='col-md-3'),
-                css_class='row'),
-            Div(
-                Div('post_date', css_class='col-md-3'),
-                Div('sap_mtr_no', css_class='col-md-3'),
-                Div('item_type', css_class='col-md-3'),
-                Div('packing_type', css_class='col-md-3'),
-                Div('', css_class='col-md-3'),
-                css_class='row'),
-            Div(
-                Div('purchase_no', css_class='col-md-3'),
-                Div('supplier', css_class='col-md-3'),
-                Div('lot_no', css_class='col-md-2'),
-                Div('size', css_class='col-md-2'),
-                Div('purchase_qty', css_class='col-md-3'),
-                Div('purchase_unit', css_class='col-md-3'),
-                Div('order_qty', css_class='col-md-2'),
-                Div('order_bin', css_class='col-md-2'),
-                Div(Button('bin_search', _('Search'), css_class='btn btn-light', onclick="stock_item_popup();"),
-                    css_class='col-md-1 d-flex align-items-center pt-3'),
-                Div('comment', css_class='col-md-10'),
-                Div(HTML(
-                    '<a href="#" class="btn btn-info" onclick="add_item();"><i class="fas fa-plus-circle"></i> '+_('Add')+'</a>'),
                     css_class='col-md-2 d-flex align-items-center pt-3'),
                 css_class='row'),
         )

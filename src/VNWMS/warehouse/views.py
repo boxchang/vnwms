@@ -621,7 +621,7 @@ def stockin_filter(raws):
         if qty > 0:
             data_list.append({'product_order': product_order, 'customer_no': raw['LIFNR'], 'version_no': version_no,
                               'version_seq': version_seq, 'lot_no': raw['LOTNO'], 'item_type': raw['WGBEZ'],
-                              'packing_type': '', 'purchase_no': purchase_no, 'purchase_qty': raw['MENGE_PO'],
+                              'purchase_no': purchase_no, 'purchase_qty': raw['MENGE_PO'],
                               'size': size, 'purchase_unit': raw['MEINS'], 'post_date': raw['BUDAT'],
                               'order_qty': qty, 'supplier': raw['NAME1'], 'sap_mtr_no': raw['MBLNR']
                               })
@@ -727,7 +727,6 @@ def packing_material_stock_in_post(request):
                             version_seq=item['version_seq'],
                             lot_no=item['lot_no'],
                             item_type=item_type,
-                            packing_type=item['packing_type'],
                             purchase_no=item['purchase_no'],
                             purchase_qty=int(float(item['purchase_qty'])),
                             size=item['size'],
@@ -1387,10 +1386,11 @@ def check_bin_exists(request):
 
     bin_data = []
 
-    for bin in bins:
-        bin_value_exists = Bin_Value.objects.filter(bin_id=bin["bin_id"]).exists()
+    data_list = list(Bin_Value.objects.values_list("bin__bin_id", flat=True))
 
-        status = "red" if bin_value_exists else "green"  # Nếu tồn tại giá trị thì đỏ, ngược lại xanh
+    for bin in bins:
+
+        status = "red" if bin['bin_id'] in data_list else "green"  # Nếu tồn tại giá trị thì đỏ, ngược lại xanh
 
         bin_data.append({
             "bin_id": bin["bin_id"],
