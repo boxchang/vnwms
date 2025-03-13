@@ -212,13 +212,6 @@ h3 {
 
         $("#create").on("click", function() {
             add_item();
-            $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
-            $("#id_purchase_qty").val(0);
-            $("#id_order_qty").val(0);
-            $("#id_purchase_qty").val(0);
-            $("#id_item_type").val(0);
-            $("#id_purchase_unit").val(0);
-
         });
 
         function add_item() {
@@ -243,7 +236,15 @@ h3 {
             if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "" || item_type_val == "") {
                 alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %} {% trans "are required" %}");
                 return false;
+            } else {
+                $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
+                $("#id_purchase_qty").val(0);
+                $("#id_order_qty").val(0);
+                $("#id_purchase_qty").val(0);
+                $("#id_item_type").val(0);
+                $("#id_purchase_unit").val(0);
             }
+
 
             const newItem = {
                 order_qty: order_qty,
