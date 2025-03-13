@@ -52,29 +52,11 @@
     <script>
     $(document).ready(function() {
 
-        $(document).on('keydown', function(e) {
-            if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
-                {#console.log("Phím ESC đã được nhấn");#}
-                const updateButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
-
-                if (updateButton.length) {
-                    updateButton.click();  // Mô phỏng click vào nút cập nhật
-                }
+        $("#id_product_order, #id_purchase_no").on("keydown", function(event) {
+            if (event.which === 13) {  // Nếu nhấn Enter
+                event.preventDefault(); // Ngăn chặn form submit
             }
         });
-
-        $(document).on('keydown', (event) => {
-          if (event.which === 13) {  // Kiểm tra nếu phím Enter (key code 13) được nhấn
-            {#console.log('Enter key pressed:', event);#}
-            const updateButton = $(".jsgrid-button.jsgrid-update-button");
-
-            // Nếu nút "Cập nhật" tồn tại, mô phỏng sự kiện click
-            if (updateButton.length) {
-                updateButton.click();  // Mô phỏng click vào nút cập nhật
-            }
-          }
-        });
-
 
         $("#id_product_order").on("change", function() {
             get_order_info();
@@ -183,6 +165,30 @@
                 { name: "size", type: "text", width: 55, title: "{% trans "Size" %}", editing: false, align: "center" },
                 { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", align: "center", editing: false },
             ]
+        });
+
+
+
+        $(document).on('keydown', function(e) {
+            if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
+                {#console.log("Phím ESC đã được nhấn");#}
+                const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
+
+                if (cancelButton .length) {
+                    e.preventDefault();
+                    cancelButton .click();  // Mô phỏng click vào nút cập nhật
+                }
+            }
+
+            if (e.which === 13) {  // Kiểm tra nếu phím Enter (key code 13) được nhấn
+                const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
+
+                // Nếu nút "Cập nhật" tồn tại, mô phỏng sự kiện click
+                if (updateButton.length) {
+                    e.preventDefault();
+                    updateButton.click();  // Mô phỏng click vào nút cập nhật
+                }
+              }
         });
 
 

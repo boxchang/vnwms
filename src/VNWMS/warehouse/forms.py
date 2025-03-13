@@ -213,12 +213,18 @@ class BinSearchForm(forms.Form):
     from_date = forms.DateField(
         required=False,
         label=_("From"),
-        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'type': 'date'},
+            format='%Y-%m-%d'
+        )
     )
     to_date = forms.DateField(
         required=False,
         label=_("To"),
-        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'type': 'date'},
+            format='%Y-%m-%d'
+        )
     )
 
     def __init__(self, *args, bin_value=None, **kwargs):

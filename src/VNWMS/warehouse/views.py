@@ -280,8 +280,8 @@ def bin_search(request):
         query_to = form.cleaned_data.get('to_date')
 
         if query_bin or query_po_no or query_size:
-            bin_hists = Bin_Value_History.objects.all()
-            bin_values = Bin_Value.objects.all()
+            bin_hists = Bin_Value_History.objects.filter()
+            bin_values = Bin_Value.objects.filter()
 
             if query_bin:
                 bin_hists = bin_hists.filter(bin__bin_id=query_bin)  # Lọc chính xác mã `bin`
