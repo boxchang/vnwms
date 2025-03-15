@@ -4,7 +4,7 @@ from django import forms
 import PIL
 from PIL import Image
 from bootstrap_datepicker_plus.widgets import DatePickerInput
-from warehouse.models import Warehouse, Area, Bin, ItemType, PackMethod, UnitType, Bin_Value, Plant
+from warehouse.models import Warehouse, Area, Bin, ItemType, PackMethod, UnitType, Bin_Value, Plant, Size
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Button, Submit, HTML
 from django.utils.translation import gettext_lazy as _, get_language
@@ -308,11 +308,17 @@ class StockInPForm(forms.Form):
     item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=True)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
     purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, initial=0)  # MENGE_PO 採購數量
-    size = forms.CharField(max_length=20, label=_("Size"), required=True, )  # ZSIZE 尺寸
+    size = forms.ModelChoiceField(queryset=Size.objects.all(), label=_("Size"), required=True)
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
     order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
-    order_bin = forms.CharField(max_length=20, label=_("Location"), required=False)
+    # order_bin = forms.CharField(max_length=20, label=_("Location"), required=False)
+    order_bin = forms.ModelChoiceField(
+        queryset=Bin.objects.all().order_by('bin_id'),
+        label=_("Location:"),
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control select2-bin'})
+    )
     supplier = forms.CharField(max_length=10, label=_("Supplier"), required=False)  # NAME1
     sap_mtr_no = forms.CharField(max_length=20, label=_("SAP Material Number"), required=False, )  # MBLNR
     desc = forms.CharField(max_length=2000, label=_("Comment"), required=False, widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}))
@@ -372,7 +378,7 @@ class StockInPForm(forms.Form):
                 Div('post_date', css_class='col-md-3'),
                 Div('supplier', css_class='col-md-3'),
                 Div('lot_no', css_class='col-md-3'),
-                Div('size', css_class='col-md-3'),
+                Div('size', css_class='col-12 col-md-3'),
                 Div('purchase_qty', css_class='col-md-3'),
                 Div('purchase_unit', css_class='col-md-3'),
                 Div('order_qty', css_class='col-md-3'),

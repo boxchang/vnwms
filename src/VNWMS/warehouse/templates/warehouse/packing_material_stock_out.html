@@ -10,6 +10,9 @@
     display: none !important;
 }
 
+.jsgrid-grid-body::-webkit-scrollbar {
+    height: 16px !important;
+}
 
 .input-custom {
     --bs-gutter-x: 0;
@@ -20,30 +23,23 @@
 
 
 {% block content %}
-<div class="row p-3">
-    <div class="col-1"></div>
+<div class="row p-3 d-flex justify-content-center">
     <div class="col-10">
 
         <h3 class="p-3 text-center">{% trans "Warehouse Stock Out Form" %}</h3>
         <form id="myForm">
             {% crispy form %}
             <div id="jsGrid"></div>
-                <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-                <h3>{% trans "Choose Location" %}</h3>
 
-                {% for bin in bins %}
-                    <button class="number-btn" data-value="{{ bin.bin_id }}" style="{% if bin.has_stock %}background-color: #d2e8b9{% else %}; background-color: #fff{% endif %}">{{ bin.bin_id }}</button>
-                    {% endfor %}
-                    <br><br>
-                    <button id="closePicker">{% trans "Close" %}</button>
-                </div>
+            <hr />
+            <div id="jsGrid_Info"></div>
+
             <hr />
             <div style="text-align: center" class="p-3">
                 <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
             </div>
         </form>
     </div>
-    <div class="col-1"></div>
 </div>
 {% endblock %}
 
@@ -65,7 +61,6 @@
         get_order_info = function() {
 
             var product_order = $("#id_product_order").val();
-            {#alert(product_order);#}
             $.ajax({
                 url: '{% url 'get_product_order_stout' %}', type: 'post',
                 dataType: 'json',
@@ -75,7 +70,8 @@
                     if (data.status === 'no_change'){
                         console.log("Keep the data table");
                     } else {
-                        $("#jsGrid").jsGrid("option", "data", data);
+                        $("#jsGrid").jsGrid("option", "data", data.data_list_stout);
+                        $("#jsGrid_Info").jsGrid("option", "data", data.data_list_info);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -94,7 +90,6 @@
         get_no_info = function() {
 
             var purchase_no = $("#id_purchase_no").val();
-            {#alert(purchase_no);#}
             $.ajax({
                 url: '{% url 'get_purchase_no_stout' %}', type: 'post',
                 dataType: 'json',
@@ -104,7 +99,8 @@
                     if (data.status === 'no_change'){
                         console.log("Keep the data table");
                     } else {
-                        $("#jsGrid").jsGrid("option", "data", data);
+                        $("#jsGrid").jsGrid("option", "data", data.data_list_stout);
+                        $("#jsGrid_Info").jsGrid("option", "data", data.data_list_info);
                     }
 
                 },
@@ -120,13 +116,12 @@
         // 初始化 jsGrid
         $("#jsGrid").jsGrid({
             width: "100%",
-            height: "400px",
+            height: "30vh",
             noDataContent: "{% trans "Not found" %}",
-
             inserting: true,  // 啟用新增功能
             editing: true,    // 啟用編輯功能
             sorting: true,    // 啟用排序功能
-            paging: true,     // 啟用分頁功能
+            paging: false,     // 啟用分頁功能
             {#confirmDeleting: false,#}
 
             rowClick: function (args) {
@@ -156,22 +151,51 @@
                 },
                 { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", align: "center", readOnly: true, visible: false },
                 { name: "order_qty", type: "text", width: 120, title: "{% trans "Qty" %}", align: "center" },
-                { name: "order_bin", type: "text", width: 120, title: "{% trans "Location" %}", align: "center", editing: false },
-                { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", align: "center", editing: true },
-                { name: "product_order", type: "text", width: 150, title: "{% trans "Product Order" %}", validate: "required", editing: false, align: "center" },
-                { name: "purchase_no", type: "text", width: 170, title: "{% trans "Purchase No" %}", editing: false, align: "center" },
-                { name: "version_no", type: "text", width: 170, title: "{% trans "Version No" %}", align: "center", editing: false },
-                { name: "version_seq", type: "number", width: 120, title: "{% trans "Version Seq" %}", editing: false, align: "center" },
-                { name: "size", type: "text", width: 55, title: "{% trans "Size" %}", editing: false, align: "center" },
+                { name: "order_bin", type: "text", width: 70, title: "{% trans "Location" %}", align: "center", editing: false },
+                { name: "desc", type: "text", width: 120, title: "{% trans "Comment" %}", align: "center", editing: true },
+                { name: "product_order", type: "text", width: 130, title: "{% trans "Product Order" %}", validate: "required", editing: false, align: "center" },
+                { name: "purchase_no", type: "text", width: 105, title: "{% trans "Purchase Order" %}", editing: false, align: "center" },
+                { name: "version_no", type: "text", width: 120, title: "{% trans "Version No" %}", align: "center", editing: false },
+                { name: "version_seq", type: "number", width: 90, title: "{% trans "Version Seq" %}", editing: false, align: "center" },
+                { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, align: "center" },
                 { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", align: "center", editing: false },
             ]
         });
 
+        $("#jsGrid_Info").jsGrid({
+            width: "100%",
+            height: "50vh",
+            noDataContent: "{% trans "Not found" %}",
+
+            inserting: false,  // 啟用新增功能
+            editing: false,    // 啟用編輯功能
+            sorting: true,    // 啟用排序功能
+            paging: true,     // 啟用分頁功能
+            {#confirmDeleting: false,#}
+
+            rowClick: function (args) {
+                this.editItem(args.item);
+            },
+
+            data: [],
+
+            fields: [
+                { name: "form_no_id", type: "number", width: 120, title: "{% trans "Stock In No" %}", align: "center", readOnly: true},
+                { name: "product_order", type: "text", width: 120, title: "{% trans "Product Order" %}", align: "center" },
+                { name: "purchase_no", type: "text", width: 100, title: "{% trans "Purchase Order" %}", align: "center", editing: false },
+                { name: "version_no", type: "text", width: 120, title: "{% trans "Version No" %}", align: "center", editing: false },
+                { name: "version_seq", type: "text", width: 80, title: "{% trans "Version Seq" %}", validate: "required", editing: false, align: "center" },
+                { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, align: "center" },
+                { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Unit" %}", align: "center", editing: false },
+                { name: "order_qty", type: "number", width: 120, title: "{% trans "Qty" %}", editing: false, align: "center" },
+                { name: "order_bin_id", type: "text", width: 70, title: "{% trans "Location" %}", editing: false, align: "center" },
+                { name: "desc", type: "text", width: 150, title: "{% trans "Comment" %}", align: "center", editing: false },
+            ]
+        });
 
 
         $(document).on('keydown', function(e) {
             if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
-                {#console.log("Phím ESC đã được nhấn");#}
                 const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
 
                 if (cancelButton .length) {
@@ -190,7 +214,6 @@
                 }
               }
         });
-
 
 
         // Khi click vào một zone (div chứa bin_id)
@@ -241,6 +264,9 @@
 
                     $("#jsGrid").jsGrid("option", "data", []);
                     $("#jsGrid").jsGrid("refresh");
+                    $("#jsGrid_Info").jsGrid("option", "data", []);
+                    $("#jsGrid_Info").jsGrid("refresh");
+
 
 
                     alert("{% trans "Form submitted successfully!" %}");

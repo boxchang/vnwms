@@ -4,6 +4,7 @@
 {% load i18n %}
 {% block title %} {% trans "Stock In" %} {% endblock %}
 {% block base_js %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 
 .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
@@ -67,9 +68,9 @@ h3 {
 {% endblock content %}
 
 {% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
     <script>
-
 
     function openMapPage(warehouse_id, obj) {
 
@@ -88,6 +89,24 @@ h3 {
     }
 
     $(document).ready(function() {
+
+        $('.select2-bin').select2({
+            tags: true,  // Cho phép nhập giá trị mới
+            allowClear: false,
+            createTag: function(params) {
+                return null;  // Không cho phép nhập giá trị mới
+            }
+         });
+
+        $('.select2-selection.select2-selection--single').css({
+            'height': '38px',
+        });
+
+        $('#select2-id_order_bin-container').css({
+            'margin-top': '4px',
+            'margin-left': '5px'
+        });
+        {#$('#select2-id_bin-container').css('margin-top', '5px');#}
 
         var translations = {
             comment: "{% trans 'Comment' %}",
@@ -243,6 +262,8 @@ h3 {
                 $("#id_purchase_qty").val(0);
                 $("#id_item_type").val(0);
                 $("#id_purchase_unit").val(0);
+                $("#id_size").val(0);
+
             }
 
 

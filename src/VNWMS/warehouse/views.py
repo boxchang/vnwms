@@ -534,7 +534,8 @@ def stockin_detail(request, pk):
 
 
 def get_product_order_stout(request):
-    data_list = []
+    data_list_stout = []
+    data_list_info = []
     if request.method == 'POST':
         product_order = request.POST.get('product_order')
         db = vnedc_database()
@@ -542,7 +543,7 @@ def get_product_order_stout(request):
         if product_order == '':
             return JsonResponse({"status": "no_change"}, status=200)
         else:
-            sql = f"""
+            sql1 = f"""
             SELECT [product_order]
                   ,[size]
                   ,[qty]
@@ -554,18 +555,47 @@ def get_product_order_stout(request):
             FROM [VNWMS].[dbo].[warehouse_bin_value] WHERE product_order = '{product_order}'
             AND qty > 0
             """
-        raws = db.select_sql_dict(sql)
-        for raw in raws:
-            data_list.append({'product_order': raw['product_order'], 'size': raw['size'], 'order_qty': raw['qty'],
-                              'version_no': raw['version_no'], 'order_bin': raw['bin_id'],
-                              'version_seq': raw['version_seq'], 'purchase_no': raw['purchase_no'],
-                              'purchase_unit': raw['purchase_unit'],
-                              })
-    return JsonResponse(data_list, safe=False)
+
+            sql2 = f"""
+            SELECT [form_no_id]
+                  ,[product_order]
+                  ,[purchase_no]
+                  ,[version_no]
+                  ,[version_seq]
+                  ,[size]
+                  ,[purchase_unit]
+                  ,[order_qty]
+                  ,[order_bin_id]
+                  ,[desc]
+            FROM [VNWMS].[dbo].[warehouse_stockinformdetail] WHERE product_order = '{product_order}' AND [desc] != ''
+            """
+        raws_stout = db.select_sql_dict(sql1)
+        raws_info = db.select_sql_dict(sql2)
+
+        for raw in raws_stout:
+            data_list_stout.append({'product_order': raw['product_order'], 'size': raw['size'],
+                                    'version_no': raw['version_no'], 'order_bin': raw['bin_id'],
+                                    'purchase_unit': raw['purchase_unit'], 'version_seq': raw['version_seq'],
+                                    'purchase_no': raw['purchase_no'], 'order_qty': int(raw['qty']),
+                                    })
+
+        for raw in raws_info:
+            data_list_info.append({'form_no_id': raw['form_no_id'], 'product_order': raw['product_order'],
+                                   'purchase_no': raw['purchase_no'], 'version_no': raw['version_no'],
+                                   'version_seq': raw['version_seq'], 'size': raw['size'],
+                                   'purchase_unit': raw['purchase_unit'], 'order_qty': raw['order_qty'],
+                                   'order_bin_id': raw['order_bin_id'], 'desc': raw['desc']
+                                   })
+
+    return JsonResponse({
+        "data_list_stout": data_list_stout,
+        "data_list_info": data_list_info
+    }, safe=False)
 
 
 def get_purchase_no_stout(request):
-    data_list = []
+    data_list_stout = []
+    data_list_info = []
     if request.method == 'POST':
         purchase_no = request.POST.get('purchase_no')
         db = vnedc_database()
@@ -573,7 +603,7 @@ def get_purchase_no_stout(request):
         if purchase_no == '':
             return JsonResponse({"status": "no_change"}, status=200)
         else:
-            sql = f"""
+            sql1 = f"""
             SELECT [product_order]
                   ,[size]
                   ,[qty]
@@ -585,14 +615,42 @@ def get_purchase_no_stout(request):
             FROM [VNWMS].[dbo].[warehouse_bin_value] WHERE purchase_no = '{purchase_no}'
             AND qty > 0
             """
-        raws = db.select_sql_dict(sql)
-        for raw in raws:
-            data_list.append({'product_order': raw['product_order'], 'size': raw['size'], 'order_qty': int(raw['qty']),
-                              'version_no': raw['version_no'], 'order_bin': raw['bin_id'],
-                              'version_seq': raw['version_seq'], 'purchase_no': raw['purchase_no'],
 
-                              })
-    return JsonResponse(data_list, safe=False)
+            sql2 = f"""
+            SELECT [form_no_id]
+                  ,[product_order]
+                  ,[purchase_no]
+                  ,[version_no]
+                  ,[version_seq]
+                  ,[size]
+                  ,[purchase_unit]
+                  ,[order_qty]
+                  ,[order_bin_id]
+                  ,[desc]
+            FROM [VNWMS].[dbo].[warehouse_stockinformdetail] WHERE purchase_no = '{purchase_no}' AND [desc] != ''
+            """
+        raws_stout = db.select_sql_dict(sql1)
+        raws_info = db.select_sql_dict(sql2)
+
+        for raw in raws_stout:
+            data_list_stout.append({'product_order': raw['product_order'], 'size': raw['size'],
+                              'version_no': raw['version_no'], 'order_bin': raw['bin_id'],
+                                'purchase_unit': raw['purchase_unit'], 'version_seq': raw['version_seq'],
+                                    'purchase_no': raw['purchase_no'], 'order_qty': int(raw['qty']),
+            })
+
+        for raw in raws_info:
+            data_list_info.append({'form_no_id': raw['form_no_id'], 'product_order': raw['product_order'],
+                                   'purchase_no': raw['purchase_no'], 'version_no': raw['version_no'],
+                                   'version_seq': raw['version_seq'], 'size': raw['size'],
+                                   'purchase_unit': raw['purchase_unit'], 'order_qty': raw['order_qty'],
+                                  'order_bin_id': raw['order_bin_id'], 'desc': raw['desc']
+            })
+
+    return JsonResponse({
+        "data_list_stout": data_list_stout,
+        "data_list_info": data_list_info
+    }, safe=False)
 
 
 def stockin_filter(raws):
@@ -828,29 +886,34 @@ def packing_material_stock_out_post(request):
 
 def product_order_search(request):
     product_order = request.GET.get('product_order')
+    size = request.GET.get('size')
 
-    if not product_order:
+    if not product_order and not size:
         return JsonResponse({"status": "blank"}, status=200)
 
-    bin_values = Bin_Value.objects.select_related(
-        'bin__area__warehouse'  # bin->area->warehouse
-    ).filter(
-        product_order__icontains=product_order
-    ).values(
-        'bin__area__warehouse__wh_code',
-        'product_order',
-        'purchase_no',
-        'version_no',
-        'version_seq',
-        'size',
-        'bin',
-        'qty'
-    )
+    if product_order or size:
+        bin_values = Bin_Value.objects.select_related(
+            'bin__area__warehouse'  # bin->area->warehouse
+        ).filter(
+            product_order__icontains=product_order,
+            size__icontains=size,
+        ).values(
+            'bin__area__warehouse__wh_code',
+            'product_order',
+            'purchase_no',
+            'version_no',
+            'version_seq',
+            'size',
+            'bin',
+            'qty'
+        )
 
-    data = list(bin_values)
+        data = list(bin_values)
 
-    if not data:
-        return JsonResponse({"status": "blank"}, status=200)
+        if not data:
+            return JsonResponse({"status": "blank"}, status=200)
+    else:
+        pass
 
     return JsonResponse(data, safe=False)
 
