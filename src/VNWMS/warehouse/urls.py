@@ -9,7 +9,7 @@ from warehouse.views import index, packing_material_stock_in, packing_material_s
     bin_transfer_page, get_product_order_stout, product_order_bin_search, product_order_hist_data, \
     get_purchase_no_stout, \
     bin_adjust_page, bin_adjust, upload_excel, open_data_import, inventory_sheet, warehouse_map, get_all_areas, \
-    check_bin_exists, download_excel_template
+    check_bin_exists, download_excel_template, result_search
 from . import views
 
 
@@ -64,6 +64,8 @@ urlpatterns = [
     url(r'^bin/transfer/$', bin_transfer, name='bin_transfer'),
     url(r'^bin_adjust_page/$', bin_adjust_page, name='bin_adjust_page'),
     url(r'^bin/adjust/$', bin_adjust, name='bin_adjust'),
+    url(r'^result_search/$', result_search, name='result_search'),
+    # url(r'^export_excel/$', export_excel, name='export_excel'),
     url(r'^map/(?P<pk>\w+)/$', warehouse_map, name='warehouse_map'),
     url(r'^download-template/(?P<filename>[\w\-.]+)/$', download_excel_template, name='download_excel_template'),
     url(r'^$', views.index, name='warehouse_index'),
