@@ -14,6 +14,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import gettext as _
+
 
 from VNWMS.database import sap_database, vnedc_database
 from VNWMS.settings.base import MEDIA_URL
@@ -891,6 +893,8 @@ def product_order_search(request):
     if not product_order and not size:
         return JsonResponse({"status": "blank"}, status=200)
 
+    request.session['search_results_url'] = request.get_full_path()
+
     if product_order or size:
         bin_values = Bin_Value.objects.select_related(
             'bin__area__warehouse'  # bin->area->warehouse
@@ -912,14 +916,17 @@ def product_order_search(request):
 
         if not data:
             return JsonResponse({"status": "blank"}, status=200)
-    else:
-        pass
 
     return JsonResponse(data, safe=False)
 
 
 def transfer_and_adjust(request):
     return render(request, 'warehouse/transfer_and_adjust.html')
+
+
+def result_search(request):
+    search_results_url = request.session.get('search_results_url', '/default-search-url/')
+    return render(request, 'warehouse/bin_adjust_page.html', {'back_url': search_results_url})
 
 
 # no use this
@@ -1510,3 +1517,56 @@ def download_excel_template(request, filename):
         raise Http404("File not exist")
 
     return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=filename)
+
+
+# def export_excel(request):
+#     # Xác định ngôn ngữ hiện tại
+#     language = request.LANGUAGE_CODE  # Lấy ngôn ngữ hiện tại từ Django
+#
+#     # Định nghĩa tiêu đề cột theo ngôn ngữ
+#     columns = {
+#         "product_order": _("Product Order"),
+#         "purchase_no": _("Purchase Order"),
+#         "version_no": _("Version No"),
+#         "version_seq": _("Version Seq"),
+#         "size": _("Size"),
+#         "location": _("Location"),
+#         "qty": _("Qty"),
+#         "unit": _("Unit"),
+#
+#     }
+#
+#     # Chuyển đổi sang DataFrame
+#     df = pd.DataFrame(columns=columns.values())
+#
+#     # Đổi tiêu đề cột theo ngôn ngữ
+#     df.rename(columns=columns, inplace=True)
+#
+#     # Tạo response với file Excel
+#     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     response['Content-Disposition'] = f'attachment; filename="data_{language}.xlsx"'
+#
+#     with pd.ExcelWriter(response, engine='openpyxl') as writer:
+#         df.to_excel(writer, index=False, sheet_name="Sheet1")
+#
+#
+#         # Lấy workbook và sheet hiện tại
+#         workbook = writer.book
+#         sheet = workbook.active
+#
+#         # Thiết lập độ rộng cột
+#         column_widths = {
+#             "A": 20,  # Product Order
+#             "B": 25,  # Purchase Order
+#             "C": 15,  # Version No
+#             "D": 15,  # Version Seq
+#             "E": 10,  # Size
+#             "F": 20,  # Location
+#             "G": 10,  # Qty
+#             "H": 20,  # Unit
+#         }
+#
+#         for col, width in column_widths.items():
+#             sheet.column_dimensions[col].width = width
+#
+#     return response
