@@ -229,18 +229,6 @@ class ItemType(models.Model):
         return self.desc
 
 
-class Size(models.Model):
-    size_code = models.CharField(max_length=20, primary_key=True)
-    size_name = models.CharField(max_length=20, blank=False, null=False)
-    desc = models.CharField(max_length=200, blank=True, null=True)
-    create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
-    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='sizetype_create_by')  # 建立者
-
-    def __str__(self):
-        return self.size_name
-
-
 class UnitType(models.Model):
     unit_code = models.CharField(max_length=20, primary_key=True)
     unit_name = models.CharField(max_length=20, blank=False, null=False)

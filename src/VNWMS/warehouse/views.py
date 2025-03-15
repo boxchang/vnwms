@@ -677,11 +677,11 @@ def stockin_filter(raws):
             qty = int(order_qty)
 
         if qty > 0:
-            data_list.append({'product_order': product_order, 'customer_no': raw['LIFNR'], 'version_no': version_no,
+            data_list.append({'product_order': product_order, 'customer_no': '', 'version_no': version_no,
                               'version_seq': version_seq, 'lot_no': raw['LOTNO'], 'item_type': raw['WGBEZ'],
                               'purchase_no': purchase_no, 'purchase_qty': raw['MENGE_PO'],
                               'size': size, 'purchase_unit': raw['MEINS'], 'post_date': raw['BUDAT'],
-                              'order_qty': qty, 'supplier': raw['NAME1'], 'sap_mtr_no': raw['MBLNR']
+                              'order_qty': qty, 'supplier': raw['LIFNR'], 'sap_mtr_no': raw['MBLNR']
                               })
     return data_list
 
@@ -1371,50 +1371,56 @@ def open_data_import(request):
             excel_file = request.FILES["file"]
             df_dict = pd.read_excel(excel_file, sheet_name=None, dtype=str)  # Đọc tất cả các sheet, ép kiểu về str
 
-            Bin_Value.objects.all().delete()
+            sheet_name, df = next(iter(df_dict.items()))
+            # Chuẩn hóa dữ liệu về chuỗi, loại bỏ khoảng trắng
+            df["Product Order"] = df["Product Order"].astype(str).str.strip()
+            df["Purchase Order"] = df["Purchase Order"].astype(str).str.strip()
+            df["Version No"] = df["Version No"].astype(str).str.strip()
+            df["Version Seq"] = df["Version Seq"].astype(str).str.strip()
+            df["Location"] = df["Location"].astype(str).str.strip()
+            df["Unit"] = df["Unit"].astype(str).str.strip()
+            df["Size"] = df["Size"].astype(str).str.strip()
 
-            for sheet_name, df in df_dict.items():
-                if sheet_name == "Sheet1":
-                    try:
-                        # Chuẩn hóa dữ liệu về chuỗi, loại bỏ khoảng trắng
-                        df["Product Order"] = df["Product Order"].astype(str).str.strip()
-                        df["Purchase Order"] = df["Purchase Order"].astype(str).str.strip()
-                        df["Version No"] = df["Version No"].astype(str).str.strip()
-                        df["Version Seq"] = df["Version Seq"].astype(str).str.strip()
-                        df["Location"] = df["Location"].astype(str).str.strip()
-                        df["Unit"] = df["Unit"].astype(str).str.strip()
-                        df["Size"] = df["Size"].astype(str).str.strip()
+            # Chuyển Qty về số nguyên, giữ 0 nếu không hợp lệ
+            df["Qty"] = pd.to_numeric(df["Qty"], errors="coerce").fillna(0).astype(int)
 
-                        # Chuyển Qty về số nguyên, giữ 0 nếu không hợp lệ
-                        df["Qty"] = pd.to_numeric(df["Qty"], errors="coerce").fillna(0).astype(int)
+            locations = list(df["Location"].dropna().unique())
 
-                        locations = list(df["Location"].dropna().unique())
+            # Lấy danh sách bin_id hợp lệ từ database
+            bin_map = {b.bin_id: b for b in Bin.objects.filter(bin_id__in=locations)}
 
-                        # Lấy danh sách bin_id hợp lệ từ database
-                        bin_map = {b.bin_id: b for b in Bin.objects.filter(bin_id__in=locations)}
+            error = ""
+            try:
+                for _, row in df.iterrows():
+                    bin_id = bin_map[row["Location"]]
+            except Exception as e:
+                error = f"<tr><td>{bin_id}</td><td>Not Exist</td></tr>"
 
-                        stock_in = StockInForm()
-                        YYYYMM = datetime.now().strftime("%Y%m")
-                        key = "OPEN" + YYYYMM
-                        stock_in.form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
+            if len(error) > 0:
+                error_msg = "<table>{error}</table>".format(error=error)
+                return render(request, "warehouse/bin/open_data_import.html", locals())
+            else:
+                Bin_Value.objects.all().delete()
 
-                        mvt = MovementType.objects.get(mvt_code="OPEN")
+                stock_in = StockInForm()
+                YYYYMM = datetime.now().strftime("%Y%m")
+                key = "OPEN" + YYYYMM
+                stock_in.form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
 
-                        for _, row in df.iterrows():
-                            bin_id = row["Location"]
+                mvt = MovementType.objects.get(mvt_code="OPEN")
 
-                            Do_Transaction(request, stock_in.form_no, row["Product Order"], row['Purchase Order'],
-                                           row["Version No"], row["Version Seq"], row["Size"], mvt, bin_map[bin_id],
-                                           row["Qty"], row["Unit"], desc="")
+                for _, row in df.iterrows():
+                    bin_id = row["Location"]
 
-                        if hasattr(excel_file, 'temporary_file_path'):
-                            os.remove(excel_file.temporary_file_path())
+                    Do_Transaction(request, stock_in.form_no, row["Product Order"], row['Purchase Order'],
+                                   row["Version No"], row["Version Seq"], row["Size"], mvt, bin_map[bin_id],
+                                   row["Qty"], row["Unit"], desc="")
 
-                        return render(request, "warehouse/bin/open_data_import.html",
-                                      {"form": form, "message": "Upload successfully!"})
-                    except Exception as e:
-                        return render(request, "warehouse/bin/open_data_import.html",
-                                      {"form": form, "error": f"Lỗi khi xử lý file: {str(e)}"})
+                if hasattr(excel_file, 'temporary_file_path'):
+                    os.remove(excel_file.temporary_file_path())
+
+                return render(request, "warehouse/bin/open_data_import.html",
+                              {"form": form, "message": "Upload successfully!"})
 
     return render(request, "warehouse/bin/open_data_import.html", {"form": form})
 

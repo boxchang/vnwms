@@ -4,7 +4,7 @@ from django import forms
 import PIL
 from PIL import Image
 from bootstrap_datepicker_plus.widgets import DatePickerInput
-from warehouse.models import Warehouse, Area, Bin, ItemType, PackMethod, UnitType, Bin_Value, Plant, Size
+from warehouse.models import Warehouse, Area, Bin, ItemType, PackMethod, UnitType, Bin_Value, Plant
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Button, Submit, HTML
 from django.utils.translation import gettext_lazy as _, get_language
@@ -300,6 +300,17 @@ class QuantityAdjustForm(forms.Form):
 
 
 class StockInPForm(forms.Form):
+    SIZE_CHOICES = [
+        ('', '---------'),
+        ('XXS', 'XXS'),
+        ('XS', 'XS'),
+        ('S', 'S'),
+        ('M', 'M'),
+        ('L', 'L'),
+        ('XL', 'XL'),
+        ('XXL', 'XXL'),
+    ]
+
     product_order = forms.CharField(max_length=20, label=_("Product Order"), required=True, )  # VBELN 收貨單號
     customer_no = forms.CharField(max_length=20, label=_("Customer"), required=False,)  # 無
     version_no = forms.CharField(max_length=20, label=_("Version No"), required=True,)  # ZZVERSION
@@ -308,7 +319,7 @@ class StockInPForm(forms.Form):
     item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=True)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
     purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, initial=0)  # MENGE_PO 採購數量
-    size = forms.ModelChoiceField(queryset=Size.objects.all(), label=_("Size"), required=True)
+    size = forms.ChoiceField(choices=SIZE_CHOICES, label=_("Size"), required=True)
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
     order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
