@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-14 14:59+0700\n"
-"PO-Revision-Date: 2025-03-14 15:09+0700\n"
+"PO-Revision-Date: 2025-03-15 15:13+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -2163,7 +2163,7 @@ msgstr "(Chứng từ mua hàng) không được để trống !"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:256
 msgid "are required"
-msgstr "thì yêu cầu"
+msgstr "không được để trống!"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:334
 msgid "Copy"

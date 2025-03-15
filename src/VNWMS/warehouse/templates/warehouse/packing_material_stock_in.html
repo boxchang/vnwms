@@ -253,7 +253,7 @@ h3 {
             const version_seq = $("#id_version_seq").val();
 
             if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "" || item_type_val == "") {
-                alert("{% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %} {% trans "are required" %}");
+                alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %}) {% trans "are required" %}");
                 return false;
             } else {
                 $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
