@@ -51,17 +51,17 @@
 
     {% block css %}
 
-    {% endblock css %}
+    {% endblock %}
     {% block base_js %}
 
-    {% endblock base_js %}
+    {% endblock %}
     {% block js %}
 
-    {% endblock js %}
+    {% endblock %}
     <script>
         $(document).ready(function() {
                {% block ready %}
-               {% endblock ready %}
+               {% endblock %}
         });
     </script>
 </head>
@@ -114,9 +114,11 @@
         <div class="container-fluid" style="padding-left: 0px;padding-right: 0px">
             {% block container %}
 
-            {% endblock container %}
+            {% endblock %}
         </div>
     </div>
+
+    {% block script %} {% endblock %}
 
     <script>
         document.getElementById('toggle-btn').addEventListener('click', function () {
@@ -127,7 +129,7 @@
             content.classList.toggle('expanded');
         });
     </script>
-    {% block javascript %} {% endblock javascript %}
+    {% block javascript %} {% endblock %}
 
 </body>
 </html>
