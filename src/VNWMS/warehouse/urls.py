@@ -1,4 +1,3 @@
-from django.urls import path
 from django.urls import re_path as url
 
 from warehouse.views import index, packing_material_stock_in, packing_material_stock_out, stockin_detail, \
@@ -9,40 +8,42 @@ from warehouse.views import index, packing_material_stock_in, packing_material_s
     bin_transfer_page, get_product_order_stout, product_order_bin_search, product_order_hist_data, \
     get_purchase_no_stout, \
     bin_adjust_page, bin_adjust, upload_excel, open_data_import, inventory_sheet, warehouse_map, get_all_areas, \
-    check_bin_exists, download_excel_template, result_search
-from . import views
+    check_bin_exists, download_excel_template, result_search, warehouse_list, get_bin_data, get_bins, get_areas, \
+    bin_search, bin_list, edit_bin, check_po_exists, bin_action, create_bin, area_list, area_delete, create_area, \
+    edit_area, warehouse_delete, create_warehouse, edit_warehouse, show_warehouse, test, bin_by_area, bin_delete, \
+    area_by_warehouse
 
 
 urlpatterns = [
-    url(r'^test/$', views.test, name='test'),
-    url(r'^show_warehouse/(?P<pk>\w+)/$', views.show_warehouse, name='show_warehouse'),
-    url(r'^edit/(?P<warehouse_code>\w+)/$', views.edit_warehouse, name='edit_warehouse'),
-    url(r'^create/$', views.create_warehouse, name='warehouse_create'),
-    url(r'^delete/(?P<pk>\w+)/$', views.warehouse_delete, name='warehouse-delete'),
+    url(r'^test/$', test, name='test'),
+    url(r'^show_warehouse/(?P<pk>\w+)/$', show_warehouse, name='show_warehouse'),
+    url(r'^edit/(?P<warehouse_code>\w+)/$', edit_warehouse, name='edit_warehouse'),
+    url(r'^create/$', create_warehouse, name='warehouse_create'),
+    url(r'^delete/(?P<pk>\w+)/$', warehouse_delete, name='warehouse-delete'),
 
-    url(r'^area/edit/(?P<area_code>[^/]+)/$', views.edit_area, name='edit_area'),
-    url(r'^area/create/(?P<wh_code>[^/]+)/$', views.create_area, name='area_create'),
-    url(r'^area/area_by_warehouse/(?P<wh_code>\w+)/$', views.area_by_warehouse, name='area_by_warehouse'),
-    url(r'^area/delete/(?P<pk>[^/]+)/$', views.area_delete, name='area-delete'),
-    url(r'^area/list/$', views.area_list, name='area_list'),
+    url(r'^area/edit/(?P<area_code>[^/]+)/$', edit_area, name='edit_area'),
+    url(r'^area/create/(?P<wh_code>[^/]+)/$', create_area, name='area_create'),
+    url(r'^area/area_by_warehouse/(?P<wh_code>\w+)/$', area_by_warehouse, name='area_by_warehouse'),
+    url(r'^area/delete/(?P<pk>[^/]+)/$', area_delete, name='area-delete'),
+    url(r'^area/list/$', area_list, name='area_list'),
     url(r'^area/get-all-areas/$', get_all_areas, name='get_all_areas'),
 
-    url(r'^bin/bin_action/$', views.bin_action, name='bin_action'),
-    url(r'^bin/check_po_exists/$', views.check_po_exists, name='check_po_exists'),
-    url(r'^bin/create/(?P<area_code>[^/]+)$', views.create_bin, name='bin_create'),
-    url(r'^bin/edit/(?P<bin_code>[^/]+)/$', views.edit_bin, name='edit_bin'),
-    url(r'^bin/list/$', views.bin_list, name='bin_list'),
-    url(r'^bin/bin_by_area/(?P<area_code>[^/]+)$', views.bin_by_area, name='bin_by_area'),
-    url(r'^bin/delete/(?P<pk>[^/]+)/$', views.bin_delete, name='bin-delete'),
+    url(r'^bin/bin_action/$', bin_action, name='bin_action'),
+    url(r'^bin/check_po_exists/$', check_po_exists, name='check_po_exists'),
+    url(r'^bin/create/(?P<area_code>[^/]+)$', create_bin, name='bin_create'),
+    url(r'^bin/edit/(?P<bin_code>[^/]+)/$', edit_bin, name='edit_bin'),
+    url(r'^bin/list/$', bin_list, name='bin_list'),
+    url(r'^bin/bin_by_area/(?P<area_code>[^/]+)$', bin_by_area, name='bin_by_area'),
+    url(r'^bin/delete/(?P<pk>[^/]+)/$', bin_delete, name='bin-delete'),
     url(r'^bin/open_data_import/$', open_data_import, name="open_data_import"),
 
-    url(r'^bin/search/$', views.bin_search, name='bin_search'),
-    url(r'^get-areas/$', views.get_areas, name='get_areas'),
-    url(r'^get-bins/$', views.get_bins, name='get_bins'),
-    url(r'^get-bin-data/$', views.get_bin_data, name='get_bin_data'),
+    url(r'^bin/search/$', bin_search, name='bin_search'),
+    url(r'^get-areas/$', get_areas, name='get_areas'),
+    url(r'^get-bins/$', get_bins, name='get_bins'),
+    url(r'^get-bin-data/$', get_bin_data, name='get_bin_data'),
     url(r'^check-bin-exists/$', check_bin_exists, name='check_bin_exists'),
     url(r'^inventory_sheet/$', inventory_sheet, name="inventory_sheet"),
-    url(r'^$', views.warehouse_list, name='warehouse_list'),
+    url(r'^$', warehouse_list, name='warehouse_list'),
 
     url(r'^packing_material_stock_in/', packing_material_stock_in, name='packing_material_stock_in'),
     url(r'^packing_material_stock_out/', packing_material_stock_out, name='packing_material_stock_out'),
@@ -68,7 +69,7 @@ urlpatterns = [
     # url(r'^export_excel/$', export_excel, name='export_excel'),
     url(r'^map/(?P<pk>\w+)/$', warehouse_map, name='warehouse_map'),
     url(r'^download-template/(?P<filename>[\w\-.]+)/$', download_excel_template, name='download_excel_template'),
-    url(r'^$', views.index, name='warehouse_index'),
+    url(r'^$', index, name='warehouse_index'),
 ]
 
 
