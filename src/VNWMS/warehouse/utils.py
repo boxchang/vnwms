@@ -1,8 +1,20 @@
 import datetime
 import uuid
-
+from django.utils.translation import get_language
 from warehouse.models import MovementType, Bin, Bin_Value, Bin_Value_History
 
+
+def get_item_type_name():
+    language = get_language()
+    if language == 'zh-hant':
+        item_type_column = "type_name"
+    elif language == 'zh-hans':
+        item_type_column = "type_name"
+    elif language == 'vi':
+        item_type_column = "type_vn_name"
+    else:
+        item_type_column = "type_code"
+    return item_type_column
 
 def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt, bin_code, qty,
                    purchase_unit, desc, stockin_form=None, stockout_form=None):
@@ -57,7 +69,6 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
         print(e)
         result = "ERROR"
     return result
-
 
 def transfer_stock(product_order, purchase_no, version_no, version_seq, size, bin_code_from, bin_code_to, warehouse, qty):
     try:

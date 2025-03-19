@@ -1,6 +1,5 @@
 import json
 import os
-
 import pandas as pd
 from datetime import datetime
 from django.utils.translation import get_language
@@ -15,12 +14,10 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
-
-
 from VNWMS.database import sap_database, vnedc_database
 from VNWMS.settings.base import MEDIA_URL
 from users.models import CustomUser
-from warehouse.utils import Do_Transaction, transfer_stock
+from warehouse.utils import Do_Transaction, transfer_stock, get_item_type_name
 from .forms import WarehouseForm, AreaForm, BinForm, BinValueForm, BinSearchForm, StockInPForm, StockOutPForm, \
     BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
 from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, \
@@ -271,7 +268,7 @@ def bin_by_area(request, area_code):
 
 
 def bin_search(request):
-
+    db = vnedc_database()
     form = BinSearchForm(request.GET or None)
 
     if request.GET and form.is_valid():
@@ -283,17 +280,30 @@ def bin_search(request):
 
         if query_bin or query_po_no or query_size:
             bin_hists = Bin_Value_History.objects.filter()
-            bin_values = Bin_Value.objects.filter()
+
+            item_type_name = get_item_type_name()
+
+            sql1 = f"""
+                        SELECT b.product_order,b.purchase_no,b.version_no,b.version_seq,b.size
+                              ,qty,b.bin_id,b.purchase_unit,customer_no,supplier,lot_no
+                              ,purchase_qty,b.purchase_unit,{item_type_name} item_type,post_date,sap_mtr_no
+                        FROM [VNWMS].[dbo].[warehouse_bin_value] b
+                        LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+                        and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+						and b.size = d.size
+                        LEFT JOIN [VNWMS].[dbo].[warehouse_itemtype] t on d.item_type_id = t.type_code
+                        WHERE qty > 0
+                        """
 
             if query_bin:
                 bin_hists = bin_hists.filter(bin__bin_id=query_bin)  # Lọc chính xác mã `bin`
-                bin_values = bin_values.filter(bin__bin_id=query_bin)
+                sql1 += f"and bin_id='{query_bin}'"
             if query_po_no:
                 bin_hists = bin_hists.filter(product_order=query_po_no)
-                bin_values = bin_values.filter(product_order=query_po_no)
+                sql1 += f"and b.product_order='{query_po_no}'"
             if query_size:
                 bin_hists = bin_hists.filter(size=query_size)
-                bin_values = bin_values.filter(size=query_size)
+                sql1 += f"and b.size='{query_size}'"
             if query_from:
                 start_datetime = datetime.combine(query_from, datetime.min.time())  # Đầu ngày (00:00:00)
                 bin_hists = bin_hists.filter(create_at__gte=start_datetime)
@@ -302,6 +312,8 @@ def bin_search(request):
                 bin_hists = bin_hists.filter(create_at__lte=end_datetime)
             if not bin_hists.exists():
                 message = "No matching records found."
+
+            bin_values = db.select_sql_dict(sql1)
 
             # Lọc kết quả cuối cùng
             result_history = bin_hists
@@ -1379,11 +1391,18 @@ def open_data_import_api(request):
             excel_file = request.FILES["file"]
             df = pd.read_excel(excel_file, dtype=str)  # Đọc tất cả các sheet, ép kiểu về str
             df.fillna("", inplace=True) # 避免 NaN 值
+            df["Qty"] = pd.to_numeric(df["Qty"], errors="coerce")
+            df = df.groupby(["CustomerName", "ProductOrder", "PackingVersion",
+                                     "Lot", "ItemType", "Size", "StockInDate", "Location",
+                                     "Supplier", "PurchaseOrder", "TransactionNo"], as_index=False)["Qty"].sum()
 
             valid_bins = set(Bin.objects.values_list("bin_name", flat=True))
+            valid_types = set(ItemType.objects.values_list("type_name", flat=True))
 
-            valid_data = df[df["Location"].isin(valid_bins)]
-            invalid_data = df[~df["Location"].isin(valid_bins)]
+            valid_data = df[df["Location"].isin(valid_bins) & df["ItemType"].isin(valid_types)]
+
+            # 找出 Location 和 Type 同時錯誤的資料
+            invalid_data = df[~df.index.isin(valid_data.index)]  # 這裡包含所有不符合條件的資料
 
             valid_records = valid_data.to_dict(orient="records")
             invalid_records = invalid_data.to_dict(orient="records")
@@ -1411,6 +1430,8 @@ def open_data_import_confirm_api(request):
 
                 Bin_Value_History.objects.all().delete()
                 Bin_Value.objects.all().delete()
+                StockInForm.objects.all().delete()
+                StockOutForm.objects.all().delete()
 
                 YYYYMM = datetime.now().strftime("%Y%m")
                 key = "OPEN" + YYYYMM
@@ -1425,15 +1446,39 @@ def open_data_import_confirm_api(request):
                     packingSeq = ""
                     size = row['Size']
                     location = row['Location']
-                    supplier = ""
-                    stockInDate = ""
+                    supplier = row['Supplier']
+                    customer = row['CustomerName']
+                    stockInDate = row['StockInDate']
                     qty = row['Qty']
                     transactionNo = row['TransactionNo']
+                    lot_no = row['Lot']
                     unit = ""
+                    item_type = ItemType.objects.get(type_name=row['ItemType'])
+                    location = Bin.objects.get(bin_id=location)
+
+                    stockin_form = StockInForm(
+                        form_no=form_no,
+                        product_order=productOrder,
+                        customer_no=customer,
+                        version_no=packingVersion,
+                        version_seq=packingSeq,
+                        lot_no=lot_no,
+                        item_type=item_type,
+                        purchase_no=purchaseOrder,
+                        size=size,
+                        post_date=stockInDate,
+                        order_qty=qty,
+                        order_bin=location,
+                        supplier=supplier,
+                        sap_mtr_no=transactionNo,
+                        create_at=timezone.now(),
+                        create_by_id=request.user.id
+                    )
+                    stockin_form.save()
 
                     Do_Transaction(request, form_no, productOrder, purchaseOrder,
-                                   packingVersion, packingSeq, size, mvt, location,
-                                   qty, unit, desc="")
+                                   packingVersion, packingSeq, size, mvt, location.bin_id,
+                                   qty, unit, desc="", stockin_form=form_no)
 
                 # if hasattr(excel_file, 'temporary_file_path'):
                 #     os.remove(excel_file.temporary_file_path())

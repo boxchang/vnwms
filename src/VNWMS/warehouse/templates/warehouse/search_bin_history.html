@@ -125,7 +125,7 @@
         <h2 style="font-size: 1.5em;">{% trans "Current Inventory" %}</h2>
         <!-- BIN VALUES TABLE -->
         <div style="overflow-y: auto; height: 250px;" class="scroll bin_value">
-            <table class="table table-striped table-bordered col-md-6 A">
+            <table class="table table-striped table-bordered col-md-12 A">
                 <thead>
                     <tr>
                         <th></th>
@@ -136,6 +136,14 @@
                         <th>{% trans "Version Sequence" %}</th>
                         <th>{% trans "Size" %}</th>
                         <th>{% trans "Qty" %}</th>
+                        <th>{% trans 'Purchase Qty' %}</th>
+                        <th>{% trans 'Purchase Unit' %}</th>
+                        <th>{% trans 'Item Type' %}</th>
+                        <th>{% trans 'Post Date' %}</th>
+                        <th>{% trans 'Supplier' %}</th>
+                        <th>{% trans 'Customer' %}</th>
+                        <th>{% trans 'Mtr No' %}</th>
+                        <th>{% trans 'Lot No' %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,13 +151,21 @@
                     {% for record in result_value %}
                     <tr>
                         <td style="width: 20px">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-                        <td>{{ record.bin }}</td>
+                        <td>{{ record.bin_id }}</td>
                         <td>{{ record.product_order }}</td>
                         <td>{{ record.purchase_no }}</td>
                         <td>{{ record.version_no }}</td>
                         <td>{{ record.version_seq }}</td>
                         <td>{{ record.size }}</td>
                         <td>{{ record.qty}}</td>
+                        <td>{{ record.purchase_qty}}</td>
+                        <td>{{ record.purchase_unit}}</td>
+                        <td>{{ record.item_type}}</td>
+                        <td>{{ record.post_date}}</td>
+                        <td>{{ record.supplier}}</td>
+                        <td>{{ record.customer_no}}</td>
+                        <td>{{ record.sap_mtr_no}}</td>
+                        <td>{{ record.lot_no}}</td>
                     </tr>
                     {% empty %}
                     <tr>

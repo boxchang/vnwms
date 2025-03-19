@@ -203,7 +203,7 @@ class StockInForm(models.Model):
     customer_no = models.CharField(max_length=20, blank=True, null=True)
     version_no = models.CharField(max_length=20, blank=True, null=True)
     version_seq = models.CharField(max_length=20, blank=True, null=True)
-    lot_no = models.CharField(max_length=20, blank=True, null=True)
+    lot_no = models.CharField(max_length=200, blank=True, null=True)
     item_type = models.ForeignKey('ItemType', related_name='stockin_itemtype', on_delete=models.DO_NOTHING)
     purchase_no = models.CharField(max_length=20, blank=True, null=True)
     purchase_qty = models.IntegerField(default=0, blank=True, null=True)
