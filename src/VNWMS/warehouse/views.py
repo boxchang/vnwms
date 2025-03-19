@@ -571,7 +571,9 @@ def get_product_order_stout(request):
 				  ,[desc]
             FROM [VNWMS].[dbo].[warehouse_bin_value] b
             LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-            WHERE product_order = '{product_order}'
+            and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+						and b.size = d.size
+            WHERE b.product_order = '{product_order}'
             AND qty > 0
             """
 
@@ -591,7 +593,6 @@ def get_product_order_stout(request):
 
 def get_purchase_no_stout(request):
     data_list_stout = []
-    data_list_info = []
     if request.method == 'POST':
         purchase_no = request.POST.get('purchase_no')
         db = vnedc_database()
@@ -600,33 +601,32 @@ def get_purchase_no_stout(request):
             return JsonResponse({"status": "no_change"}, status=200)
         else:
             sql1 = f"""
-            SELECT [product_order]
-                  ,[size]
-                  ,[qty]
-                  ,[bin_id]
-                  ,[purchase_no]
-                  ,[version_no]
-                  ,[version_seq]
-                  ,[purchase_unit]
-            FROM [VNWMS].[dbo].[warehouse_bin_value] WHERE purchase_no = '{purchase_no}'
+            SELECT b.product_order
+                  ,b.size
+                  ,qty
+                  ,bin_id
+                  ,b.purchase_no
+                  ,b.version_no
+                  ,b.version_seq
+                  ,b.purchase_unit
+                  ,customer_no
+                  ,supplier
+                  ,lot_no
+                  ,purchase_qty
+                  ,b.purchase_unit
+                  ,item_type_id
+                  ,post_date
+                  ,sap_mtr_no
+				  ,[desc]
+            FROM [VNWMS].[dbo].[warehouse_bin_value] b
+            LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+            and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+						and b.size = d.size
+			WHERE purchase_no = '{purchase_no}'
             AND qty > 0
             """
 
-            sql2 = f"""
-            SELECT [form_no_id]
-                  ,[product_order]
-                  ,[purchase_no]
-                  ,[version_no]
-                  ,[version_seq]
-                  ,[size]
-                  ,[purchase_unit]
-                  ,[order_qty]
-                  ,[order_bin_id]
-                  ,[desc]
-            FROM [VNWMS].[dbo].[warehouse_stockinformdetail] WHERE purchase_no = '{purchase_no}' AND [desc] != ''
-            """
         raws_stout = db.select_sql_dict(sql1)
-        raws_info = db.select_sql_dict(sql2)
 
         for raw in raws_stout:
             data_list_stout.append({'product_order': raw['product_order'], 'size': raw['size'],
@@ -635,17 +635,8 @@ def get_purchase_no_stout(request):
                                     'purchase_no': raw['purchase_no'], 'order_qty': int(raw['qty']),
             })
 
-        for raw in raws_info:
-            data_list_info.append({'form_no_id': raw['form_no_id'], 'product_order': raw['product_order'],
-                                   'purchase_no': raw['purchase_no'], 'version_no': raw['version_no'],
-                                   'version_seq': raw['version_seq'], 'size': raw['size'],
-                                   'purchase_unit': raw['purchase_unit'], 'order_qty': raw['order_qty'],
-                                  'order_bin_id': raw['order_bin_id'], 'desc': raw['desc']
-            })
-
     return JsonResponse({
-        "data_list_stout": data_list_stout,
-        "data_list_info": data_list_info
+        "data_list_stout": data_list_stout
     }, safe=False)
 
 
