@@ -1369,6 +1369,109 @@ def to_string_or_none(value):
 
 
 def open_data_import(request):
+    if request.method == "POST":
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            excel_file = request.FILES["file"]
+            df = pd.read_excel(excel_file, dtype=str)  # Đọc tất cả các sheet, ép kiểu về str
+            df.fillna("", inplace=True) # 避免 NaN 值
+
+            valid_bins = set(Bin.objects.values_list("bin_name", flat=True))
+
+            valid_data = df[df["Location"].isin(valid_bins)]
+            invalid_data = df[~df["Location"].isin(valid_bins)]
+
+            valid_records = valid_data.to_dict(orient="records")
+            invalid_records = invalid_data.to_dict(orient="records")
+
+            for row in valid_records:
+                print(row['Location'])
+
+            request.session["valid_data"] = valid_records
+            request.session["invalid_data"] = invalid_records
+
+            return render(request, "warehouse/bin/open_data_import.html", locals())
+    else:
+        form = ExcelUploadForm()
+
+    return render(request, "warehouse/bin/open_data_import.html", {"form": form})
+
+
+def open_data_import_api(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+
+            excel_file = request.FILES["file"]
+            df = pd.read_excel(excel_file, dtype=str)  # Đọc tất cả các sheet, ép kiểu về str
+            df.fillna("", inplace=True) # 避免 NaN 值
+
+            valid_bins = set(Bin.objects.values_list("bin_name", flat=True))
+
+            valid_data = df[df["Location"].isin(valid_bins)]
+            invalid_data = df[~df["Location"].isin(valid_bins)]
+
+            valid_records = valid_data.to_dict(orient="records")
+            invalid_records = invalid_data.to_dict(orient="records")
+
+            request.session["valid_data"] = valid_data.to_dict(orient="records")
+            request.session["excel_file"] = excel_file
+
+            return JsonResponse({
+                "valid_data": valid_records,
+                "invalid_data": invalid_records
+            })
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+def open_data_import_confirm_api(request):
+    if request.method == "POST":
+        try:
+            valid_data = request.session.get("valid_data", [])
+            excel_file = request.session.get("excel_file", "")
+
+            if not valid_data:
+                return JsonResponse({"error": "沒有可匯入的數據"}, status=400)
+
+            with transaction.atomic():
+                Bin_Value.objects.all().delete()
+
+                YYYYMM = datetime.now().strftime("%Y%m")
+                key = "OPEN" + YYYYMM
+                form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
+
+                mvt = MovementType.objects.get(mvt_code="OPEN")
+
+                for row in valid_data:
+                    productOrder = row['ProductOrder']
+                    purchaseOrder = row['PurchaseOrder']
+                    packingVersion = row['PackingVersion']
+                    packingSeq = ""
+                    size = row['Size']
+                    location = row['Location']
+                    supplier = ""
+                    stockInDate = ""
+                    qty = row['Qty']
+                    transactionNo = row['TransactionNo']
+                    unit = ""
+
+                    Do_Transaction(request, form_no, productOrder, purchaseOrder,
+                                   packingVersion, packingSeq, size, mvt, location,
+                                   qty, unit, desc="")
+
+                # if hasattr(excel_file, 'temporary_file_path'):
+                #     os.remove(excel_file.temporary_file_path())
+
+                del request.session["valid_data"]
+                del request.session["excel_file"]
+
+                return JsonResponse({"message": "成功匯入 {} 筆資料".format(len(valid_data))})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "請使用 POST 方法"}, status=400)
+
+def open_data_import1(request):
     form = ExcelUploadForm()
 
     if request.method == "POST":
