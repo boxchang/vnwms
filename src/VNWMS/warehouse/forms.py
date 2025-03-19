@@ -461,3 +461,27 @@ class BinValueSearchForm(forms.Form):
                                                                                                            "wh_name"))
         self.fields["area"].choices = [("", _("Choose Area"))]
         self.fields["bin"].choices = [("", _("Choose Location"))]
+
+
+class BinValueDeleteForm(forms.Form):
+    warehouse = forms.ChoiceField(
+        choices=[], required=False, widget=forms.Select(attrs={"class": "form-control"})
+    )
+    area = forms.ChoiceField(
+        choices=[], required=False, widget=forms.Select(attrs={"class": "form-control", "disabled": "disabled"})
+    )
+    bin = forms.ChoiceField(
+        choices=[], required=False, widget=forms.Select(attrs={"class": "form-control", "disabled": "disabled"})
+    )
+
+    po = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["warehouse"].choices = [("", _("Choose Warehouse"))] + list(Warehouse.objects.values_list("wh_code",
+                                                                                                           "wh_name"))
+        self.fields["area"].choices = [("", _("Choose Area"))]
+        self.fields["bin"].choices = [("", _("Choose Location"))]

@@ -33,42 +33,44 @@ h3 {
 <div class="row p-3">
     <div class="col-1"></div>
     <div class="col-10">
-{#        <div class="row">#}
-{#        </div>#}
         <h3 class="col p-3">{% trans "Warehouse Stock In Form" %}</h3>
 
-    <form id="myForm">
-        {% crispy form %}
-        <div id="jsGrid"></div>
-            <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-            <h3>{% trans "Choose Location" %}</h3>
-            {% for bin in bins %}
-            <button class="number-btn" data-value="{{ bin.bin_id }}" style="
-                    {% if bin.has_stock %}
-                        background-color: #d2e8b9
-                    {% else %};
-                        background-color: #fff
-                    {% endif %}">
-                {{ bin.bin_id }}
-            </button>
-            {% endfor %}
-            <br><br>
-            <button id="closePicker">{% trans "Close" %}</button>
-        </div>
+        <form id="myForm">
+            {% crispy form %}
+            <div id="jsGrid"></div>
+                <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+                <h3>{% trans "Choose Location" %}</h3>
+                {% for bin in bins %}
+                <button class="number-btn" data-value="{{ bin.bin_id }}" style="
+                        {% if bin.has_stock %}
+                            background-color: #d2e8b9
+                        {% else %};
+                            background-color: #fff
+                        {% endif %}">
+                    {{ bin.bin_id }}
+                </button>
+                {% endfor %}
+                <br><br>
+                <button id="closePicker">{% trans "Close" %}</button>
+            </div>
 
-        <hr />
-        <div style="text-align: center" class="p-3">
-            <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
-        </div>
-    </form>
+            <hr />
+            <div style="text-align: center" class="p-3">
+                <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
+            </div>
+        </form>
 
-    <div class="col-1"></div>
+        <div class="col-1"></div>
+    </div>
 </div>
-</div>
-{% endblock content %}
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+{% endblock %}
 
 {% block javascript %}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
     <script>
 
@@ -106,7 +108,6 @@ h3 {
             'margin-top': '4px',
             'margin-left': '5px'
         });
-        {#$('#select2-id_bin-container').css('margin-top', '5px');#}
 
         var translations = {
             comment: "{% trans 'Comment' %}",
@@ -126,22 +127,42 @@ h3 {
             qty: "{% trans 'Qty' %}"
         };
 
+        {# Keydown #}
+
+        $("#id_product_order").on("keydown", function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                get_order_info();
+            }
+        });
+
+        $("#id_purchase_no").on("keydown", function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                get_no_info();
+            }
+        });
+
+        $(document).on("keydown", "input", function (e) {
+            if (e.which === 13 && !$(this).is("#id_purchase_no, #id_product_order, #jsGrid input")) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
 
         $(document).on("keydown", function (e) {
-            // Nếu không phải phím ESC (27) hoặc ENTER (13), thì thoát ngay lập tức
             if (e.which !== 27 && e.which !== 13) {
                 return;
             }
 
-            if (e.which === 27) {  // Phím Escape
-                const cancelButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
+            if (e.which === 13) {  // Phím Escape
+                const cancelButton = $(".jsgrid-button.jsgrid-update-button");
                 if (cancelButton.length) {
                     cancelButton.click();
-                    e.stopPropagation();
-                    e.preventDefault();
+
                 }
-            } else if (e.which === 13) {  // Phím Enter
-                const updateButton = $(".jsgrid-button.jsgrid-update-button");
+            } else if (e.which === 27) {  // Phím Enter
+                const updateButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
                 if (updateButton.length) {
                     updateButton.click();
                     e.stopPropagation();
@@ -150,7 +171,7 @@ h3 {
             }
         });
 
-
+        {# Search by Product Order, Purchase No #}
         $("#_product_order").on("click", function() {
 
             let product_order = document.getElementById('id_product_order').value.trim();
@@ -165,6 +186,19 @@ h3 {
 
         });
 
+        $("#_purchase_no").on("click", function() {
+
+            let purchase_no = document.getElementById('id_purchase_no').value.trim();
+
+            if (!purchase_no) {
+                event.preventDefault(); // Ngăn gửi request lên server
+                alert("{% trans 'Purchase Order cannot be null!' %}");
+
+            } else {
+                get_no_info();
+            }
+
+        });
 
         get_order_info = function() {
 
@@ -187,23 +221,6 @@ h3 {
                 }
             });
         };
-
-
-        // already fix
-        $("#_purchase_no").on("click", function() {
-
-            let purchase_no = document.getElementById('id_purchase_no').value.trim();
-
-            if (!purchase_no) {
-                event.preventDefault(); // Ngăn gửi request lên server
-                alert("{% trans 'Purchase Order cannot be null!' %}");
-
-            } else {
-                get_no_info();
-            }
-
-        });
-
 
         get_no_info = function() {
 
@@ -229,6 +246,7 @@ h3 {
         };
 
 
+        {# Create new fields #}
         $("#create").on("click", function() {
             add_item();
         });
@@ -266,7 +284,6 @@ h3 {
 
             }
 
-
             const newItem = {
                 order_qty: order_qty,
                 order_bin: order_bin,
@@ -301,7 +318,7 @@ h3 {
 
         }
 
-
+        {# Main JsGrid #}
         data: []; // 初始為空，將透過 AJAX 加載資料
         var currentLang = "{{ request.LANGUAGE_CODE }}";
 
@@ -334,10 +351,7 @@ h3 {
                             .text("{% trans "Copy" %}")
                             .addClass("btn btn-info btn-sm")
                             .on("click", (e) => {
-                                {#e.preventDefault();#}
-                                {#e.stopPropagation();#}
 
-                                // 獲取當前行的索引
                                 const gridData = $("#jsGrid").jsGrid("option", "data");
                                 const index = gridData.indexOf(item);
 
@@ -354,7 +368,8 @@ h3 {
                                 $("#jsGrid").jsGrid("option", "data", gridData);
 
                                 alert("{% trans "Copy and insert below this row Success!" %}");
-                            });
+                            })
+
 
                         return $copyButton;
                     }
@@ -369,12 +384,6 @@ h3 {
                             .text("{% trans "Delete" %}")
                             .on("click", function(e) {
                                 e.stopPropagation(); // 防止觸發行點擊事件
-
-                                {#var confirmMessage = "{% trans 'Are you sure you want to delete this item?' %}";#}
-                                {#if (confirm(confirmMessage)) {#}
-                                {#    $("#jsGrid").jsGrid("deleteItem", item);#}
-
-
                                 $("#jsGrid").jsGrid("deleteItem", item);
 
                             });
@@ -453,6 +462,7 @@ h3 {
 
                 { name: "desc", type: "text", width: 225, title: translations.comment, align: "center", editing: true },
                 { name: "customer_no", type: "text", width: 120, title: translations.customerNo, align: "center", editing: true },
+                { name: "supplier", type: "text", width: 130, title: translations.supplier, align: "center", editing: true },
                 { name: "product_order", type: "text", width: 135, title: translations.productOrder, align: "center", validate: "required", editing: false },
                 { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, align: "center", validate: "required", editing: false },
                 { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", align: "center", editing: false },
@@ -463,18 +473,8 @@ h3 {
                 { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, align: "center", editing: false },
                 { name: "item_type", type: "text", width: 200, title: translations.itemType, align: "center", editing: false },
                 { name: "post_date", type: "text", width: 150, title: translations.postDate, align: "center", editing: false },
-                { name: "supplier", type: "text", width: 120, title: translations.supplier, align: "center", editing: false },
                 { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, align: "center", editing: false }
             ]
-        });
-
-        $(".jsgrid-grid-body").on("click", ".jsgrid-button", function(e) {
-            // Cách để kiểm soát hành động sao chép
-            if ($(this).text() === "Copy") {
-                // Ngừng sự kiện nếu không muốn thông báo khi Enter được nhấn
-                e.stopPropagation();
-                e.preventDefault();
-            }
         });
 
 

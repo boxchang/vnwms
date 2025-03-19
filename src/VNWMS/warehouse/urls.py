@@ -11,7 +11,7 @@ from warehouse.views import index, packing_material_stock_in, packing_material_s
     check_bin_exists, download_excel_template, result_search, warehouse_list, get_bin_data, get_bins, get_areas, \
     bin_search, bin_list, edit_bin, check_po_exists, bin_action, create_bin, area_list, area_delete, create_area, \
     edit_area, warehouse_delete, create_warehouse, edit_warehouse, show_warehouse, test, bin_by_area, bin_delete, \
-    area_by_warehouse, open_data_import_api, open_data_import_confirm_api
+    area_by_warehouse, delete_inventory, inventory_deletion
 
 urlpatterns = [
     url(r'^test/$', test, name='test'),
@@ -44,6 +44,8 @@ urlpatterns = [
     url(r'^get-bin-data/$', get_bin_data, name='get_bin_data'),
     url(r'^check-bin-exists/$', check_bin_exists, name='check_bin_exists'),
     url(r'^inventory_sheet/$', inventory_sheet, name="inventory_sheet"),
+    url(r'^delete_inventory/$', delete_inventory, name="delete_inventory"),
+    url(r'^inventory_deletion/$', inventory_deletion, name="inventory_deletion"),
     url(r'^$', warehouse_list, name='warehouse_list'),
 
     url(r'^packing_material_stock_in/', packing_material_stock_in, name='packing_material_stock_in'),

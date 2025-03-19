@@ -22,7 +22,7 @@ from VNWMS.settings.base import MEDIA_URL
 from users.models import CustomUser
 from warehouse.utils import Do_Transaction, transfer_stock
 from .forms import WarehouseForm, AreaForm, BinForm, BinValueForm, BinSearchForm, StockInPForm, StockOutPForm, \
-    BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm
+    BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
 from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, StockInFormDetail, \
     MovementType, ItemType, StockOutForm, StockOutFormDetail
 from django.db.models import Case, When, Value, BooleanField, Q
@@ -1545,11 +1545,53 @@ def inventory_sheet(request):
         if bin_id:
             results = Bin_Value.objects.filter(bin__bin_id=bin_id)
 
-    return render(request, 'warehouse/bin/search_bin_value.html', {'form': form, 'results': results, 'warehouses': warehouses})
+    return render(request, 'warehouse/bin/search_bin_value.html',
+                  {'form': form, 'results': results, 'warehouses': warehouses})
+
+
+def inventory_deletion(request):
+    form = BinValueDeleteForm(request.GET)
+    results = []
+    warehouses = Warehouse.objects.filter(wh_plant=request.user.plant)
+
+    if form.is_valid():
+        bin_id = form.cleaned_data.get('bin')
+        if bin_id:
+            results = Bin_Value.objects.filter(bin__bin_id=bin_id)
+
+    return render(request, 'warehouse/bin/delete_bin_value.html',
+                  {'form': form, 'results': results, 'warehouses': warehouses})
+
+
+@csrf_exempt
+def delete_inventory(request):
+    if request.method == "POST":
+        try:
+
+            # Debug Id
+            # print(Bin_Value._meta.get_fields())
+            #
+            # # Kiểm tra ID của một bản ghi cụ thể
+            # obj = Bin_Value.objects.first()
+            # print(obj.id)  # Nếu có dữ liệu, nó sẽ in ra ID
+
+            data = json.loads(request.body)  # Đọc dữ liệu từ AJAX
+            ids_to_delete = data.get("ids", [])
+
+            if not ids_to_delete:
+                return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
+
+            # Xóa các bản ghi có ID trong danh sách
+            deleted_count, _ = Bin_Value.objects.filter(id__in=ids_to_delete).delete()
+
+            return JsonResponse({"success": True, "deleted_count": deleted_count})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Phương thức không hợp lệ!"})
 
 
 # GET DATA
-
 def get_areas(request):
     warehouse_id = request.GET.get('warehouse')
     areas = Area.objects.filter(warehouse_id=warehouse_id).values('area_id', 'area_name')
@@ -1592,22 +1634,24 @@ def get_bin_data(request):
     warehouse_id = request.GET.get("warehouse")
     area_id = request.GET.get("area")
     bin_id = request.GET.get("bin")
+    po_id = request.GET.get("po")
 
     stocks = Bin_Value.objects.all()
 
-    if warehouse_id or area_id or bin_id:
+    if warehouse_id or area_id or bin_id or po_id:
         if warehouse_id:
             stocks = stocks.filter(Q(bin__area__warehouse_id=warehouse_id))
-
         if area_id:
             stocks = stocks.filter(Q(bin__area__area_id=area_id))
-
         if bin_id:
             stocks = stocks.filter(Q(bin_id=bin_id))
+        if po_id:
+            stocks = stocks.filter(Q(product_order=po_id))
 
         products = stocks.select_related(
             "bin__area__warehouse"
         ).values(
+            "id",
             "bin__area__warehouse__wh_name",
             "bin__area__warehouse__wh_plant",
             "product_order", "purchase_no", "version_no", "version_seq", "size", "bin_id", "qty", "purchase_unit"
