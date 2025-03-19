@@ -1,6 +1,6 @@
 from django.urls import re_path as url
 
-from warehouse.views import index, packing_material_stock_in, packing_material_stock_out, stockin_detail, \
+from warehouse.views import index, packing_material_stock_in, packing_material_stock_out, \
     get_product_order_info, \
     packing_material_stock_in_post, packing_material_stock_out_post, dashboard, get_purchase_no_info, \
     product_order_search, \
@@ -11,7 +11,8 @@ from warehouse.views import index, packing_material_stock_in, packing_material_s
     check_bin_exists, download_excel_template, result_search, warehouse_list, get_bin_data, get_bins, get_areas, \
     bin_search, bin_list, edit_bin, check_po_exists, bin_action, create_bin, area_list, area_delete, create_area, \
     edit_area, warehouse_delete, create_warehouse, edit_warehouse, show_warehouse, test, bin_by_area, bin_delete, \
-    area_by_warehouse, delete_inventory, inventory_deletion, open_data_import_api, open_data_import_confirm_api
+    area_by_warehouse, delete_inventory, inventory_deletion, open_data_import_api, open_data_import_confirm_api, \
+    stockin_form
 
 urlpatterns = [
     url(r'^test/$', test, name='test'),
@@ -50,7 +51,7 @@ urlpatterns = [
 
     url(r'^packing_material_stock_in/', packing_material_stock_in, name='packing_material_stock_in'),
     url(r'^packing_material_stock_out/', packing_material_stock_out, name='packing_material_stock_out'),
-    url(r'^stockin_detail/(?P<pk>\w+)/$', stockin_detail, name='stockin_detail'),
+    url(r'^stockin_form/(?P<pk>\w+)/$', stockin_form, name='stockin_form'),
     url(r'^get_product_order_info/', get_product_order_info, name='get_product_order_info'),
     url(r'^get_product_order_stout/', get_product_order_stout, name='get_product_order_stout'),
     url(r'^get_purchase_no_stout/', get_purchase_no_stout, name='get_purchase_no_stout'),

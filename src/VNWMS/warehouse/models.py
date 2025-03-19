@@ -130,23 +130,6 @@ class Attribute(models.Model):
                                   related_name='attr_update_by')
 
 
-class Area_Attribute(models.Model):
-    area = models.ForeignKey(Area, on_delete=models.CASCADE)
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-    update_at = models.DateTimeField(default=timezone.now)
-    update_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='area_attr_update_by')
-
-
-class Bin_Attr_Value(models.Model):
-    bin = models.ForeignKey(Bin, on_delete=models.CASCADE)
-    attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
-    value = models.CharField(max_length=50)
-    create_at = models.DateTimeField(default=timezone.now)
-    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='bin_attr_value_create_by')
-
-
 class MovementType(models.Model):
     mvt_code = models.CharField(max_length=20, primary_key=True)
     mvt_name = models.CharField(max_length=20, blank=False, null=False)
@@ -166,33 +149,6 @@ class MovementType(models.Model):
 
     def __str__(self):
         return self.mvt_code
-
-
-class Bin_Value(models.Model):
-    bin = models.ForeignKey(Bin, related_name='value_bin', on_delete=models.CASCADE)
-    product_order = models.CharField(max_length=50, null=False, blank=False)
-    purchase_no = models.CharField(max_length=50, null=True, blank=True)
-    version_no = models.CharField(max_length=50, null=True, blank=True)
-    version_seq = models.CharField(max_length=50, null=True, blank=True)
-    size = models.CharField(max_length=5, null=False, blank=False)
-    qty = models.IntegerField(blank=True, null=True)
-    purchase_unit = models.CharField(max_length=20, blank=True, null=True)
-    status = models.CharField(max_length=5, null=False, blank=False)
-    update_at = models.DateTimeField(default=timezone.now)
-    update_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='bin_value_update_by')
-    # customer_no = models.CharField(max_length=20, blank=True, null=True)
-    # lot_no = models.CharField(max_length=20, blank=True, null=True)
-    # item_type = models.ForeignKey('ItemType', related_name='bin_value_itemtype', on_delete=models.DO_NOTHING)
-    # supplier = models.CharField(max_length=20, blank=True, null=True)
-
-
-    def __str__(self):
-        return self.bin.bin_id
-    #     return self.bin.bin_id
-        # return f"Bin: {self.bin} - PO: {self.product_order} - PN: {self.purchase_no} - VN: {self.version_no} - " \
-        #        f"VS: {self.version_seq}"
-
 
 class Bin_Value_History(models.Model):
     batch_no = models.CharField(max_length=50, null=False, blank=False)
@@ -241,30 +197,8 @@ class UnitType(models.Model):
         return self.desc
 
 
-class PackMethod(models.Model):
-    pack_code = models.CharField(max_length=20, primary_key=True)
-    pack_name = models.CharField(max_length=20, blank=False, null=False)
-    desc = models.CharField(max_length=200, blank=True, null=True)
-    create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
-    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='packmethod_create_by')  # 建立者
-
-    def __str__(self):
-        return self.desc
-
-
 class StockInForm(models.Model):
-    form_no = models.CharField(max_length=20, primary_key=True)
-    create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
-    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='stockin_form_create_by')  # 建立者
-
-    def get_absolute_url(self):
-        return reverse('stockin_detail', kwargs={'pk': self.pk})
-
-
-class StockInFormDetail(models.Model):
-    form_no = models.ForeignKey('StockInForm', related_name='stockin_detail_form', on_delete=models.CASCADE)
+    form_no = models.CharField(max_length=20)
     product_order = models.CharField(max_length=20, blank=True, null=True)
     customer_no = models.CharField(max_length=20, blank=True, null=True)
     version_no = models.CharField(max_length=20, blank=True, null=True)
@@ -281,17 +215,16 @@ class StockInFormDetail(models.Model):
     supplier = models.CharField(max_length=20, blank=True, null=True)
     sap_mtr_no = models.CharField(max_length=20, blank=True, null=True)
     desc = models.CharField(max_length=2000, blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
+    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
+                                  related_name='stockin_form_create_by')  # 建立者
+
+    def get_absolute_url(self):
+        return reverse('stockin_form', kwargs={'pk': self.pk})
 
 
 class StockOutForm(models.Model):
-    form_no = models.CharField(max_length=20, primary_key=True)
-    create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
-    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
-                                  related_name='stockout_form_create_by')  # 建立者
-
-
-class StockOutFormDetail(models.Model):
-    form_no = models.ForeignKey('StockOutForm', related_name='stockout_detail_form', on_delete=models.CASCADE)
+    form_no = models.CharField(max_length=20)
     product_order = models.CharField(max_length=20, blank=True, null=True)
     version_no = models.CharField(max_length=20, blank=True, null=True)
     version_seq = models.CharField(max_length=20, blank=True, null=True)
@@ -300,9 +233,29 @@ class StockOutFormDetail(models.Model):
     purchase_unit = models.CharField(max_length=20, blank=False, null=True)
     order_bin = models.ForeignKey('Bin', related_name='stockout_order_bin', on_delete=models.DO_NOTHING)
     desc = models.CharField(max_length=2000, blank=True, null=True)
+    create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
+    create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
+                                  related_name='stockout_form_create_by')  # 建立者
 
     def get_absolute_url(self):
-        return reverse('stockout_detail', kwargs={'pk': self.pk})
+        return reverse('stockout_form', kwargs={'pk': self.pk})
+
+
+class Bin_Value(models.Model):
+    bin = models.ForeignKey(Bin, related_name='value_bin', on_delete=models.CASCADE)
+    product_order = models.CharField(max_length=50, null=False, blank=False)
+    purchase_no = models.CharField(max_length=50, null=True, blank=True)
+    version_no = models.CharField(max_length=50, null=True, blank=True)
+    version_seq = models.CharField(max_length=50, null=True, blank=True)
+    size = models.CharField(max_length=5, null=False, blank=False)
+    qty = models.IntegerField(blank=True, null=True)
+    purchase_unit = models.CharField(max_length=20, blank=True, null=True)
+    status = models.CharField(max_length=5, null=False, blank=False)
+    stockin_form = models.CharField(max_length=20, blank=True, null=True)
+    stockout_form = models.CharField(max_length=20, blank=True, null=True)
+    update_at = models.DateTimeField(default=timezone.now)
+    update_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
+                                  related_name='bin_value_update_by')
 
 
 class Series(models.Model):

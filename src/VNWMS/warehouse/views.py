@@ -23,8 +23,8 @@ from users.models import CustomUser
 from warehouse.utils import Do_Transaction, transfer_stock
 from .forms import WarehouseForm, AreaForm, BinForm, BinValueForm, BinSearchForm, StockInPForm, StockOutPForm, \
     BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
-from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, StockInFormDetail, \
-    MovementType, ItemType, StockOutForm, StockOutFormDetail
+from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, \
+    MovementType, ItemType, StockOutForm
 from django.db.models import Case, When, Value, BooleanField, Q
 
 
@@ -525,19 +525,13 @@ def packing_material_stock_in(request):
 
 
 @login_required
-def stockin_detail(request, pk):
-    # try:
-    #     form = StockInForm.objects.get(pk=pk)
-    #     items = StockHistory.objects.filter(batch_no=pk)
-    # except StockInForm.DoesNotExist:
-    #     raise Http404('Form does not exist')
-
-    return render(request, 'stock/stockin_detail.html', locals())
+def stockin_form(request, pk):
+    return render(request, 'warehouse/stockin_form.html', locals())
 
 
 def get_product_order_stout(request):
     data_list_stout = []
-    data_list_info = []
+
     if request.method == 'POST':
         product_order = request.POST.get('product_order')
         db = vnedc_database()
@@ -546,33 +540,30 @@ def get_product_order_stout(request):
             return JsonResponse({"status": "no_change"}, status=200)
         else:
             sql1 = f"""
-            SELECT [product_order]
-                  ,[size]
-                  ,[qty]
-                  ,[bin_id]
-                  ,[purchase_no]
-                  ,[version_no]
-                  ,[version_seq]
-                  ,[purchase_unit]
-            FROM [VNWMS].[dbo].[warehouse_bin_value] WHERE product_order = '{product_order}'
+            SELECT b.product_order
+                  ,b.size
+                  ,qty
+                  ,bin_id
+                  ,b.purchase_no
+                  ,b.version_no
+                  ,b.version_seq
+                  ,b.purchase_unit
+                  ,customer_no
+                  ,supplier
+                  ,lot_no
+                  ,purchase_qty
+                  ,b.purchase_unit
+                  ,item_type_id
+                  ,post_date
+                  ,sap_mtr_no
+				  ,[desc]
+            FROM [VNWMS].[dbo].[warehouse_bin_value] b
+            LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+            WHERE product_order = '{product_order}'
             AND qty > 0
             """
 
-            sql2 = f"""
-            SELECT [form_no_id]
-                  ,[product_order]
-                  ,[purchase_no]
-                  ,[version_no]
-                  ,[version_seq]
-                  ,[size]
-                  ,[purchase_unit]
-                  ,[order_qty]
-                  ,[order_bin_id]
-                  ,[desc]
-            FROM [VNWMS].[dbo].[warehouse_stockinformdetail] WHERE product_order = '{product_order}' AND [desc] != ''
-            """
         raws_stout = db.select_sql_dict(sql1)
-        raws_info = db.select_sql_dict(sql2)
 
         for raw in raws_stout:
             data_list_stout.append({'product_order': raw['product_order'], 'size': raw['size'],
@@ -581,17 +572,8 @@ def get_product_order_stout(request):
                                     'purchase_no': raw['purchase_no'], 'order_qty': int(raw['qty']),
                                     })
 
-        for raw in raws_info:
-            data_list_info.append({'form_no_id': raw['form_no_id'], 'product_order': raw['product_order'],
-                                   'purchase_no': raw['purchase_no'], 'version_no': raw['version_no'],
-                                   'version_seq': raw['version_seq'], 'size': raw['size'],
-                                   'purchase_unit': raw['purchase_unit'], 'order_qty': raw['order_qty'],
-                                   'order_bin_id': raw['order_bin_id'], 'desc': raw['desc']
-                                   })
-
     return JsonResponse({
-        "data_list_stout": data_list_stout,
-        "data_list_info": data_list_info
+        "data_list_stout": data_list_stout
     }, safe=False)
 
 
@@ -667,7 +649,7 @@ def stockin_filter(raws):
         order_qty = raw['MENGE']
 
         sql2 = f"""
-        SELECT sum(order_qty) order_qty FROM [VNWMS].[dbo].[warehouse_stockinformdetail]
+        SELECT sum(order_qty) order_qty FROM [VNWMS].[dbo].[warehouse_stockinform]
         WHERE product_order='{product_order}' and purchase_no='{purchase_no}'
         and version_no='{version_no}' and version_seq='{version_seq}' and size='{size}'
         """
@@ -756,22 +738,13 @@ def packing_material_stock_in_post(request):
             key = "STIN" + YYYYMM
             form_no = key + str(get_series_number(key, "STOCKIN")).zfill(3)
 
-            item_type = None
-
             mvt = MovementType.objects.get(mvt_code="STIN")
-
-            stockin_form = StockInForm.objects.create(
-                form_no=form_no,
-                create_at=timezone.now(),
-                create_by_id=request.user.id
-            )
 
             for item in data:
                 bin = Bin.objects.get(bin_id=item['order_bin'])
 
                 if 'item_type' in item and item['item_type']:
                     try:
-                        # item_type = ItemType.objects.get(type_name=item['item_type'])
                         item_type = ItemType.objects.get(
                             Q(type_code=item['item_type']) |
                             Q(type_name=item['item_type']) |
@@ -779,8 +752,8 @@ def packing_material_stock_in_post(request):
                         )
                         item['item_type'] = item_type.type_code
 
-                        stockin_form_detail = StockInFormDetail(
-                            form_no=stockin_form,
+                        stockin_form = StockInForm(
+                            form_no=form_no,
                             product_order=item['product_order'],
                             customer_no=item['customer_no'],
                             version_no=item['version_no'],
@@ -797,13 +770,16 @@ def packing_material_stock_in_post(request):
                             supplier=item['supplier'],
                             sap_mtr_no=item['sap_mtr_no'],
                             desc=item['desc'],
+                            create_at=timezone.now(),
+                            create_by_id=request.user.id
                         )
-                        stockin_form_detail.save()
+                        stockin_form.save()
 
                         result = Do_Transaction(request, form_no, item['product_order'],
                                                 item['purchase_no'], item['version_no'], item['version_seq'],
                                                 item['size'], mvt,
-                                                item['order_bin'], item['order_qty'], item['purchase_unit'], item['desc'])
+                                                item['order_bin'], item['order_qty'], item['purchase_unit'], item['desc'],
+                                                stockin_form=form_no)
 
                     except Exception as e:
                         raise ValueError(f"{e}")
@@ -843,19 +819,13 @@ def packing_material_stock_out_post(request):
 
             mvt = MovementType.objects.get(mvt_code="STOU")
 
-            stockout_form = StockOutForm.objects.create(
-                form_no=form_no,
-                create_at=timezone.now(),
-                create_by_id=request.user.id
-            )
-
             for item in data:
                 bin = Bin.objects.get(bin_id=item['order_bin'])
                 comment = item['desc'] if 'desc' in item else ""
 
                 try:
-                    stockout_form_detail = StockOutFormDetail(
-                        form_no=stockout_form,
+                    stockout_form = StockOutForm(
+                        form_no=form_no,
                         product_order=item['product_order'],
                         version_no=item['version_no'],
                         version_seq=item['version_seq'],
@@ -864,15 +834,18 @@ def packing_material_stock_out_post(request):
                         purchase_unit=item['purchase_unit'],
                         order_bin=bin,
                         desc=comment,
+                        create_at=timezone.now(),
+                        create_by_id=request.user.id
                     )
-                    stockout_form_detail.save()
+                    stockout_form.save()
 
                     qty = int(item['order_qty']) * -1
 
                     result = Do_Transaction(request, form_no, item['product_order'],
                                             item['purchase_no'], item['version_no'], item['version_seq'],
                                             item['size'], mvt,
-                                            item['order_bin'], qty, item['purchase_unit'], comment)
+                                            item['order_bin'], qty, item['purchase_unit'], comment,
+                                            stockout_form=form_no)
 
                 except Exception as e:
                     raise ValueError(f"{e}")
@@ -1435,6 +1408,8 @@ def open_data_import_confirm_api(request):
                 return JsonResponse({"error": "沒有可匯入的數據"}, status=400)
 
             with transaction.atomic():
+
+                Bin_Value_History.objects.all().delete()
                 Bin_Value.objects.all().delete()
 
                 YYYYMM = datetime.now().strftime("%Y%m")

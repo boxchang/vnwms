@@ -4,7 +4,8 @@ import uuid
 from warehouse.models import MovementType, Bin, Bin_Value, Bin_Value_History
 
 
-def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt, bin_code, qty, purchase_unit, desc):
+def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt, bin_code, qty,
+                   purchase_unit, desc, stockin_form=None, stockout_form=None):
     try:
         qty = float(qty)
         bin = Bin.objects.get(bin_id=bin_code)
@@ -27,7 +28,11 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
                     Bin_Value.objects.update_or_create(product_order=product_order, purchase_no=purchase_no,
                                                        version_no=version_no,
                                                        version_seq=version_seq, size=size, bin=bin,
-                                                       defaults={'qty': remain_qty, 'purchase_unit': purchase_unit, 'update_by': request.user})
+                                                       defaults={'qty': remain_qty, 'purchase_unit': purchase_unit,
+                                                                 'update_by': request.user,
+                                                                 'stockin_form': stockin_form,
+                                                                 'stockout_form': stockout_form
+                                                                 })
 
                 if qty > 0:
                     Bin_Value_History.objects.create(batch_no=form_no, product_order=product_order,

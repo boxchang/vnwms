@@ -4,7 +4,7 @@ from django import forms
 import PIL
 from PIL import Image
 from bootstrap_datepicker_plus.widgets import DatePickerInput
-from warehouse.models import Warehouse, Area, Bin, ItemType, PackMethod, UnitType, Bin_Value, Plant
+from warehouse.models import Warehouse, Area, Bin, ItemType, UnitType, Bin_Value, Plant
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Button, Submit, HTML
 from django.utils.translation import gettext_lazy as _, get_language

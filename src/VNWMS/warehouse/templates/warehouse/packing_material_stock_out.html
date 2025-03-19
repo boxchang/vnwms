@@ -32,9 +32,6 @@
             <div id="jsGrid"></div>
 
             <hr />
-            <div id="jsGrid_Info"></div>
-
-            <hr />
             <div style="text-align: center" class="p-3">
                 <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
             </div>
@@ -79,7 +76,6 @@
                         console.log("Keep the data table");
                     } else {
                         $("#jsGrid").jsGrid("option", "data", data.data_list_stout);
-                        $("#jsGrid_Info").jsGrid("option", "data", data.data_list_info);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -108,7 +104,6 @@
                         console.log("Keep the data table");
                     } else {
                         $("#jsGrid").jsGrid("option", "data", data.data_list_stout);
-                        $("#jsGrid_Info").jsGrid("option", "data", data.data_list_info);
                     }
 
                 },
@@ -167,37 +162,6 @@
                 { name: "version_seq", type: "number", width: 90, title: "{% trans "Version Seq" %}", editing: false, align: "center" },
                 { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, align: "center" },
                 { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", align: "center", editing: false },
-            ]
-        });
-
-        $("#jsGrid_Info").jsGrid({
-            width: "100%",
-            height: "50vh",
-            noDataContent: "{% trans "Not found" %}",
-
-            inserting: false,  // 啟用新增功能
-            editing: false,    // 啟用編輯功能
-            sorting: true,    // 啟用排序功能
-            paging: true,     // 啟用分頁功能
-            {#confirmDeleting: false,#}
-
-            rowClick: function (args) {
-                this.editItem(args.item);
-            },
-
-            data: [],
-
-            fields: [
-                { name: "form_no_id", type: "number", width: 120, title: "{% trans "Stock In No" %}", align: "center", readOnly: true},
-                { name: "product_order", type: "text", width: 120, title: "{% trans "Product Order" %}", align: "center" },
-                { name: "purchase_no", type: "text", width: 100, title: "{% trans "Purchase Order" %}", align: "center", editing: false },
-                { name: "version_no", type: "text", width: 120, title: "{% trans "Version No" %}", align: "center", editing: false },
-                { name: "version_seq", type: "text", width: 80, title: "{% trans "Version Seq" %}", validate: "required", editing: false, align: "center" },
-                { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, align: "center" },
-                { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Unit" %}", align: "center", editing: false },
-                { name: "order_qty", type: "number", width: 120, title: "{% trans "Qty" %}", editing: false, align: "center" },
-                { name: "order_bin_id", type: "text", width: 70, title: "{% trans "Location" %}", editing: false, align: "center" },
-                { name: "desc", type: "text", width: 150, title: "{% trans "Comment" %}", align: "center", editing: false },
             ]
         });
 
@@ -272,10 +236,6 @@
 
                     $("#jsGrid").jsGrid("option", "data", []);
                     $("#jsGrid").jsGrid("refresh");
-                    $("#jsGrid_Info").jsGrid("option", "data", []);
-                    $("#jsGrid_Info").jsGrid("refresh");
-
-
 
                     alert("{% trans "Form submitted successfully!" %}");
                     console.log(response);
