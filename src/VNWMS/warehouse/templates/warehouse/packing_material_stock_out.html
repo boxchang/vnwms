@@ -48,9 +48,17 @@
     <script>
     $(document).ready(function() {
 
-        $("#id_product_order, #id_purchase_no").on("keydown", function(event) {
-            if (event.which === 13) {  // Nếu nhấn Enter
-                event.preventDefault(); // Ngăn chặn form submit
+        $("#id_product_order").on("keydown", function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                get_order_info(); // Chỉ gọi khi nhập #id_product_order
+            }
+        });
+
+        $("#id_purchase_no").on("keydown", function (event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                get_no_info(); // Chỉ gọi khi nhập #id_purchase_no
             }
         });
 
