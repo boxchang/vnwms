@@ -218,9 +218,8 @@ body {
 }
 
 h3:lang(vi) {
-    font-family: "Be Vietnam Pro", "Inter", "Merriweather", "Noto Serif", serif;
+    font-family: "Times New Roman", "Be Vietnam Pro", "Merriweather", "Noto Serif", serif;
     font-weight: 600;
     letter-spacing: 0.8px;
     line-height: 1.4;
-    text-transform: uppercase;
 }

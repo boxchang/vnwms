@@ -3,8 +3,20 @@
 {% load i18n %}
 {% block title %} {% trans "Inventory Sheet" %} {% endblock %}
 
+{% block css %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+
+
+    <style>
+        .jsgrid-grid-body::-webkit-scrollbar {
+            height: 16px !important;
+        }
+    </style>
+{% endblock %}
+
+
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-4">
 
     <h3 class="text-center">{% trans "Inventory Sheet" %}</h3>
 
@@ -50,10 +62,8 @@
 {% endblock %}
 
 
+
 {% block javascript %}
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
     <script>
 
         $(document).ready(function () {
@@ -191,25 +201,16 @@
                     titleMap[field.name] = field.title;
                 });
 
-                // Chuyển đổi dữ liệu với cột là title thay vì name
                 var transformedData = gridData.map(function (item) {
                     var transformedItem = {};
-                    for (var key in item) {
-                        if (item.hasOwnProperty(key)) {
-                            // Ánh xạ từ name sang title
-                            var title = titleMap[key];
-                            if (title) {
-                                transformedItem[title] = item[key];
-                            }
-                        }
-                    }
+                    fields.forEach(function (field) {
+                        transformedItem[field.title] = item[field.name] || ""; // Giữ đúng thứ tự trong `fields`
+                    });
                     return transformedItem;
                 });
 
-
                 // Chuyển đổi dữ liệu thành định dạng SheetJS
                 var ws = XLSX.utils.json_to_sheet(transformedData);
-
 
                 // Đặt độ rộng cho các cột
                 var colWidths = fields.map(function(field) {
@@ -224,9 +225,8 @@
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel
-                XLSX.writeFile(wb, "Bin_Data.xlsx");
+                XLSX.writeFile(wb, "Inventory_Sheet.xlsx");
             });
-
         });
     </script>
 {% endblock %}

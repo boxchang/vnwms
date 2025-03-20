@@ -6,38 +6,39 @@
 {% block css %}
 <style>
 
-.jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
-    display: none !important;
-}
+    .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
+        display: none !important;
+    }
 
-.jsgrid-grid-body::-webkit-scrollbar {
-    height: 16px !important;
-}
+    .jsgrid-grid-body::-webkit-scrollbar {
+        height: 16px !important;
+    }
 
-.input-custom {
-    --bs-gutter-x: 0;
-}
+    .input-custom {
+        --bs-gutter-x: 0;
+    }
+
 </style>
 
 {% endblock css %}
 
 
 {% block content %}
-<div class="row p-3 d-flex justify-content-center">
-    <div class="col-10">
+    <div class="row p-3 d-flex justify-content-center">
+        <div class="col-10">
 
-        <h3 class="p-3 text-center">{% trans "Warehouse Stock Out Form" %}</h3>
-        <form id="myForm">
-            {% crispy form %}
-            <div id="jsGrid"></div>
+            <h3 class="p-3 text-center">{% trans "Warehouse Stock Out Form" %}</h3>
+            <form id="myForm">
+                {% crispy form %}
+                <div id="jsGrid"></div>
 
-            <hr />
-            <div style="text-align: center" class="p-3">
-                <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
-            </div>
-        </form>
+                <hr />
+                <div style="text-align: center" class="p-3">
+                    <button type="button" id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 {% endblock %}
 
 {% block javascript %}
@@ -45,22 +46,21 @@
     <script>
     $(document).ready(function() {
 
+        {# Search #}
         $("#id_product_order").on("keydown", function (event) {
-            if (event.which === 13) {
+            let product_order = $('#id_product_order').val().trim();
+            if (event.key === "Enter" && product_order) {
                 event.preventDefault();
-                get_order_info(); // Chỉ gọi khi nhập #id_product_order
+                get_order_info();
             }
         });
 
         $("#id_purchase_no").on("keydown", function (event) {
-            if (event.which === 13) {
+            let purchase_no = $('#id_purchase_no').val().trim();
+            if (event.key === "Enter" && purchase_no) {
                 event.preventDefault();
-                get_no_info(); // Chỉ gọi khi nhập #id_purchase_no
+                get_no_info();
             }
-        });
-
-        $("#id_product_order").on("change", function() {
-            get_order_info();
         });
 
         get_order_info = function() {
@@ -83,13 +83,6 @@
                 }
             });
         };
-
-
-        $("#id_purchase_no").on("change", function() {
-
-            get_no_info();
-        });
-
 
         get_no_info = function() {
 
@@ -114,6 +107,7 @@
         };
 
 
+        {# Main JsGrid #}
         data: [], // 初始為空，將透過 AJAX 加載資料
 
         // 初始化 jsGrid
@@ -174,7 +168,7 @@
             ]
         });
 
-
+        {# Shortcut Keyboard #}
         $(document).on('keydown', function(e) {
             if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
                 const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");

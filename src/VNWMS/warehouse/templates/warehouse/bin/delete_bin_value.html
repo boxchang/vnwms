@@ -7,7 +7,6 @@
     {{ block.super }}
     <style>
 
-
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
@@ -17,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-4">
 
     <h3 class="text-center">{% trans "Inventory Deletion" %}</h3>
 
@@ -63,7 +62,7 @@
     <hr>
 
     <div class="row d-flex justify-content-center">
-        <button class="btn btn-danger btn-lg" id="deleteSelected">Delete</button>
+        <button class="btn btn-danger btn-lg" style="min-width: 80px" id="deleteSelected">{% trans "Delete" %}</button>
     </div>
 
     <br>
@@ -125,6 +124,29 @@
                 }
             });
 
+            $("form").on("submit", function(event) {
+                event.preventDefault();
+            });
+
+            $("#id_po").on("keydown", function (event) {
+                let warehouseId = $("#warehouse").val();
+                let areaId = $("#id_area").val();
+                let binId = $("#id_bin").val();
+                let poId = $("#id_po").val().trim();
+
+                if (warehouseId || areaId || binId || poId) {
+                    $.getJSON("{% url 'get_bin_data' %}", {
+                            warehouse: warehouseId,
+                            area: areaId,
+                            bin: binId,
+                            po: poId
+                        }, function (data) {
+                            console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
+
+                            $("#jsGrid").jsGrid("option", "data", data);
+                    });
+                }
+            });
 
             $("#Search").click(function () {
                 let warehouseId = $("#warehouse").val();
@@ -293,11 +315,11 @@
                     { name: "product_order", title: translations.product_order, type: "text", width: 100 },
                     { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100 },
                     { name: "version_no", title: translations.version_no, type: "text", width: 100 },
-                    { name: "version_seq", title: translations.version_seq, type: "text", width: 50 },
+                    { name: "version_seq", title: translations.version_seq, type: "text", width: 70 },
                     { name: "size", title: translations.size, type: "text", width: 50 },
-                    { name: "bin_id", title: translations.location, type: "text", width: 100 },
+                    { name: "bin_id", title: translations.location, type: "text", width: 80 },
                     { name: "qty", title: translations.qty, type: "number", width: 100 },
-                    { name: "purchase_unit", title: translations.unit, type: "text", width: 50 }
+                    { name: "purchase_unit", title: translations.unit, type: "text", width: 50 },
                 ];
 
                 // Tạo một đối tượng map để ánh xạ từ name sang title
@@ -306,25 +328,16 @@
                     titleMap[field.name] = field.title;
                 });
 
-                // Chuyển đổi dữ liệu với cột là title thay vì name
                 var transformedData = gridData.map(function (item) {
                     var transformedItem = {};
-                    for (var key in item) {
-                        if (item.hasOwnProperty(key)) {
-                            // Ánh xạ từ name sang title
-                            var title = titleMap[key];
-                            if (title) {
-                                transformedItem[title] = item[key];
-                            }
-                        }
-                    }
+                    fields.forEach(function (field) {
+                        transformedItem[field.title] = item[field.name] || ""; // Giữ đúng thứ tự trong `fields`
+                    });
                     return transformedItem;
                 });
 
-
                 // Chuyển đổi dữ liệu thành định dạng SheetJS
                 var ws = XLSX.utils.json_to_sheet(transformedData);
-
 
                 // Đặt độ rộng cho các cột
                 var colWidths = fields.map(function(field) {
@@ -339,9 +352,8 @@
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel
-                XLSX.writeFile(wb, "Bin_Data.xlsx");
+                XLSX.writeFile(wb, "Transaction_History.xlsx");
             });
-
         });
     </script>
 {% endblock %}
