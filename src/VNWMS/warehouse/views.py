@@ -537,7 +537,7 @@ def get_product_order_stout(request):
                                         'supplier': raw['supplier'],
                                         'lot_no': raw['lot_no'],
                                         'purchase_qty': raw['purchase_qty'],
-                                        'item_type_id': raw['item_type_id'],
+                                        'item_type': raw['item_type'],
                                         'post_date': raw['post_date'],
                                         'sap_mtr_no': raw['sap_mtr_no'],
                                         'desc': raw['desc'],
@@ -570,7 +570,7 @@ def get_purchase_no_stout(request):
                                         'supplier': raw['supplier'],
                                         'lot_no': raw['lot_no'],
                                         'purchase_qty': raw['purchase_qty'],
-                                        'item_type_id': raw['item_type_id'],
+                                        'item_type': raw['item_type'],
                                         'post_date': raw['post_date'],
                                         'sap_mtr_no': raw['sap_mtr_no'],
                                         'desc': raw['desc'],
@@ -764,7 +764,7 @@ def packing_material_stock_out_post(request):
             mvt = MovementType.objects.get(mvt_code="STOU")
 
             for item in data:
-                bin = Bin.objects.get(bin_id=item['order_bin'])
+                bin = Bin.objects.get(bin_id=item['bin_id'])
                 comment = item['desc'] if 'desc' in item else ""
 
                 try:
@@ -788,7 +788,7 @@ def packing_material_stock_out_post(request):
                     result = Do_Transaction(request, form_no, item['product_order'],
                                             item['purchase_no'], item['version_no'], item['version_seq'],
                                             item['size'], mvt,
-                                            item['order_bin'], qty, item['purchase_unit'], comment,
+                                            item['bin_id'], qty, item['purchase_unit'], comment,
                                             stockout_form=form_no)
 
                 except Exception as e:
@@ -1588,26 +1588,10 @@ def get_bin_data(request):
     bin_id = request.GET.get("bin")
     po_id = request.GET.get("po")
 
-    stocks = Bin_Value.objects.all()
-
     if warehouse_id or area_id or bin_id or po_id:
-        if warehouse_id:
-            stocks = stocks.filter(Q(bin__area__warehouse_id=warehouse_id))
-        if area_id:
-            stocks = stocks.filter(Q(bin__area__area_id=area_id))
-        if bin_id:
-            stocks = stocks.filter(Q(bin_id=bin_id))
-        if po_id:
-            stocks = stocks.filter(Q(product_order=po_id))
 
-        products = stocks.select_related(
-            "bin__area__warehouse"
-        ).values(
-            "id",
-            "bin__area__warehouse__wh_name",
-            "bin__area__warehouse__wh_plant",
-            "product_order", "purchase_no", "version_no", "version_seq", "size", "bin_id", "qty", "purchase_unit"
-        )
+        products = inventory_search(warehouse=warehouse_id, area=area_id, location=bin_id, product_order=po_id)
+
         return JsonResponse(list(products), safe=False)
 
     return JsonResponse([], safe=False)

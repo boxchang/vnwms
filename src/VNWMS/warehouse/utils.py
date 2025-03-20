@@ -135,6 +135,8 @@ def transfer_stock(product_order, purchase_no, version_no, version_seq, size, bi
 def inventory_search(warehouse=None, area=None, location=None, product_order=None, purchase_order=None, size=None):
     db = vnedc_database()
 
+    item_type_name = get_item_type_name()
+
     sql = f"""
                 SELECT b.product_order
                       ,b.size
@@ -149,14 +151,15 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
                       ,lot_no
                       ,purchase_qty
                       ,b.purchase_unit
-                      ,item_type_id
+                      ,{item_type_name} item_type
                       ,post_date
                       ,sap_mtr_no
-    				  ,[desc]
+    				  ,d.[desc]
                 FROM [VNWMS].[dbo].[warehouse_bin_value] b
                 JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
 				JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
-                LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+                LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+				JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
                 and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
     						and b.size = d.size
                 WHERE qty > 0

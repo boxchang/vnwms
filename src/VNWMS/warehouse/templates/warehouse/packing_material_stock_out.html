@@ -119,7 +119,7 @@
         // 初始化 jsGrid
         $("#jsGrid").jsGrid({
             width: "100%",
-            height: "30vh",
+            height: "70vh",
             noDataContent: "{% trans "Not found" %}",
             inserting: true,  // 啟用新增功能
             editing: true,    // 啟用編輯功能
@@ -153,8 +153,8 @@
                     }
                 },
                 { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", align: "center", readOnly: true, visible: false },
-                { name: "order_qty", type: "text", width: 120, title: "{% trans "Qty" %}", align: "center" },
-                { name: "order_bin", type: "text", width: 70, title: "{% trans "Location" %}", align: "center", editing: false },
+                { name: "qty", type: "text", width: 120, title: "{% trans "Qty" %}", align: "center" },
+                { name: "bin_id", type: "text", width: 80, title: "{% trans "Location" %}", align: "center", editing: false },
                 { name: "desc", type: "text", width: 120, title: "{% trans "Comment" %}", align: "center", editing: true },
                 { name: "product_order", type: "text", width: 130, title: "{% trans "Product Order" %}", validate: "required", editing: false, align: "center" },
                 { name: "purchase_no", type: "text", width: 105, title: "{% trans "Purchase Order" %}", editing: false, align: "center" },
@@ -162,6 +162,15 @@
                 { name: "version_seq", type: "number", width: 90, title: "{% trans "Version Seq" %}", editing: false, align: "center" },
                 { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, align: "center" },
                 { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", align: "center", editing: false },
+
+                { name: "customer_no", type: "text", width: 100, title: "{% trans "Customer" %}", align: "center", editing: false },
+                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", align: "center", editing: false },
+                { name: "lot_no", type: "text", width: 120, title: "{% trans "Lot Number" %}", align: "center", editing: false },
+                { name: "purchase_qty", type: "text", width: 100, title: "{% trans "Purchase Quantity" %}", align: "center", editing: false },
+                { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", align: "center", editing: false },
+                { name: "post_date", type: "text", width: 150, title: "{% trans "Post Date" %}", align: "center", editing: false },
+                { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", align: "center", editing: false },
+
             ]
         });
 
@@ -210,14 +219,6 @@
             if (!gridData || gridData.length === 0) {
                 alert("{% trans "No data in the table! Please enter at least one row." %}");
                 return; // Dừng xử lý nếu không có dữ liệu
-            }
-
-            // 檢查 order_qty 是否都有值
-            for (var i = 0; i < gridData.length; i++) {
-                if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
-                    alert("第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！");
-                    return; // 阻止繼續執行
-                }
             }
 
             // 將數據轉換為 JSON 格式
