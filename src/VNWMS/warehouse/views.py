@@ -17,7 +17,7 @@ from django.utils.translation import gettext as _
 from VNWMS.database import sap_database, vnedc_database
 from VNWMS.settings.base import MEDIA_URL
 from users.models import CustomUser
-from warehouse.utils import Do_Transaction, transfer_stock, get_item_type_name
+from warehouse.utils import Do_Transaction, transfer_stock, get_item_type_name, inventory_search, inventory_history
 from .forms import WarehouseForm, AreaForm, BinForm, BinValueForm, BinSearchForm, StockInPForm, StockOutPForm, \
     BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
 from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, \
@@ -279,41 +279,14 @@ def bin_search(request):
         query_to = form.cleaned_data.get('to_date')
 
         if query_bin or query_po_no or query_size:
-            bin_hists = Bin_Value_History.objects.filter()
 
             item_type_name = get_item_type_name()
 
-            sql1 = f"""
-                        SELECT b.product_order,b.purchase_no,b.version_no,b.version_seq,b.size
-                              ,qty,b.bin_id,b.purchase_unit,customer_no,supplier,lot_no
-                              ,purchase_qty,b.purchase_unit,{item_type_name} item_type,post_date,sap_mtr_no
-                        FROM [VNWMS].[dbo].[warehouse_bin_value] b
-                        LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-                        and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
-						and b.size = d.size
-                        LEFT JOIN [VNWMS].[dbo].[warehouse_itemtype] t on d.item_type_id = t.type_code
-                        WHERE qty > 0
-                        """
-
-            if query_bin:
-                bin_hists = bin_hists.filter(bin__bin_id=query_bin)  # Lọc chính xác mã `bin`
-                sql1 += f"and bin_id='{query_bin}'"
-            if query_po_no:
-                bin_hists = bin_hists.filter(product_order=query_po_no)
-                sql1 += f"and b.product_order='{query_po_no}'"
-            if query_size:
-                bin_hists = bin_hists.filter(size=query_size)
-                sql1 += f"and b.size='{query_size}'"
-            if query_from:
-                start_datetime = datetime.combine(query_from, datetime.min.time())  # Đầu ngày (00:00:00)
-                bin_hists = bin_hists.filter(create_at__gte=start_datetime)
-            if query_to:
-                end_datetime = datetime.combine(query_to, datetime.max.time())
-                bin_hists = bin_hists.filter(create_at__lte=end_datetime)
+            bin_hists = inventory_history(location=query_bin, product_order=query_po_no, size=query_size, from_date=query_from, to_date=query_to)
             if not bin_hists.exists():
                 message = "No matching records found."
 
-            bin_values = db.select_sql_dict(sql1)
+            bin_values = inventory_search(location=query_bin, product_order=query_po_no, size=query_size)
 
             # Lọc kết quả cuối cùng
             result_history = bin_hists
@@ -546,45 +519,29 @@ def get_product_order_stout(request):
 
     if request.method == 'POST':
         product_order = request.POST.get('product_order')
-        db = vnedc_database()
 
         if product_order == '':
             return JsonResponse({"status": "no_change"}, status=200)
         else:
-            sql1 = f"""
-            SELECT b.product_order
-                  ,b.size
-                  ,qty
-                  ,bin_id
-                  ,b.purchase_no
-                  ,b.version_no
-                  ,b.version_seq
-                  ,b.purchase_unit
-                  ,customer_no
-                  ,supplier
-                  ,lot_no
-                  ,purchase_qty
-                  ,b.purchase_unit
-                  ,item_type_id
-                  ,post_date
-                  ,sap_mtr_no
-				  ,[desc]
-            FROM [VNWMS].[dbo].[warehouse_bin_value] b
-            LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-            and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
-						and b.size = d.size
-            WHERE b.product_order = '{product_order}'
-            AND qty > 0
-            """
-
-        raws_stout = db.select_sql_dict(sql1)
-
-        for raw in raws_stout:
-            data_list_stout.append({'product_order': raw['product_order'], 'size': raw['size'],
-                                    'version_no': raw['version_no'], 'order_bin': raw['bin_id'],
-                                    'purchase_unit': raw['purchase_unit'], 'version_seq': raw['version_seq'],
-                                    'purchase_no': raw['purchase_no'], 'order_qty': int(raw['qty']),
-                                    })
+            raws_stout = inventory_search(product_order=product_order)
+            for raw in raws_stout:
+                data_list_stout.append({'product_order': raw['product_order'],
+                                        'size': raw['size'],
+                                        'qty': int(raw['qty']),
+                                        'bin_id': raw['bin_id'],
+                                        'purchase_no': raw['purchase_no'],
+                                        'version_no': raw['version_no'],
+                                        'version_seq': raw['version_seq'],
+                                        'purchase_unit': raw['purchase_unit'],
+                                        'customer_no': raw['customer_no'],
+                                        'supplier': raw['supplier'],
+                                        'lot_no': raw['lot_no'],
+                                        'purchase_qty': raw['purchase_qty'],
+                                        'item_type_id': raw['item_type_id'],
+                                        'post_date': raw['post_date'],
+                                        'sap_mtr_no': raw['sap_mtr_no'],
+                                        'desc': raw['desc'],
+                                        })
 
     return JsonResponse({
         "data_list_stout": data_list_stout
@@ -595,45 +552,29 @@ def get_purchase_no_stout(request):
     data_list_stout = []
     if request.method == 'POST':
         purchase_no = request.POST.get('purchase_no')
-        db = vnedc_database()
 
         if purchase_no == '':
             return JsonResponse({"status": "no_change"}, status=200)
         else:
-            sql1 = f"""
-            SELECT b.product_order
-                  ,b.size
-                  ,qty
-                  ,bin_id
-                  ,b.purchase_no
-                  ,b.version_no
-                  ,b.version_seq
-                  ,b.purchase_unit
-                  ,customer_no
-                  ,supplier
-                  ,lot_no
-                  ,purchase_qty
-                  ,b.purchase_unit
-                  ,item_type_id
-                  ,post_date
-                  ,sap_mtr_no
-				  ,[desc]
-            FROM [VNWMS].[dbo].[warehouse_bin_value] b
-            LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-            and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
-						and b.size = d.size
-			WHERE purchase_no = '{purchase_no}'
-            AND qty > 0
-            """
-
-        raws_stout = db.select_sql_dict(sql1)
-
-        for raw in raws_stout:
-            data_list_stout.append({'product_order': raw['product_order'], 'size': raw['size'],
-                              'version_no': raw['version_no'], 'order_bin': raw['bin_id'],
-                                'purchase_unit': raw['purchase_unit'], 'version_seq': raw['version_seq'],
-                                    'purchase_no': raw['purchase_no'], 'order_qty': int(raw['qty']),
-            })
+            raws_stout = inventory_search(purchase_order=purchase_no)
+            for raw in raws_stout:
+                data_list_stout.append({'product_order': raw['product_order'],
+                                        'size': raw['size'],
+                                        'qty': int(raw['qty']),
+                                        'bin_id': raw['bin_id'],
+                                        'purchase_no': raw['purchase_no'],
+                                        'version_no': raw['version_no'],
+                                        'version_seq': raw['version_seq'],
+                                        'purchase_unit': raw['purchase_unit'],
+                                        'customer_no': raw['customer_no'],
+                                        'supplier': raw['supplier'],
+                                        'lot_no': raw['lot_no'],
+                                        'purchase_qty': raw['purchase_qty'],
+                                        'item_type_id': raw['item_type_id'],
+                                        'post_date': raw['post_date'],
+                                        'sap_mtr_no': raw['sap_mtr_no'],
+                                        'desc': raw['desc'],
+                                        })
 
     return JsonResponse({
         "data_list_stout": data_list_stout

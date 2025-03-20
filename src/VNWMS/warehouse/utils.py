@@ -1,6 +1,8 @@
-import datetime
+from datetime import datetime
 import uuid
 from django.utils.translation import get_language
+
+from VNWMS.database import vnedc_database
 from warehouse.models import MovementType, Bin, Bin_Value, Bin_Value_History
 
 
@@ -130,9 +132,77 @@ def transfer_stock(product_order, purchase_no, version_no, version_seq, size, bi
     except Exception as e:
         return {"success": False, "message": str(e)}
 
+def inventory_search(warehouse=None, area=None, location=None, product_order=None, purchase_order=None, size=None):
+    db = vnedc_database()
 
+    sql = f"""
+                SELECT b.product_order
+                      ,b.size
+                      ,b.qty
+                      ,b.bin_id
+                      ,b.purchase_no
+                      ,b.version_no
+                      ,b.version_seq
+                      ,b.purchase_unit
+                      ,customer_no
+                      ,supplier
+                      ,lot_no
+                      ,purchase_qty
+                      ,b.purchase_unit
+                      ,item_type_id
+                      ,post_date
+                      ,sap_mtr_no
+    				  ,[desc]
+                FROM [VNWMS].[dbo].[warehouse_bin_value] b
+                JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
+				JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
+                LEFT JOIN [dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+                and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+    						and b.size = d.size
+                WHERE qty > 0
+                """
 
+    if product_order:
+        sql += f" AND b.product_order = '{product_order}'"
 
+    if purchase_order:
+        sql += f" AND b.purchase_no = '{purchase_order}'"
+
+    if warehouse:
+        sql += f" AND area.warehouse_id = '{warehouse}'"
+
+    if area:
+        sql += f" AND area.area_id = '{area}'"
+
+    if location:
+        sql += f" AND bin.bin_id = '{location}'"
+
+    if size:
+        sql += f" AND b.size = '{size}'"
+
+    results = db.select_sql_dict(sql)
+
+    return results
+
+def inventory_history(location=None, product_order=None, purchase_order=None, size=None, from_date=None, to_date=None):
+    bin_hists = Bin_Value_History.objects.filter()
+
+    if location:
+        bin_hists = bin_hists.filter(bin__bin_id=location)  # Lọc chính xác mã `bin`
+    if product_order:
+        bin_hists = bin_hists.filter(product_order=product_order)
+    if purchase_order:
+        bin_hists = bin_hists.filter(purchase_no=purchase_order)
+    if size:
+        bin_hists = bin_hists.filter(size=size)
+    if from_date:
+        start_datetime = datetime.combine(from_date, datetime.min.time())  # Đầu ngày (00:00:00)
+        bin_hists = bin_hists.filter(create_at__gte=start_datetime)
+    if to_date:
+        end_datetime = datetime.combine(to_date, datetime.max.time())
+        bin_hists = bin_hists.filter(create_at__lte=end_datetime)
+
+    return bin_hists
 
 
 
