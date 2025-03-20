@@ -81,7 +81,6 @@
                 pageSize: 20,
                 fields: [
                     { name: "product_order", title: translations.productOrder, type: "text", width: 30, css: "text-center" },
-                    { name: "product_order", title: translations.productOrder, type: "text", width: 30, css: "text-center" },
                     { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 25, css: "text-center" },
                     { name: "version_no", title: translations.versionNo, type: "text", width: 25, css: "text-center" },
                     { name: "version_seq", title: translations.versionSeq, type: "text", width: 10, css: "text-center" },
@@ -89,9 +88,35 @@
                     { name: "comment", title: translations.comment, type: "text", width: 35, css: "text-center" },
                     { name: "bin_id", title: translations.bin, type: "text", width: 15, css: "text-center" },
                     { name: "mvt_id", title: translations.mvt, type: "text", width: 25, css: "text-center" },
-                    { name: "minus_qty", title: "-", type: "text", width: 25, css: "text-right" },
-                    { name: "plus_qty", title: "+", type: "text", width: 25, css: "text-right" },
-                    { name: "remain_qty", title: translations.qty, type: "text", width: 25, css: "text-right" },
+                    {
+                        name: "minus_qty",
+                        title: "-",
+                        type: "text",
+                        width: 25,
+                        css: "text-center", // Giữ tiêu đề cột căn giữa
+                        itemTemplate: function(value) {
+                            return $("<div>").attr("style", "text-align: right;").text(value); // Căn phải nội dung
+                        }
+                    },
+                    {
+                        name: "plus_qty",
+                        title: "+",
+                        type: "text",
+                        width: 25,
+                        css: "text-center",
+                        itemTemplate: function(value) {
+                            return $("<div>").attr("style", "text-align: right;").text(value); // Căn phải nội dung
+                        }
+                    },
+                    {
+                        name: "remain_qty",
+                        title: translations.qty,
+                        type: "text", width: 25,
+                        css: "text-center",
+                        itemTemplate: function(value) {
+                            return $("<div>").attr("style", "text-align: right;").text(value); // Căn phải nội dung
+                        }
+                    },
                     { name: "create_at", title: translations.createAt, type: "text", width: 40, css: "text-center" },
                     { name: "create_by__username", title: translations.createBy, type: "text", width: 25, css: "text-center" },
                 ]
@@ -183,4 +208,4 @@
 
 
     </script>
-{% endblock javascript %}
+{% endblock %}
