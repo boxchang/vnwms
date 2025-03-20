@@ -519,7 +519,7 @@ h3 {
             for (var i = 0; i < gridData.length; i++) {
                 if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
                     {#alert({% blocktrans %}"第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！"{% endblocktrans %});#}
-                    alert({% blocktrans %}"The 'location' field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
+                    alert("{% blocktrans %}The 'location' field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
                     return; // 阻止繼續執行
                 }
 

@@ -783,7 +783,7 @@ def packing_material_stock_out_post(request):
                     )
                     stockout_form.save()
 
-                    qty = int(item['order_qty']) * -1
+                    qty = int(item['qty']) * -1
 
                     result = Do_Transaction(request, form_no, item['product_order'],
                                             item['purchase_no'], item['version_no'], item['version_seq'],

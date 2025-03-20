@@ -39,14 +39,20 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
                                                        version_no=version_no,
                                                        version_seq=version_seq, size=size, bin=bin).delete()
                 else:
+                    tmp1 = {}
+                    if stockin_form:
+                        tmp1 = {'stockin_form': stockin_form}
+                    if stockout_form:
+                        tmp1 = {'stockout_form': stockout_form}
+
+                    tmp = {'qty': remain_qty, 'purchase_unit': purchase_unit,
+                             'update_by': request.user,
+                             }
+                    tmp.update(tmp1)
                     Bin_Value.objects.update_or_create(product_order=product_order, purchase_no=purchase_no,
                                                        version_no=version_no,
                                                        version_seq=version_seq, size=size, bin=bin,
-                                                       defaults={'qty': remain_qty, 'purchase_unit': purchase_unit,
-                                                                 'update_by': request.user,
-                                                                 'stockin_form': stockin_form,
-                                                                 'stockout_form': stockout_form
-                                                                 })
+                                                       defaults=tmp)
 
                 if qty > 0:
                     Bin_Value_History.objects.create(batch_no=form_no, product_order=product_order,
@@ -159,9 +165,9 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
                 JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
 				JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
                 LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-				JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
-                and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+				and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
     						and b.size = d.size
+				JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
                 WHERE qty > 0
                 """
 

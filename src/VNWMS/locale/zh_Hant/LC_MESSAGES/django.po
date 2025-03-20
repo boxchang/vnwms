@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-20 10:00+0700\n"
-"PO-Revision-Date: 2025-03-20 10:48+0700\n"
+"PO-Revision-Date: 2025-03-20 11:04+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -1782,7 +1782,7 @@ msgstr "結束日期"
 #: .\warehouse\forms.py:245
 #: .\warehouse\templates\warehouse\search_bin_history.html:241
 msgid "Location, Product Order, and Size cannot all be null!"
-msgstr "地點、商品訂單和尺寸不能全部為空！"
+msgstr "地點、訂單和尺寸不能全部為空！"
 
 #: .\warehouse\forms.py:259 .\warehouse\forms.py:324
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:48
@@ -2354,11 +2354,11 @@ msgstr "請至少輸入一筆資料"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:522
 msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
-msgstr "\"資料 \" + (i + 1) + \" 儲位為必填欄位\""
+msgstr "資料 \" + (i + 1) + \" 儲位為必填欄位"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:527
 msgid "The 'order quantity' field in row \" + (i + 1) + \" cannot be empty!"
-msgstr "\"資料 \" + (i + 1) + \" 數量為必填欄位\""
+msgstr "資料 \" + (i + 1) + \" 數量為必填欄位"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:550
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:241
@@ -2407,7 +2407,7 @@ msgstr "輸入者"
 
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:109
 msgid "(Product Order/Location/Size/Comment) cannot all be null!"
-msgstr "訂單/儲位/尺寸/備註為必填欄位"
+msgstr "訂單、儲位、尺寸、備註不能全部為空！"
 
 #: .\warehouse\templates\warehouse\search_bin_history.html:6
 msgid "Search Bin Value History"
