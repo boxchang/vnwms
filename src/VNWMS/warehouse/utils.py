@@ -18,7 +18,6 @@ def get_item_type_name():
         item_type_column = "type_code"
     return item_type_column
 
-
 def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt, bin_code, qty,
                    purchase_unit, desc, stockin_form=None, stockout_form=None):
     try:
@@ -78,7 +77,6 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
         print(e)
         result = "ERROR"
     return result
-
 
 def transfer_stock(product_order, purchase_no, version_no, version_seq, size, bin_code_from, bin_code_to, warehouse, qty):
     try:
@@ -140,39 +138,38 @@ def transfer_stock(product_order, purchase_no, version_no, version_seq, size, bi
     except Exception as e:
         return {"success": False, "message": str(e)}
 
-
 def inventory_search(warehouse=None, area=None, location=None, product_order=None, purchase_order=None, size=None):
     db = vnedc_database()
 
     item_type_name = get_item_type_name()
 
     sql = f"""
-            SELECT b.product_order
-                  ,b.size
-                  ,b.qty
-                  ,b.bin_id
-                  ,b.purchase_no
-                  ,b.version_no
-                  ,b.version_seq
-                  ,b.purchase_unit
-                  ,customer_no
-                  ,supplier
-                  ,lot_no
-                  ,purchase_qty
-                  ,b.purchase_unit
-                  ,{item_type_name} item_type
-                  ,post_date
-                  ,sap_mtr_no
-                  ,d.[desc]
-            FROM [VNWMS].[dbo].[warehouse_bin_value] b
-            JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
-            JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
-            LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-            AND b.product_order = d.product_order AND b.purchase_no = d.purchase_no AND b.version_no = d.version_no
-            AND b.size = d.size
-            JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
-            WHERE qty > 0
-            """
+                SELECT b.product_order
+                      ,b.size
+                      ,b.qty
+                      ,b.bin_id
+                      ,b.purchase_no
+                      ,b.version_no
+                      ,b.version_seq
+                      ,b.purchase_unit
+                      ,customer_no
+                      ,supplier
+                      ,lot_no
+                      ,purchase_qty
+                      ,b.purchase_unit
+                      ,{item_type_name} item_type
+                      ,post_date
+                      ,sap_mtr_no
+    				  ,d.[desc]
+                FROM [VNWMS].[dbo].[warehouse_bin_value] b
+                JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
+				JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
+                LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+				and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+    						and b.size = d.size
+				JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
+                WHERE qty > 0
+                """
 
     if product_order:
         sql += f" AND b.product_order = '{product_order}'"
@@ -195,7 +192,6 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
     results = db.select_sql_dict(sql)
 
     return results
-
 
 def inventory_history(location=None, product_order=None, purchase_order=None, size=None, from_date=None, to_date=None):
     bin_hists = Bin_Value_History.objects.filter()
