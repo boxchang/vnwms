@@ -454,6 +454,10 @@ class BinValueSearchForm(forms.Form):
     bin = forms.ChoiceField(
         choices=[], required=False, widget=forms.Select(attrs={"class": "form-control", "disabled": "disabled"})
     )
+    po = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
