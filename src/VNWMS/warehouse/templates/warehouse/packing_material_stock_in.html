@@ -6,22 +6,21 @@
 {% block base_js %}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <style>
+    .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
+        display: none !important;
+    }
 
-.jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
-    display: none !important;
-}
+    .jsgrid-grid-body::-webkit-scrollbar {
+        height: 16px !important;
+    }
 
-.jsgrid-grid-body::-webkit-scrollbar {
-    height: 16px !important;
-}
+    .input-custom {
+        --bs-gutter-x: 0;
+    }
 
-.input-custom {
-    --bs-gutter-x: 0;
-}
-
-h3 {
-    text-align: center;
-}
+    h3 {
+        text-align: center;
+    }
 
 
 </style>

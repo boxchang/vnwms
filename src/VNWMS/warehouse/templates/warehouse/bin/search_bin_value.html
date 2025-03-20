@@ -27,12 +27,16 @@
                 <label for="{{ form.bin.id_for_label }}">{% trans "Location" %}</label>
                 {{ form.bin }}
             </div>
+            <div class="col-12 col-md-2">
+                <label for="id_po" class="form-label">{% trans "Product Order" %}</label>
+                {{ form.po }}
+            </div>
             <div class="col-12 col-md-2 d-flex align-items-end">
                 <button type="button" class="btn btn-primary btn-lg" id="Search">
                     <i class="fas fa-search"></i> {% trans "Search" %}
                 </button>
             </div>
-            <div class="col-12 col-md-4 d-flex align-items-end justify-content-end">
+            <div class="col-12 col-md-2 d-flex align-items-end justify-content-end">
                 <button id="exportExcel" type="button" class="btn btn-success" aria-label="Template">
                     <i class="fas fa-download"></i>
                 </button>
@@ -53,21 +57,6 @@
     <script>
 
         $(document).ready(function () {
-
-            var translations = {
-                notFound: "{% trans 'Not found' %}",
-                plant: "{% trans 'Plant' %}",
-                warehouse: "{% trans 'Warehouse' %}",
-                product_order: "{% trans 'Product Order' %}",
-                purchase_order: "{% trans 'Purchase Order' %}",
-                version_no: "{% trans 'Version No' %}",
-                version_seq: "{% trans 'Version Seq' %}",
-                size: "{% trans 'Size' %}",
-                location: "{% trans 'Location' %}",
-                qty: "{% trans 'Qty' %}",
-                unit: "{% trans 'Unit' %}"
-            };
-
 
             // Load động danh sách Area khi chọn Warehouse
             $("#warehouse").change(function () {
@@ -103,21 +92,45 @@
                 let warehouseId = $("#warehouse").val();
                 let areaId = $("#id_area").val();
                 let binId = $("#id_bin").val();
+                let poId = $("#id_po").val().trim();
 
+                if (warehouseId || areaId || binId || poId) {
+                    $.getJSON("{% url 'get_bin_data' %}", {
+                            warehouse: warehouseId,
+                            area: areaId,
+                            bin: binId,
+                            po: poId
+                        }, function (data) {
+                            console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
 
-
-                if (warehouseId || areaId || binId) {
-                        $.getJSON("{% url 'get_bin_data' %}", { warehouse: warehouseId, area: areaId, bin: binId }, function (data) {
-                        console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
-
-                        $("#jsGrid").jsGrid("option", "data", data);
+                            $("#jsGrid").jsGrid("option", "data", data);
                     });
                 }
 
             });
 
+            var translations = {
+                notFound: "{% trans 'Not found' %}",
+                plant: "{% trans 'Plant' %}",
+                warehouse: "{% trans 'Warehouse' %}",
+                product_order: "{% trans 'Product Order' %}",
+                purchase_order: "{% trans 'Purchase Order' %}",
+                version_no: "{% trans 'Version No' %}",
+                version_seq: "{% trans 'Version Seq' %}",
+                size: "{% trans 'Size' %}",
+                location: "{% trans 'Location' %}",
+                qty: "{% trans 'Qty' %}",
+                unit: "{% trans 'Unit' %}",
 
-            // Cấu hình jsGrid
+                item_type: "{% trans 'Item Type' %}",
+                post_date: "{% trans 'Post Date' %}",
+                supplier: "{% trans 'Supplier' %}",
+                customer_no: "{% trans 'Customer' %}",
+                sap_mtr_no: "{% trans 'Mtr No' %}",
+                lot_no: "{% trans 'Lot No' %}",
+
+            };
+
             $("#jsGrid").jsGrid({
                 width: "100%",
                 height: "70vh",
@@ -138,7 +151,13 @@
                     { name: "size", title: translations.size, type: "text", width: 50 },
                     { name: "bin_id", title: translations.location, type: "text", width: 80 },
                     { name: "qty", title: translations.qty, type: "number", width: 100 },
-                    { name: "purchase_unit", title: translations.unit, type: "text", width: 50 }
+
+                    { name: "item_type", title: translations.item_type, type: "text", width: 200 },
+                    { name: "post_date", title: translations.post_date, type: "text", width: 100 },
+                    { name: "supplier", title: translations.supplier, type: "text", width: 100 },
+                    { name: "customer_no", title: translations.customer_no, type: "text", width: 100 },
+                    { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text", width: 100 },
+                    { name: "lot_no", title: translations.lot_no, type: "text", width: 100 }
                 ]
             });
 
@@ -153,11 +172,17 @@
                     { name: "product_order", title: translations.product_order, type: "text", width: 100 },
                     { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100 },
                     { name: "version_no", title: translations.version_no, type: "text", width: 100 },
-                    { name: "version_seq", title: translations.version_seq, type: "text", width: 50 },
+                    { name: "version_seq", title: translations.version_seq, type: "text", width: 70 },
                     { name: "size", title: translations.size, type: "text", width: 50 },
-                    { name: "bin_id", title: translations.location, type: "text", width: 100 },
+                    { name: "bin_id", title: translations.location, type: "text", width: 80 },
                     { name: "qty", title: translations.qty, type: "number", width: 100 },
-                    { name: "purchase_unit", title: translations.unit, type: "text", width: 50 }
+
+                    { name: "item_type", title: translations.item_type, type: "text", width: 200 },
+                    { name: "post_date", title: translations.post_date, type: "text", width: 100 },
+                    { name: "supplier", title: translations.supplier, type: "text", width: 100 },
+                    { name: "customer_no", title: translations.customer_no, type: "text", width: 100 },
+                    { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text", width: 100 },
+                    { name: "lot_no", title: translations.lot_no, type: "text", width: 100 }
                 ];
 
                 // Tạo một đối tượng map để ánh xạ từ name sang title

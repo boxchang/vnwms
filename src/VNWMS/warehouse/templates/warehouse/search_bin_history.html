@@ -23,11 +23,20 @@
             padding: 3px;
         }
 
+        th {
+            text-align: center;
+            align-content: center;
+        }
+
         table thead th {
             position: sticky;
             top: 0; /* Vị trí dính trên cùng */
             background-color: #fff;
 
+        }
+
+        .qty {
+            text-align: end;
         }
 
         .scroll {
@@ -157,8 +166,8 @@
                         <td>{{ record.version_no }}</td>
                         <td>{{ record.version_seq }}</td>
                         <td>{{ record.size }}</td>
-                        <td>{{ record.qty}}</td>
-                        <td>{{ record.purchase_qty}}</td>
+                        <td class="qty">{{ record.qty}}</td>
+                        <td class="qty">{{ record.purchase_qty}}</td>
                         <td>{{ record.purchase_unit}}</td>
                         <td>{{ record.item_type}}</td>
                         <td>{{ record.post_date }}</td>
@@ -206,9 +215,9 @@
                         <td>{{ record.product_order }}</td>
                         <td>{{ record.purchase_no }}</td>
                         <td>{{ record.size }}</td>
-                        <td>{{ record.minus_qty }}</td>
-                        <td>{{ record.plus_qty }}</td>
-                        <td>{{ record.remain_qty }}</td>
+                        <td class="qty">{{ record.minus_qty }}</td>
+                        <td class="qty">{{ record.plus_qty }}</td>
+                        <td class="qty">{{ record.remain_qty }}</td>
                         <td>{{ record.mvt.get_translated_name }}</td>
                         <td>{{ record.purchase_unit }}</td>
                         <td>{{ record.create_at|date:"d/m/Y H:i" }}</td>
@@ -225,7 +234,9 @@
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}
+
+
 
 {% block javascript %}
     <script>
@@ -244,6 +255,6 @@
             });
         });
     </script>
-{% endblock javascript %}
+{% endblock %}
 
 
