@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-25 10:41+0700\n"
+"POT-Creation-Date: 2025-03-20 10:00+0700\n"
 "PO-Revision-Date: 2025-01-15 16:56+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -38,17 +38,17 @@ msgstr ""
 msgid "save"
 msgstr "储存"
 
-#: .\bases\templates\bases\base.html:58
+#: .\bases\templates\bases\base.html:84
 #, fuzzy
 #| msgid "Warehouse Name"
 msgid "Warehouse Management System"
 msgstr "倉庫名稱"
 
-#: .\bases\templates\bases\base.html:67
+#: .\bases\templates\bases\base.html:101
 msgid "Personal Setting"
 msgstr "个人资讯"
 
-#: .\bases\templates\bases\base.html:68
+#: .\bases\templates\bases\base.html:107
 msgid "Logout"
 msgstr "登出"
 
@@ -797,8 +797,8 @@ msgstr ""
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:76
 #: .\warehouse\templates\warehouse\list_warehouse.html:64
 #: .\warehouse\templates\warehouse\list_warehouse.html:67
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:376
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:167
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:384
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:144
 msgid "Delete"
 msgstr "删除"
 
@@ -1572,228 +1572,237 @@ msgstr ""
 msgid "%s: error: %s\n"
 msgstr ""
 
-#: .\warehouse\forms.py:147
+#: .\warehouse\forms.py:56
+#, fuzzy
+#| msgid "Create Area"
+msgid "Choose Plant"
+msgstr "创建区域"
+
+#: .\warehouse\forms.py:161
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:47
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:49
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:48
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:66
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:62
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:63
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:75
 #, fuzzy
 #| msgid "Bin Id"
 msgid "Bin"
 msgstr "宾代码"
 
-#: .\warehouse\forms.py:151 .\warehouse\forms.py:266 .\warehouse\forms.py:334
-#: .\warehouse\forms.py:406
+#: .\warehouse\forms.py:165 .\warehouse\forms.py:313 .\warehouse\forms.py:415
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:42
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:44
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:57
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:147
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:214
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:181
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:25
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:43
-#: .\warehouse\templates\warehouse\search_bin_history.html:135
-#: .\warehouse\templates\warehouse\search_bin_history.html:174
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:61
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:141
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:57
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:45
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:88
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:61
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:114
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:159
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:12
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:57
+#: .\warehouse\templates\warehouse\search_bin_history.html:133
+#: .\warehouse\templates\warehouse\search_bin_history.html:188
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:12
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:70
 #, fuzzy
 #| msgid "Product"
 msgid "Product Order"
 msgstr "产品"
 
-#: .\warehouse\forms.py:152 .\warehouse\forms.py:196 .\warehouse\forms.py:275
-#: .\warehouse\forms.py:343
+#: .\warehouse\forms.py:166 .\warehouse\forms.py:210 .\warehouse\forms.py:321
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:46
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:48
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:61
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:151
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:214
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:185
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:47
-#: .\warehouse\templates\warehouse\search_bin_history.html:139
-#: .\warehouse\templates\warehouse\search_bin_history.html:176
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:65
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:61
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:92
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:65
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:118
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:163
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:20
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:61
+#: .\warehouse\templates\warehouse\search_bin_history.html:137
+#: .\warehouse\templates\warehouse\search_bin_history.html:190
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:13
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:74
 msgid "Size"
 msgstr "尺寸"
 
-#: .\warehouse\forms.py:153
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:63
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:161
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:178
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:52
-#: .\warehouse\templates\warehouse\search_bin_history.html:140
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:67
+#: .\warehouse\forms.py:167
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:94
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:67
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:127
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:156
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:67
+#: .\warehouse\templates\warehouse\search_bin_history.html:138
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:76
 msgid "Qty"
 msgstr ""
 
-#: .\warehouse\forms.py:188 .\warehouse\forms.py:221
+#: .\warehouse\forms.py:202 .\warehouse\forms.py:253 .\warehouse\forms.py:328
 msgid "Location:"
 msgstr ""
 
-#: .\warehouse\forms.py:192
+#: .\warehouse\forms.py:206
 #, fuzzy
 #| msgid "Product"
 msgid "Product Order:"
 msgstr "产品"
 
-#: .\warehouse\forms.py:201
+#: .\warehouse\forms.py:215
 msgid "From"
 msgstr ""
 
-#: .\warehouse\forms.py:206
+#: .\warehouse\forms.py:223
 msgid "To"
 msgstr ""
 
-#: .\warehouse\forms.py:225 .\warehouse\forms.py:246 .\warehouse\forms.py:278
-#: .\warehouse\forms.py:346
+#: .\warehouse\forms.py:245
+#: .\warehouse\templates\warehouse\search_bin_history.html:241
+msgid "Location, Product Order, and Size cannot all be null!"
+msgstr ""
+
+#: .\warehouse\forms.py:259 .\warehouse\forms.py:324
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:48
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:50
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:63
 msgid "Quantity"
 msgstr ""
 
-#: .\warehouse\forms.py:237 .\warehouse\forms.py:258
+#: .\warehouse\forms.py:274 .\warehouse\forms.py:295
 #: .\warehouse\templates\warehouse\test.html:111
 #, fuzzy
 #| msgid "Confirm Delete"
 msgid "Confirm"
 msgstr "确认删除"
 
-#: .\warehouse\forms.py:267 .\warehouse\forms.py:335
+#: .\warehouse\forms.py:283
+msgid "New Quantity"
+msgstr ""
+
+#: .\warehouse\forms.py:314
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:125
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:166
+#: .\warehouse\templates\warehouse\search_bin_history.html:144
 msgid "Customer"
 msgstr ""
 
-#: .\warehouse\forms.py:268 .\warehouse\forms.py:336
+#: .\warehouse\forms.py:315
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:44
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:46
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:59
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:149
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:214
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:183
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:45
-#: .\warehouse\templates\warehouse\search_bin_history.html:137
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:63
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:59
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:90
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:63
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:116
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:161
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:59
+#: .\warehouse\templates\warehouse\search_bin_history.html:135
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:72
 msgid "Version No"
 msgstr ""
 
-#: .\warehouse\forms.py:269 .\warehouse\forms.py:337
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:214
-#: .\warehouse\templates\warehouse\search_bin_history.html:138
+#: .\warehouse\forms.py:316
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\search_bin_history.html:136
 msgid "Version Sequence"
 msgstr ""
 
-#: .\warehouse\forms.py:270 .\warehouse\forms.py:338
+#: .\warehouse\forms.py:317
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:168
 msgid "Lot Number"
 msgstr ""
 
-#: .\warehouse\forms.py:271 .\warehouse\forms.py:339
-msgid "Receive Type"
+#: .\warehouse\forms.py:318
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:122
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:170
+#: .\warehouse\templates\warehouse\search_bin_history.html:141
+msgid "Item Type"
 msgstr ""
 
-#: .\warehouse\forms.py:272 .\warehouse\forms.py:340
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:157
-msgid "Packing Type"
-msgstr ""
-
-#: .\warehouse\forms.py:273 .\warehouse\forms.py:341 .\warehouse\forms.py:407
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:58
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:214
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:44
-#: .\warehouse\templates\warehouse\search_bin_history.html:136
-#: .\warehouse\templates\warehouse\search_bin_history.html:175
+#: .\warehouse\forms.py:319 .\warehouse\forms.py:416
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:89
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:62
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:160
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:58
+#: .\warehouse\templates\warehouse\search_bin_history.html:134
+#: .\warehouse\templates\warehouse\search_bin_history.html:189
 msgid "Purchase Order"
 msgstr ""
 
-#: .\warehouse\forms.py:274 .\warehouse\forms.py:342
+#: .\warehouse\forms.py:320
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:169
 msgid "Purchase Quantity"
 msgstr ""
 
-#: .\warehouse\forms.py:276 .\warehouse\forms.py:344
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:64
-#: .\warehouse\templates\warehouse\search_bin_history.html:181
+#: .\warehouse\forms.py:322
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:95
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:68
+#: .\warehouse\templates\warehouse\search_bin_history.html:195
 msgid "Unit"
 msgstr ""
 
-#: .\warehouse\forms.py:277 .\warehouse\forms.py:345
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:156
+#: .\warehouse\forms.py:323
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:123
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:171
+#: .\warehouse\templates\warehouse\search_bin_history.html:142
 #, fuzzy
 #| msgid "Start Date"
 msgid "Post Date"
 msgstr "开始日期"
 
-#: .\warehouse\forms.py:279 .\warehouse\forms.py:347
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:27
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:62
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:399
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:179
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:29
-#: .\warehouse\templates\warehouse\search_bin_history.html:134
-#: .\warehouse\templates\warehouse\search_bin_history.html:173
-msgid "Location"
-msgstr ""
-
-#: .\warehouse\forms.py:281 .\warehouse\forms.py:349
-msgid "Complimentary Location"
-msgstr ""
-
-#: .\warehouse\forms.py:282 .\warehouse\forms.py:350
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:158
+#: .\warehouse\forms.py:332
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:124
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:167
+#: .\warehouse\templates\warehouse\search_bin_history.html:143
 msgid "Supplier"
 msgstr ""
 
-#: .\warehouse\forms.py:283 .\warehouse\forms.py:351
+#: .\warehouse\forms.py:333
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:172
 msgid "SAP Material Number"
 msgstr ""
 
-#: .\warehouse\forms.py:284 .\warehouse\forms.py:352 .\warehouse\forms.py:353
+#: .\warehouse\forms.py:334
 #: .\warehouse\templates\warehouse\create_warehouse.html:30
-#: .\warehouse\templates\warehouse\edit_warehouse.html:37
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:146
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:180
+#: .\warehouse\templates\warehouse\edit_warehouse.html:32
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:113
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:158
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:24
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:62
 msgid "Comment"
 msgstr "評論"
 
-#: .\warehouse\forms.py:317 .\warehouse\forms.py:389
+#: .\warehouse\forms.py:398
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:38
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:37
 #: .\warehouse\templates\warehouse\list_warehouse.html:40
 msgid "Add"
 msgstr "添加"
 
-#: .\warehouse\forms.py:348
-msgid "Complimentary Quantity"
-msgstr ""
-
-#: .\warehouse\forms.py:385
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:32
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:33
-#: .\warehouse\templates\warehouse\search_bin_history.html:92
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:142
-msgid "Search"
-msgstr ""
-
-#: .\warehouse\forms.py:427
+#: .\warehouse\forms.py:436
 msgid "Choose Excel File"
 msgstr ""
 
-#: .\warehouse\forms.py:451
+#: .\warehouse\forms.py:460 .\warehouse\forms.py:484
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:29
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:16
 #, fuzzy
 #| msgid "Create Warehouse"
 msgid "Choose Warehouse"
 msgstr "建立倉庫"
 
-#: .\warehouse\forms.py:453
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:71
+#: .\warehouse\forms.py:462 .\warehouse\forms.py:486
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:102
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:75
 #, fuzzy
 #| msgid "Create Area"
 msgid "Choose Area"
 msgstr "创建区域"
 
-#: .\warehouse\forms.py:454
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:72
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:86
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:96
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:33
+#: .\warehouse\forms.py:463 .\warehouse\forms.py:487
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:103
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:117
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:76
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:90
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:42
 msgid "Choose Location"
 msgstr ""
 
@@ -1803,15 +1812,16 @@ msgid "Area List By Warehouse"
 msgstr "按仓库列出的区域"
 
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:41
-#: .\warehouse\templates\warehouse\area\edit_area.html:65
+#: .\warehouse\templates\warehouse\area\edit_area.html:66
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:40
 #: .\warehouse\templates\warehouse\bin\edit_bin.html:36
-#: .\warehouse\templates\warehouse\edit_warehouse.html:52
+#: .\warehouse\templates\warehouse\edit_warehouse.html:47
 msgid "Back to List"
 msgstr "返回列表"
 
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:50
 #: .\warehouse\templates\warehouse\area\create_area.html:16
+#: .\warehouse\templates\warehouse\area\edit_area.html:15
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:51
 #: .\warehouse\templates\warehouse\bin\create_bin.html:25
 #: .\warehouse\templates\warehouse\bin\edit_bin.html:28
@@ -1820,13 +1830,13 @@ msgstr "区域编号"
 
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:51
 #: .\warehouse\templates\warehouse\area\create_area.html:22
-#: .\warehouse\templates\warehouse\area\edit_area.html:26
+#: .\warehouse\templates\warehouse\area\edit_area.html:21
 msgid "Area Name"
 msgstr "区域名称"
 
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:52
 #: .\warehouse\templates\warehouse\area\create_area.html:52
-#: .\warehouse\templates\warehouse\area\edit_area.html:56
+#: .\warehouse\templates\warehouse\area\edit_area.html:57
 #: .\warehouse\templates\warehouse\edit_warehouse.html:14
 #: .\warehouse\templates\warehouse\list_warehouse.html:48
 msgid "Warehouse Id"
@@ -1881,24 +1891,24 @@ msgid "Create Area"
 msgstr "创建区域"
 
 #: .\warehouse\templates\warehouse\area\create_area.html:28
-#: .\warehouse\templates\warehouse\area\edit_area.html:32
+#: .\warehouse\templates\warehouse\area\edit_area.html:27
 msgid "Position X"
 msgstr "位置 X"
 
 #: .\warehouse\templates\warehouse\area\create_area.html:34
-#: .\warehouse\templates\warehouse\area\edit_area.html:38
+#: .\warehouse\templates\warehouse\area\edit_area.html:33
 msgid "Position Y"
 msgstr "位置 Y"
 
 #: .\warehouse\templates\warehouse\area\create_area.html:40
-#: .\warehouse\templates\warehouse\area\edit_area.html:44
+#: .\warehouse\templates\warehouse\area\edit_area.html:39
 #, fuzzy
 #| msgid "Area Id"
 msgid "Area Width"
 msgstr "区域编号"
 
 #: .\warehouse\templates\warehouse\area\create_area.html:46
-#: .\warehouse\templates\warehouse\area\edit_area.html:50
+#: .\warehouse\templates\warehouse\area\edit_area.html:45
 #, fuzzy
 #| msgid "Bin Length"
 msgid "Area Length"
@@ -1917,69 +1927,77 @@ msgstr "储存"
 msgid "Edit Area"
 msgstr "编辑"
 
-#: .\warehouse\templates\warehouse\area\edit_area.html:62
+#: .\warehouse\templates\warehouse\area\edit_area.html:51
+msgid "Layer"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\area\edit_area.html:63
 #: .\warehouse\templates\warehouse\bin\edit_bin.html:33
-#: .\warehouse\templates\warehouse\edit_warehouse.html:49
+#: .\warehouse\templates\warehouse\edit_warehouse.html:44
 msgid "Save Changes"
 msgstr "保存更改"
 
-#: .\warehouse\templates\warehouse\bases\base.html:36
+#: .\warehouse\templates\warehouse\bases\base.html:30
 msgid "Transaction Function"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:41
+#: .\warehouse\templates\warehouse\bases\base.html:35
 #, fuzzy
 #| msgid "Packaging Material WH 1F"
 msgid "Packing Material Stock In"
 msgstr "1F包装材料仓库"
 
-#: .\warehouse\templates\warehouse\bases\base.html:46
+#: .\warehouse\templates\warehouse\bases\base.html:40
 #, fuzzy
 #| msgid "Packaging Material WH 1F"
 msgid "Packing Material Stock Out"
 msgstr "1F包装材料仓库"
 
-#: .\warehouse\templates\warehouse\bases\base.html:50
+#: .\warehouse\templates\warehouse\bases\base.html:47
 #: .\warehouse\templates\warehouse\transfer_and_adjust.html:5
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:139
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:9
 msgid "Quantity Transfer & Adjust Form"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:55
+#: .\warehouse\templates\warehouse\bases\base.html:50
+msgid "Inventory Deletion"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\bases\base.html:58
 msgid "Search Function"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:60
+#: .\warehouse\templates\warehouse\bases\base.html:63
 msgid "Inventory Search"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:65
+#: .\warehouse\templates\warehouse\bases\base.html:68
 msgid "Transaction History"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:70
+#: .\warehouse\templates\warehouse\bases\base.html:73
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:4
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:10
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:9
 msgid "Inventory Sheet"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:77
+#: .\warehouse\templates\warehouse\bases\base.html:81
 msgid "Basic Data"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bases\base.html:82
+#: .\warehouse\templates\warehouse\bases\base.html:86
 #, fuzzy
 #| msgid "Personal Setting"
 msgid "Storage Setting"
 msgstr "个人资讯"
 
-#: .\warehouse\templates\warehouse\bases\base.html:87
+#: .\warehouse\templates\warehouse\bases\base.html:91
 #, fuzzy
 #| msgid "Production Information"
 msgid "Location Importing"
 msgstr "生产资讯"
 
-#: .\warehouse\templates\warehouse\bases\base.html:92
+#: .\warehouse\templates\warehouse\bases\base.html:96
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:5
 msgid "Open Data Importing"
 msgstr ""
@@ -1990,28 +2008,30 @@ msgid "Quantity Adjust"
 msgstr ""
 
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:41
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:43
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:56
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:27
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:87
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:14
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:56
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:60
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:60
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:69
 msgid "Warehouse"
 msgstr "仓库"
 
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:43
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:45
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:148
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:182
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:62
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:58
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:115
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:71
 msgid "Purchase No"
 msgstr ""
 
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:45
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:47
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:60
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:150
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:184
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:46
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:64
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:60
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:91
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:64
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:117
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:162
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:60
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:73
 msgid "Version Seq"
 msgstr ""
 
@@ -2041,7 +2061,7 @@ msgid "Are you sure you want to delete the bin "
 msgstr "您确定要删除儲位吗"
 
 #: .\warehouse\templates\warehouse\bin\bin_transfer.html:5
-#: .\warehouse\templates\warehouse\bin\bin_transfer.html:29
+#: .\warehouse\templates\warehouse\bin\bin_transfer.html:26
 msgid "Location Transfer"
 msgstr ""
 
@@ -2049,57 +2069,85 @@ msgstr ""
 msgid "Create Bin"
 msgstr "创建儲位"
 
-#: .\warehouse\templates\warehouse\bin\edit_bin.html:5
-#: .\warehouse\templates\warehouse\bin\edit_bin.html:13
-msgid "Edit Bin"
-msgstr "編輯箱"
-
-#: .\warehouse\templates\warehouse\bin\open_data_import.html:44
-msgid "Upload Open Data Excel File"
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:4
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:22
+msgid "Manage Inventory Deletion"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\bin\open_data_import.html:53
-#: .\warehouse\templates\warehouse\upload.html:55
-msgid "Upload"
-msgstr ""
-
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:37
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:23
 #, fuzzy
 #| msgid "Area Id"
 msgid "Area"
 msgstr "区域编号"
 
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:54
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:323
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:145
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:42
-#: .\warehouse\templates\warehouse\search_bin_history.html:158
-#: .\warehouse\templates\warehouse\search_bin_history.html:205
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:53
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:41
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:93
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:27
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:66
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:413
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:157
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:16
+#: .\warehouse\templates\warehouse\search_bin_history.html:132
+#: .\warehouse\templates\warehouse\search_bin_history.html:187
+msgid "Location"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:50
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:32
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:28
+#: .\warehouse\templates\warehouse\search_bin_history.html:90
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:15
+msgid "Search"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:85
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:58
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:334
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:123
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:56
+#: .\warehouse\templates\warehouse\search_bin_history.html:172
+#: .\warehouse\templates\warehouse\search_bin_history.html:219
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:62
 #, fuzzy
 #| msgid "No bins found."
 msgid "Not found"
 msgstr "沒有找到儲位。"
 
-#: .\warehouse\templates\warehouse\bin\search_bin_value.html:55
+#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:86
+#: .\warehouse\templates\warehouse\bin\search_bin_value.html:59
 #: .\warehouse\templates\warehouse\create_warehouse.html:24
-#: .\warehouse\templates\warehouse\edit_warehouse.html:31
+#: .\warehouse\templates\warehouse\edit_warehouse.html:26
 #: .\warehouse\templates\warehouse\list_warehouse.html:47
 msgid "Plant"
 msgstr "厂别"
+
+#: .\warehouse\templates\warehouse\bin\edit_bin.html:5
+#: .\warehouse\templates\warehouse\bin\edit_bin.html:13
+msgid "Edit Bin"
+msgstr "編輯箱"
+
+#: .\warehouse\templates\warehouse\bin\open_data_import.html:126
+msgid "Upload Open Data Excel File"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\bin\open_data_import.html:138
+#: .\warehouse\templates\warehouse\upload.html:53
+msgid "Upload"
+msgstr ""
 
 #: .\warehouse\templates\warehouse\create_warehouse.html:14
 msgid "Warehouse Code"
 msgstr "倉庫代碼"
 
 #: .\warehouse\templates\warehouse\create_warehouse.html:19
-#: .\warehouse\templates\warehouse\edit_warehouse.html:25
+#: .\warehouse\templates\warehouse\edit_warehouse.html:20
 #: .\warehouse\templates\warehouse\list_warehouse.html:49
 msgid "Warehouse Name"
 msgstr "倉庫名稱"
 
 #: .\warehouse\templates\warehouse\create_warehouse.html:36
-#: .\warehouse\templates\warehouse\edit_warehouse.html:43
+#: .\warehouse\templates\warehouse\edit_warehouse.html:38
 msgid "Background Image"
 msgstr "背景圖片"
 
@@ -2148,75 +2196,84 @@ msgstr "您确定要删除仓库吗"
 msgid "Stock In"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:90
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:36
 #, fuzzy
 #| msgid "Warehouse Id"
 msgid "Warehouse Stock In Form"
 msgstr "仓库编号"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:108
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:40
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:54
 msgid "Close"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:113
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:44
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:59
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:36
 msgid "Post"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:152
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:119
+#: .\warehouse\templates\warehouse\search_bin_history.html:146
 msgid "Lot No"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:153
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:120
+#: .\warehouse\templates\warehouse\search_bin_history.html:139
 msgid "Purchase Qty"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:154
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:186
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:121
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:164
+#: .\warehouse\templates\warehouse\search_bin_history.html:140
 msgid "Purchase Unit"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:155
-msgid "Item Type"
-msgstr ""
-
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:159
-msgid "Customer No"
-msgstr ""
-
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:160
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:126
+#: .\warehouse\templates\warehouse\search_bin_history.html:145
 msgid "Mtr No"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:214
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:181
+#, fuzzy
+#| msgid "Product"
+msgid "Product Order cannot be null!"
+msgstr "产品"
+
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:195
+msgid "Purchase Order cannot be null!"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
 msgid "are required"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:341
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:351
 msgid "Copy"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:363
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:370
 msgid "Copy and insert below this row Success!"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:212
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:514
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:220
 msgid "No data in the table! Please enter at least one row."
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:517
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:522
 msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:540
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:242
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:527
+msgid "The 'order quantity' field in row \" + (i + 1) + \" cannot be empty!"
+msgstr ""
+
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:550
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:241
 msgid "Form submitted successfully!"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:544
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:246
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:554
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:245
 msgid "Form submission failed!"
 msgstr ""
 
@@ -2224,11 +2281,11 @@ msgstr ""
 msgid "Stock Out"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:27
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:29
 msgid "Warehouse Stock Out Form"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:177
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:155
 msgid "ID"
 msgstr ""
 
@@ -2236,75 +2293,64 @@ msgstr ""
 msgid "Transaction"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:21
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:7
 msgid "Transaction History Search"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:26
-msgid "Enter Product Order"
-msgstr ""
-
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:30
-#, fuzzy
-#| msgid "User Information"
-msgid "Enter Location"
-msgstr "使用者资讯"
-
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:49
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:64
+#: .\warehouse\templates\warehouse\search_bin_history.html:194
 msgid "Mvt"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:53
-#: .\warehouse\templates\warehouse\search_bin_history.html:182
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:68
+#: .\warehouse\templates\warehouse\search_bin_history.html:196
 #, fuzzy
 #| msgid "Create Area"
 msgid "Create at"
 msgstr "创建区域"
 
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:54
-#: .\warehouse\templates\warehouse\search_bin_history.html:183
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:69
+#: .\warehouse\templates\warehouse\search_bin_history.html:197
 #, fuzzy
 #| msgid "Create Bin"
 msgid "Create by"
 msgstr "创建儲位"
 
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:109
+msgid "(Product Order/Location/Size/Comment) cannot all be null!"
+msgstr ""
+
 #: .\warehouse\templates\warehouse\search_bin_history.html:6
 msgid "Search Bin Value History"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\search_bin_history.html:127
+#: .\warehouse\templates\warehouse\search_bin_history.html:125
 msgid "Current Inventory"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\search_bin_history.html:167
+#: .\warehouse\templates\warehouse\search_bin_history.html:181
 msgid "History"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\search_bin_history.html:179
+#: .\warehouse\templates\warehouse\search_bin_history.html:193
 msgid "Remain Qty"
 msgstr ""
-
-#: .\warehouse\templates\warehouse\search_bin_history.html:180
-#, fuzzy
-#| msgid "A1 Production"
-msgid "Action"
-msgstr "A1产品"
 
 #: .\warehouse\templates\warehouse\stockin_detail.html:5
 #: .\warehouse\templates\warehouse\stockout_detail.html:5
 msgid "Stock In Detail"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:71
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:80
 msgid "Transfer"
 msgstr ""
 
-#: .\warehouse\templates\warehouse\transfer_and_adjust.html:94
+#: .\warehouse\templates\warehouse\transfer_and_adjust.html:103
 msgid "Adjust"
 msgstr ""
 
 #: .\warehouse\templates\warehouse\upload.html:5
-#: .\warehouse\templates\warehouse\upload.html:45
+#: .\warehouse\templates\warehouse\upload.html:43
 msgid "Upload Location Excel File"
 msgstr ""
 
@@ -2313,6 +2359,16 @@ msgstr ""
 #| msgid "Create Warehouse"
 msgid "Packing Warehouse Map"
 msgstr "建立倉庫"
+
+#, fuzzy
+#~| msgid "User Information"
+#~ msgid "Enter Location"
+#~ msgstr "使用者资讯"
+
+#, fuzzy
+#~| msgid "A1 Production"
+#~ msgid "Action"
+#~ msgstr "A1产品"
 
 #, fuzzy
 #~| msgid "Create Warehouse"
