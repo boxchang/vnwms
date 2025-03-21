@@ -11,6 +11,10 @@
             background-color: #f8f9fa;
         }
 
+        .scroll::-webkit-scrollbar {
+            height: 10px !important; /* Độ cao của thanh scrollbar ngang */
+        }
+
         label {
             width: 127px;
             font-weight: bold;
@@ -39,8 +43,6 @@
             background-color: #fff;
 
         }
-
-
 
         .qty {
             text-align: end;
@@ -219,7 +221,7 @@
                 {% if result_history %}
                     {% for record in result_history %}
                     <tr>
-                        <td style="width: 20px">{{ page_obj.start_index|add:forloop.counter0 }}</td>
+                        <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
                         <td>{{ record.bin }}</td>
                         <td>{{ record.product_order }}</td>
                         <td>{{ record.purchase_no }}</td>
@@ -244,8 +246,6 @@
     </div>
 </div>
 {% endblock %}
-
-
 
 {% block javascript %}
     <script>

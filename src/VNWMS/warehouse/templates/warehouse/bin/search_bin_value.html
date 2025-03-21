@@ -6,21 +6,30 @@
 {% block css %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 
-
     <style>
         .jsgrid-grid-body::-webkit-scrollbar {
             height: 16px !important;
         }
+
+        th {
+            text-align: center;
+        }
+
+
+
+
+
+
+
     </style>
 {% endblock %}
 
-
 {% block content %}
-<div class="container mt-4">
+<div class="container-fluid mt-4">
 
     <h3 class="text-center">{% trans "Inventory Sheet" %}</h3>
 
-    <form method="GET" id="searchForm" class="mt-4">
+    <form id="searchForm" class="mt-4">
         <div class="row g-2">
             <div class="col-12 col-md-2">
                 <label for="warehouse">{% trans "Warehouse" %}</label>
@@ -57,15 +66,11 @@
     </form>
 
     <div id="jsGrid" class="mt-4"></div>
-
 </div>
 {% endblock %}
 
-
-
 {% block javascript %}
     <script>
-
         $(document).ready(function () {
 
             // Load động danh sách Area khi chọn Warehouse
@@ -98,6 +103,31 @@
             });
 
 
+            $("#id_po").on("keydown", function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    let warehouse = $("#warehouse").val().trim();
+                    let id_area = $("#id_area").val().trim();
+                    let id_bin = $("#id_bin").val().trim();
+                    let id_po = $("#id_po").val().trim();
+
+                    if (warehouse || id_area || id_bin || id_po) {
+                        $.getJSON("{% url 'get_bin_data' %}",
+                        {
+                            warehouse: warehouse,
+                            area: id_area,
+                            bin: id_bin,
+                            po: id_po
+                        }).done(function (response) {
+                            $("#jsGrid").jsGrid("option", "data", response);
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            console.log('Error: ' + errorThrown);
+                        });
+                    }
+                }
+            });
+
+
             $("#Search").click(function () {
                 let warehouseId = $("#warehouse").val();
                 let areaId = $("#id_area").val();
@@ -105,7 +135,8 @@
                 let poId = $("#id_po").val().trim();
 
                 if (warehouseId || areaId || binId || poId) {
-                    $.getJSON("{% url 'get_bin_data' %}", {
+                    $.getJSON("{% url 'get_bin_data' %}",
+                        {
                             warehouse: warehouseId,
                             area: areaId,
                             bin: binId,
@@ -141,6 +172,7 @@
 
             };
 
+            {# Main jsGrid #}
             $("#jsGrid").jsGrid({
                 width: "100%",
                 height: "70vh",
@@ -152,24 +184,24 @@
                 editing: false,
                 data: [],
                 fields: [
-                    { name: "bin__area__warehouse__wh_plant", title: translations.plant, type: "text", width: 100 },
-                    { name: "bin__area__warehouse__wh_name", title: translations.warehouse, type: "text", width: 100 },
-                    { name: "product_order", title: translations.product_order, type: "text", width: 100 },
-                    { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100 },
-                    { name: "version_no", title: translations.version_no, type: "text", width: 100 },
-                    { name: "version_seq", title: translations.version_seq, type: "text", width: 70 },
-                    { name: "size", title: translations.size, type: "text", width: 50 },
-                    { name: "bin_id", title: translations.location, type: "text", width: 80 },
-                    { name: "qty", title: translations.qty, type: "number", width: 100 },
-
-                    { name: "item_type", title: translations.item_type, type: "text", width: 200 },
-                    { name: "post_date", title: translations.post_date, type: "text", width: 100 },
-                    { name: "supplier", title: translations.supplier, type: "text", width: 100 },
-                    { name: "customer_no", title: translations.customer_no, type: "text", width: 100 },
-                    { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text", width: 100 },
-                    { name: "lot_no", title: translations.lot_no, type: "text", width: 100 }
+                    { name: "bin__area__warehouse__wh_plant", title: translations.plant, type: "text"},
+                    { name: "bin__area__warehouse__wh_name", title: translations.warehouse, type: "text"},
+                    { name: "product_order", title: translations.product_order, type: "text"},
+                    { name: "purchase_no", title: translations.purchase_order, type: "text"},
+                    { name: "version_no", title: translations.version_no, type: "text"},
+                    { name: "version_seq", title: translations.version_seq, type: "text"},
+                    { name: "size", title: translations.size, type: "text"},
+                    { name: "bin_id", title: translations.location, type: "text"},
+                    { name: "qty", title: translations.qty, type: "number"},
+                    { name: "item_type", title: translations.item_type, type: "text", width: "200px"},
+                    { name: "post_date", title: translations.post_date, type: "date"},
+                    { name: "supplier", title: translations.supplier, type: "text"},
+                    { name: "customer_no", title: translations.customer_no, type: "text"},
+                    { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text"},
+                    { name: "lot_no", title: translations.lot_no, type: "text"}
                 ]
             });
+
 
             $("#exportExcel").click(function () {
                 // Lấy dữ liệu từ jsGrid
@@ -188,44 +220,38 @@
                     { name: "qty", title: translations.qty, type: "number", width: 100 },
 
                     { name: "item_type", title: translations.item_type, type: "text", width: 200 },
-                    { name: "post_date", title: translations.post_date, type: "text", width: 100 },
+                    { name: "post_date", title: translations.post_date, type: "text", width: 150 },
                     { name: "supplier", title: translations.supplier, type: "text", width: 100 },
                     { name: "customer_no", title: translations.customer_no, type: "text", width: 100 },
                     { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text", width: 100 },
                     { name: "lot_no", title: translations.lot_no, type: "text", width: 100 }
                 ];
 
-                // Tạo một đối tượng map để ánh xạ từ name sang title
-                var titleMap = {};
-                fields.forEach(function (field) {
-                    titleMap[field.name] = field.title;
-                });
-
+                // Tạo dữ liệu chuyển đổi
                 var transformedData = gridData.map(function (item) {
                     var transformedItem = {};
                     fields.forEach(function (field) {
-                        transformedItem[field.title] = item[field.name] || ""; // Giữ đúng thứ tự trong `fields`
+                        let value = item[field.name] || "";
+                        if (field.type === "number") {
+                            value = Number(value) || 0; // Ép kiểu số để Excel nhận dạng đúng
+                        }
+                        transformedItem[field.title] = value;
                     });
                     return transformedItem;
                 });
 
-                // Chuyển đổi dữ liệu thành định dạng SheetJS
-                var ws = XLSX.utils.json_to_sheet(transformedData);
+                // Chuyển đổi dữ liệu thành định dạng SheetJS với `raw: true`
+                var ws = XLSX.utils.json_to_sheet(transformedData, { raw: true });
 
                 // Đặt độ rộng cho các cột
-                var colWidths = fields.map(function(field) {
-                    return { wpx: field.width }; // Đặt độ rộng cột theo thuộc tính width trong fields
-                });
-                // Áp dụng độ rộng cho sheet
-                ws['!cols'] = colWidths;
-
+                ws["!cols"] = fields.map(field => ({ wpx: field.width }));
 
                 // Tạo workbook và thêm sheet vào
                 var wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel
-                XLSX.writeFile(wb, "Inventory_Sheet.xlsx");
+                XLSX.writeFile(wb, "Inventory Sheet.xlsx");
             });
         });
     </script>

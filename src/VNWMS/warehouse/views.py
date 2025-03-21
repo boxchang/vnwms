@@ -1491,12 +1491,6 @@ def inventory_sheet(request):
     form = BinValueSearchForm(request.GET)
     results = []
     warehouses = Warehouse.objects.filter(wh_plant=request.user.plant)
-
-    if form.is_valid():
-        bin_id = form.cleaned_data.get('bin')
-        if bin_id:
-            results = Bin_Value.objects.filter(bin__bin_id=bin_id)
-
     return render(request, 'warehouse/bin/search_bin_value.html',
                   {'form': form, 'results': results, 'warehouses': warehouses})
 

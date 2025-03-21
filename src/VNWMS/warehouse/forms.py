@@ -461,6 +461,9 @@ class BinValueSearchForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
         self.fields["warehouse"].choices = [("", _("Choose Warehouse"))] + list(Warehouse.objects.values_list("wh_code",
                                                                                                            "wh_name"))
         self.fields["area"].choices = [("", _("Choose Area"))]

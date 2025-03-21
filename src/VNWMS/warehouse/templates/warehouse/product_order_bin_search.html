@@ -3,9 +3,25 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 {% block title %} {% trans "Transaction" %} {% endblock %}
+{% block css %}
+    <style>
+
+        th {
+            text-align: center;
+        }
+
+        th, td {
+            min-width: 90px;
+            width: auto;
+        }
+
+    </style>
+{% endblock %}
+
+
 {% block content %}
-    <h3 class="mt-4 mb-5 text-center">{% trans "Transaction History Search" %}</h3>
-    <div class="row d-flex justify-content-center p-0">
+    <h3 class="mt-4 text-center">{% trans "Transaction History Search" %}</h3>
+    <div class="row d-flex justify-content-center p-0 mt-4">
         <div class="row d-flex justify-content-center p-0 m-0" style="width: 95%">
             <div class="d-flex justify-content-start flex-grow-1">
                 <div class="col-md-2 pl-1">
@@ -69,7 +85,6 @@
                 createBy: "{% trans 'Create by' %}"
             };
 
-
             $("#jsGrid").jsGrid({
                 width: "95%",
                 height: "70vh",
@@ -80,73 +95,67 @@
                 paging: true,
                 pageSize: 20,
                 fields: [
-                    { name: "product_order", title: translations.productOrder, type: "text", width: 30, css: "text-center" },
-                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 25, css: "text-center" },
-                    { name: "version_no", title: translations.versionNo, type: "text", width: 25, css: "text-center" },
-                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 10, css: "text-center" },
-                    { name: "size", title: translations.size, type: "text", width: 15, css: "text-center" },
-                    { name: "comment", title: translations.comment, type: "text", width: 35, css: "text-center" },
-                    { name: "bin_id", title: translations.bin, type: "text", width: 15, css: "text-center" },
-                    { name: "mvt_id", title: translations.mvt, type: "text", width: 25, css: "text-center" },
-                    {
-                        name: "minus_qty",
-                        title: "-",
-                        type: "text",
-                        width: 25,
-                        css: "text-center", // Giữ tiêu đề cột căn giữa
-                        itemTemplate: function(value) {
-                            return $("<div>").attr("style", "text-align: right;").text(value); // Căn phải nội dung
-                        }
-                    },
-                    {
-                        name: "plus_qty",
-                        title: "+",
-                        type: "text",
-                        width: 25,
-                        css: "text-center",
-                        itemTemplate: function(value) {
-                            return $("<div>").attr("style", "text-align: right;").text(value); // Căn phải nội dung
-                        }
-                    },
-                    {
-                        name: "remain_qty",
-                        title: translations.qty,
-                        type: "text", width: 25,
-                        css: "text-center",
-                        itemTemplate: function(value) {
-                            return $("<div>").attr("style", "text-align: right;").text(value); // Căn phải nội dung
-                        }
-                    },
-                    { name: "create_at", title: translations.createAt, type: "text", width: 40, css: "text-center" },
-                    { name: "create_by__username", title: translations.createBy, type: "text", width: 25, css: "text-center" },
+                    { name: "product_order", title: translations.productOrder, type: "text"},
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text"},
+                    { name: "version_no", title: translations.versionNo, type: "text"},
+                    { name: "version_seq", title: translations.versionSeq, type: "text"},
+                    { name: "size", title: translations.size, type: "text"},
+                    { name: "comment", title: translations.comment, type: "text"},
+                    { name: "bin_id", title: translations.bin, type: "text"},
+                    { name: "mvt_id", title: translations.mvt, type: "text"},
+                    { name: "minus_qty", title: "-", type: "number"},
+                    { name: "plus_qty", title: "+", type: "number"},
+                    { name: "remain_qty", title: translations.qty, type: "number"},
+                    { name: "create_at", title: translations.createAt, type: "date"},
+                    { name: "create_by__username", title: translations.createBy, type: "text"},
                 ]
+            });
+
+            $("#productOrder, #bin, #size, #comment").on("keydown", function (e) {
+                let product_order = $("#productOrder").val().trim();
+                let bin = $("#bin").val().trim();
+                let size = $("#size").val().trim();
+                let comment = $("#comment").val().trim();
+
+                if (e.key === 'Enter' && (product_order || bin || size || comment)){
+                    $.getJSON('{% url "product_order_hist_data" %}',
+                        {
+                            product_order: product_order,
+                            bin_id: bin,
+                            size: size,
+                            comment: comment
+                        }).done(function (response) {
+                            $("#jsGrid").jsGrid("option", "data", response);
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            console.log('Error: ' + errorThrown);
+                    })
+                }
             });
 
 
             $("#searchBtn").on("click", function() {
-                const productOrder = $("#productOrder").val();
-                const bin = $("#bin").val();
-                const size = $("#size").val();
-                const comment = $("#comment").val();
+                let product_order = $("#productOrder").val().trim();
+                let bin = $("#bin").val().trim();
+                let size = $("#size").val().trim();
+                let comment = $("#comment").val().trim();
 
-                if (!productOrder && !bin && !size && !comment) {
+                if (!product_order && !bin && !size && !comment) {
                     event.preventDefault(); // Ngăn gửi request lên server
                     alert("{% trans '(Product Order/Location/Size/Comment) cannot all be null!' %}");
                     return;
                 }
 
-                $.ajax({
-                    url: '{% url "product_order_hist_data" %}?product_order=' + productOrder + '&bin_id=' + bin +
-                        '&size=' + size + '&comment=' + comment,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
+                $.getJSON('{% url "product_order_hist_data" %}',
+                    {
+                        product_order: product_order,
+                        bin_id: bin,
+                        size: size,
+                        comment: comment
+                    }).done(function (response) {
                         $("#jsGrid").jsGrid("option", "data", response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error: ' + error);
-                    }
-                });
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log('Error: ' + errorThrown);
+                })
 
             });
 
@@ -157,45 +166,39 @@
 
                 // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
                 var fields = [
-                    { name: "product_order", title: translations.productOrder, type: "text", width: 100},
-                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 100},
-                    { name: "version_no", title: translations.versionNo, type: "text", width: 100},
-                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 80},
-                    { name: "size", title: translations.size, type: "text", width: 45},
-                    { name: "comment", title: translations.comment, type: "text", width: 100},
-                    { name: "bin_id", title: translations.bin, type: "text", width: 55},
-                    { name: "mvt_id", title: translations.mvt, type: "text", width: 55},
-                    { name: "minus_qty", title: "-", type: "text", width: 55},
-                    { name: "plus_qty", title: "+", type: "text", width: 55},
-                    { name: "remain_qty", title: translations.qty, type: "text", width: 55},
-                    { name: "create_at", title: translations.createAt, type: "text", width: 100},
-                    { name: "create_by__username", title: translations.createBy, type: "text", width: 70},
+                    { name: "product_order", title: translations.productOrder, type: "text", width: 100 },
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 100 },
+                    { name: "version_no", title: translations.versionNo, type: "text", width: 100 },
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 80 },
+                    { name: "size", title: translations.size, type: "text", width: 45 },
+                    { name: "comment", title: translations.comment, type: "text", width: 100 },
+                    { name: "bin_id", title: translations.bin, type: "text", width: 55 },
+                    { name: "mvt_id", title: translations.mvt, type: "text", width: 55 },
+                    { name: "minus_qty", title: "-", type: "number", width: 55 },
+                    { name: "plus_qty", title: "+", type: "number", width: 55 },
+                    { name: "remain_qty", title: translations.qty, type: "number", width: 55 },
+                    { name: "create_at", title: translations.createAt, type: "date", width: 100 },
+                    { name: "create_by__username", title: translations.createBy, type: "text", width: 70 },
                 ];
 
-                // Tạo một đối tượng map để ánh xạ từ name sang title
-                var titleMap = {};
-                fields.forEach(function (field) {
-                    titleMap[field.name] = field.title;
-                });
-
+                // Tạo dữ liệu chuyển đổi
                 var transformedData = gridData.map(function (item) {
                     var transformedItem = {};
                     fields.forEach(function (field) {
-                        transformedItem[field.title] = item[field.name] || ""; // Giữ đúng thứ tự trong `fields`
+                        let value = item[field.name] || "";
+                        if (field.type === "number") {
+                            value = Number(value) || 0; // Ép kiểu số để Excel nhận dạng đúng
+                        }
+                        transformedItem[field.title] = value;
                     });
                     return transformedItem;
                 });
 
-                // Chuyển đổi dữ liệu thành định dạng SheetJS
-                var ws = XLSX.utils.json_to_sheet(transformedData);
+                // Chuyển đổi dữ liệu thành định dạng SheetJS với `raw: true`
+                var ws = XLSX.utils.json_to_sheet(transformedData, { raw: true });
 
                 // Đặt độ rộng cho các cột
-                var colWidths = fields.map(function(field) {
-                    return { wpx: field.width }; // Đặt độ rộng cột theo thuộc tính width trong fields
-                });
-                // Áp dụng độ rộng cho sheet
-                ws['!cols'] = colWidths;
-
+                ws["!cols"] = fields.map(field => ({ wpx: field.width }));
 
                 // Tạo workbook và thêm sheet vào
                 var wb = XLSX.utils.book_new();
@@ -204,8 +207,8 @@
                 // Xuất file Excel
                 XLSX.writeFile(wb, "Transaction_History.xlsx");
             });
-        });
 
+        });
 
     </script>
 {% endblock %}
