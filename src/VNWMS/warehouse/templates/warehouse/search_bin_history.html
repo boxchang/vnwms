@@ -17,7 +17,7 @@
             color: #333;
         }
 
-        th input {
+        input {
             width: 100%;
             box-sizing: border-box;
             padding: 3px;
@@ -28,12 +28,19 @@
             align-content: center;
         }
 
+        th, td {
+            min-width: 90px;
+            white-space: nowrap;
+        }
+
         table thead th {
             position: sticky;
             top: 0; /* Vị trí dính trên cùng */
             background-color: #fff;
 
         }
+
+
 
         .qty {
             text-align: end;
@@ -133,48 +140,50 @@
     <div class="table-container justify-content-center mt-5">
         <h2 style="font-size: 1.5em;">{% trans "Current Inventory" %}</h2>
         <!-- BIN VALUES TABLE -->
-        <div style="overflow-y: auto; height: 250px;" class="scroll bin_value">
-            <table class="table table-striped table-bordered col-md-12 A">
+        <div style="overflow-y: auto; height: 250px" class="scroll bin_value">
+            <table class="table table-striped table-bordered col-md-12">
                 <thead>
                     <tr>
                         <th></th>
                         <th>{% trans "Location" %}</th>
+                        <th>{% trans 'Customer' %}</th>
                         <th>{% trans "Product Order" %}</th>
-                        <th>{% trans "Purchase Order" %}</th>
                         <th>{% trans "Version No" %}</th>
                         <th>{% trans "Version Sequence" %}</th>
+                        <th>{% trans 'Lot No' %}</th>
                         <th>{% trans "Size" %}</th>
                         <th>{% trans "Qty" %}</th>
                         <th>{% trans 'Purchase Qty' %}</th>
                         <th>{% trans 'Purchase Unit' %}</th>
-                        <th>{% trans 'Item Type' %}</th>
-                        <th>{% trans 'Post Date' %}</th>
                         <th>{% trans 'Supplier' %}</th>
-                        <th>{% trans 'Customer' %}</th>
+                        <th>{% trans 'Post Date' %}</th>
+                        <th>{% trans 'Item Type' %}</th>
+                        <th>{% trans "Purchase Order" %}</th>
                         <th>{% trans 'Mtr No' %}</th>
-                        <th>{% trans 'Lot No' %}</th>
+
+
                     </tr>
                 </thead>
                 <tbody>
                 {% if result_value %}
                     {% for record in result_value %}
                     <tr>
-                        <td style="width: 20px">{{ page_obj.start_index|add:forloop.counter0 }}</td>
+                        <td style="width: auto">{{ page_obj.start_index|add:forloop.counter0 }}</td>
                         <td>{{ record.bin_id }}</td>
+                        <td>{{ record.customer_no}}</td>
                         <td>{{ record.product_order }}</td>
-                        <td>{{ record.purchase_no }}</td>
-                        <td>{{ record.version_no }}</td>
+                        <td style="width: auto">{{ record.version_no }}</td>
                         <td>{{ record.version_seq }}</td>
+                        <td>{{ record.lot_no}}</td>
                         <td>{{ record.size }}</td>
                         <td class="qty">{{ record.qty}}</td>
                         <td class="qty">{{ record.purchase_qty}}</td>
                         <td>{{ record.purchase_unit}}</td>
-                        <td>{{ record.item_type}}</td>
-                        <td>{{ record.post_date }}</td>
                         <td>{{ record.supplier}}</td>
-                        <td>{{ record.customer_no}}</td>
+                        <td>{{ record.post_date }}</td>
+                        <td>{{ record.item_type}}</td>
+                        <td>{{ record.purchase_no }}</td>
                         <td>{{ record.sap_mtr_no}}</td>
-                        <td>{{ record.lot_no}}</td>
                     </tr>
                     {% empty %}
                     <tr>
