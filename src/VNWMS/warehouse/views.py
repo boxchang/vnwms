@@ -17,7 +17,7 @@ from django.utils.translation import gettext as _
 from VNWMS.database import sap_database, vnedc_database
 from VNWMS.settings.base import MEDIA_URL
 from users.models import CustomUser
-from warehouse.utils import Do_Transaction, transfer_stock, get_item_type_name, inventory_search, inventory_history
+from warehouse.utils import Do_Transaction, get_item_type_name, inventory_search, inventory_history
 from .forms import WarehouseForm, AreaForm, BinForm, BinValueForm, BinSearchForm, StockInPForm, StockOutPForm, \
     BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
 from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, \
@@ -517,13 +517,14 @@ def stockin_form(request, pk):
 def get_product_order_stout(request):
     data_list_stout = []
 
-    if request.method == 'POST':
-        product_order = request.POST.get('product_order')
+    if request.method == 'GET':
+        product_order = request.GET.get('product_order')
+        purchase_no = request.GET.get('purchase_no')
 
         if product_order == '':
             return JsonResponse({"status": "no_change"}, status=200)
         else:
-            raws_stout = inventory_search(product_order=product_order)
+            raws_stout = inventory_search(product_order=product_order, purchase_order=purchase_no)
             for raw in raws_stout:
                 data_list_stout.append({'product_order': raw['product_order'],
                                         'size': raw['size'],
@@ -550,13 +551,14 @@ def get_product_order_stout(request):
 
 def get_purchase_no_stout(request):
     data_list_stout = []
-    if request.method == 'POST':
-        purchase_no = request.POST.get('purchase_no')
+    if request.method == 'GET':
+        product_order = request.GET.get('product_order')
+        purchase_no = request.GET.get('purchase_no')
 
         if purchase_no == '':
             return JsonResponse({"status": "no_change"}, status=200)
         else:
-            raws_stout = inventory_search(purchase_order=purchase_no)
+            raws_stout = inventory_search(purchase_order=purchase_no, product_order=product_order)
             for raw in raws_stout:
                 data_list_stout.append({'product_order': raw['product_order'],
                                         'size': raw['size'],
@@ -616,8 +618,8 @@ def stockin_filter(raws):
 
 def get_product_order_info(request):
     data_list = []
-    if request.method == 'POST':
-        product_order = request.POST.get('product_order')
+    if request.method == 'GET':
+        product_order = request.GET.get('product_order')
         sap_db = sap_database()
 
         if product_order == '':
@@ -638,8 +640,8 @@ def get_product_order_info(request):
 
 def get_purchase_no_info(request):
     data_list = []
-    if request.method == 'POST':
-        purchase_no = request.POST.get('purchase_no')
+    if request.method == 'GET':
+        purchase_no = request.GET.get('purchase_no')
         db = sap_database()
 
         if purchase_no == '':

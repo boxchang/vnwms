@@ -18,6 +18,10 @@
         --bs-gutter-x: 0;
     }
 
+    th {
+        text-align: center;
+    }
+
 </style>
 
 {% endblock css %}
@@ -51,6 +55,7 @@
             let product_order = $('#id_product_order').val().trim();
             if (event.key === "Enter" && product_order) {
                 event.preventDefault();
+                event.stopPropagation();
                 get_order_info();
             }
         });
@@ -63,14 +68,20 @@
             }
         });
 
+
         get_order_info = function() {
 
-            var product_order = $("#id_product_order").val();
+            let product_order = $("#id_product_order").val().trim();
+            let purchase_no = $("#id_purchase_no").val().trim();
             $.ajax({
-                url: '{% url 'get_product_order_stout' %}', type: 'post',
+                url: '{% url 'get_product_order_stout' %}',
+                type: 'get',
                 dataType: 'json',
                 async: false,
-                data: {"csrfmiddlewaretoken": "{{ csrf_token }}", "product_order": product_order},
+                data: {
+                    "product_order": product_order,
+                    "purchase_no": purchase_no
+                },
                 success: function(data) {
                     if (data.status === 'no_change'){
                         console.log("Keep the data table");
@@ -86,12 +97,18 @@
 
         get_no_info = function() {
 
-            var purchase_no = $("#id_purchase_no").val();
+            let product_order = $("#id_product_order").val().trim();
+            let purchase_no = $("#id_purchase_no").val().trim();
+
             $.ajax({
-                url: '{% url 'get_purchase_no_stout' %}', type: 'post',
+                url: '{% url 'get_purchase_no_stout' %}',
+                type: 'get',
                 dataType: 'json',
                 async: false,
-                data: {"csrfmiddlewaretoken": "{{ csrf_token }}", "purchase_no": purchase_no},
+                data: {
+                    "product_order": product_order,
+                    "purchase_no": purchase_no
+                },
                 success: function(data) {
                     if (data.status === 'no_change'){
                         console.log("Keep the data table");
@@ -146,24 +163,24 @@
                         return deleteButton;
                     }
                 },
-                { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", align: "center", readOnly: true, visible: false },
-                { name: "qty", type: "text", width: 120, title: "{% trans "Qty" %}", align: "center" },
-                { name: "bin_id", type: "text", width: 80, title: "{% trans "Location" %}", align: "center", editing: false },
-                { name: "desc", type: "text", width: 120, title: "{% trans "Comment" %}", align: "center", editing: true },
-                { name: "product_order", type: "text", width: 130, title: "{% trans "Product Order" %}", validate: "required", editing: false, align: "center" },
-                { name: "purchase_no", type: "text", width: 105, title: "{% trans "Purchase Order" %}", editing: false, align: "center" },
-                { name: "version_no", type: "text", width: 120, title: "{% trans "Version No" %}", align: "center", editing: false },
-                { name: "version_seq", type: "number", width: 90, title: "{% trans "Version Seq" %}", editing: false, align: "center" },
-                { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, align: "center" },
-                { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", align: "center", editing: false },
+                { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", readOnly: true, visible: false },
+                { name: "qty", type: "number", width: 120, title: "{% trans "Qty" %}"},
+                { name: "bin_id", type: "text", width: 80, title: "{% trans "Location" %}", editing: false },
+                { name: "desc", type: "text", width: 120, title: "{% trans "Comment" %}", editing: true },
+                { name: "product_order", type: "text", width: 130, title: "{% trans "Product Order" %}", validate: "required", editing: false },
+                { name: "purchase_no", type: "text", width: 105, title: "{% trans "Purchase Order" %}", editing: false},
+                { name: "version_no", type: "text", width: 120, title: "{% trans "Version No" %}", editing: false },
+                { name: "version_seq", type: "text", width: 90, title: "{% trans "Version Seq" %}", editing: false},
+                { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false},
+                { name: "purchase_unit", type: "text", width: 100, title: "{% trans "Purchase Unit" %}", editing: false },
 
-                { name: "customer_no", type: "text", width: 100, title: "{% trans "Customer" %}", align: "center", editing: false },
-                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", align: "center", editing: false },
-                { name: "lot_no", type: "text", width: 120, title: "{% trans "Lot Number" %}", align: "center", editing: false },
-                { name: "purchase_qty", type: "text", width: 100, title: "{% trans "Purchase Quantity" %}", align: "center", editing: false },
-                { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", align: "center", editing: false },
-                { name: "post_date", type: "text", width: 150, title: "{% trans "Post Date" %}", align: "center", editing: false },
-                { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", align: "center", editing: false },
+                { name: "customer_no", type: "text", width: 100, title: "{% trans "Customer" %}", editing: false },
+                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", editing: false },
+                { name: "lot_no", type: "text", width: 120, title: "{% trans "Lot Number" %}", editing: false },
+                { name: "purchase_qty", type: "text", width: 100, title: "{% trans "Purchase Quantity" %}", editing: false },
+                { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", editing: false },
+                { name: "post_date", type: "date", width: 150, title: "{% trans "Post Date" %}", editing: false },
+                { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", editing: false },
 
             ]
         });
@@ -188,19 +205,6 @@
                     updateButton.click();  // Mô phỏng click vào nút cập nhật
                 }
               }
-        });
-
-
-        // Khi click vào một zone (div chứa bin_id)
-        $(".zone").on("click", function() {
-            // Lấy giá trị của bin_id từ data-value của div
-            var bin_id = $(this).data("value");
-            const updateInput = $("#zonePopup").data("updateInput"); // 取得回調函數
-            if (updateInput) {
-                updateInput(bin_id); // 更新輸入框的值
-            }
-            // Đóng popup
-            $("#zonePopup").fadeOut();
         });
 
 

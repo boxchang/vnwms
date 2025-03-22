@@ -290,9 +290,11 @@ class QuantityAdjustForm(forms.Form):
         self.helper.form_show_errors = True
         self.helper.layout = Layout(
             Div(
-                HTML("<div class='col-md-5'></div>"),  # Sửa lỗi này
+                HTML("<div class='col-md-5'></div>"),
                 Div('qty', css_class='col-md-5'),
-                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-2', style='margin-top: 16px; height: 40px'),
+                Submit('submit', _('Confirm'),
+                       css_class='btn btn-primary col-md-2',
+                       style='margin-top: 16px; height: 40px'),
                 css_class='row d-flex align-items-center m-0'
             ),
         )

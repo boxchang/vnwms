@@ -18,6 +18,7 @@ def get_item_type_name():
         item_type_column = "type_code"
     return item_type_column
 
+
 def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt, bin_code, qty,
                    purchase_unit, desc, stockin_form=None, stockout_form=None):
     try:
@@ -36,8 +37,9 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
             if remain_qty >= 0:
                 if remain_qty == 0:
                     Bin_Value.objects.filter(product_order=product_order, purchase_no=purchase_no,
-                                                       version_no=version_no,
-                                                       version_seq=version_seq, size=size, bin=bin).delete()
+                                             version_no=version_no,
+                                             version_seq=version_seq,
+                                             size=size, bin=bin).delete()
                 else:
                     tmp1 = {}
                     if stockin_form:
@@ -78,65 +80,6 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
         result = "ERROR"
     return result
 
-def transfer_stock(product_order, purchase_no, version_no, version_seq, size, bin_code_from, bin_code_to, warehouse, qty):
-    try:
-        # Bước 1: Kiểm tra số lượng trong kho xuất
-        bin_from = Bin_Value.objects.get(product_order=product_order, purchase_no=purchase_no, version_no=version_no,
-                                         version_seq=version_seq, size=size, bin_id=bin_code_from,
-                                         bin__area__warehouse__wh_code=warehouse)
-        bin_to = Bin_Value.objects.get(bin_id=bin_code_to, bin__area__warehouse__wh_code=warehouse,
-                                       product_order=product_order, purchase_no=purchase_no, version_no=version_no,
-                                       version_seq=version_seq, size=size,)
-
-        # Lấy thông tin sản phẩm trong kho xuất
-        inv_from = Bin_Value.objects.filter(
-            product_order=product_order,
-            purchase_no=purchase_no,
-            version_no=version_no,
-            version_seq=version_seq,
-            size=size,
-            bin_id=bin_from.bin_id
-        ).first()
-        print(inv_from)
-
-        if not inv_from or inv_from.qty < qty:
-            raise ValueError("Không đủ số lượng trong kho xuất.")
-
-        # Bước 2: Cập nhật số lượng trong kho xuất (giảm số lượng)
-        inv_from.qty -= qty
-        inv_from.save()
-
-        # Bước 3: Kiểm tra và cập nhật số lượng trong kho đích
-        inv_to = Bin_Value.objects.filter(
-            product_order=product_order,
-            purchase_no=purchase_no,
-            version_no=version_no,
-            version_seq=version_seq,
-            size=size,
-            bin=bin_to.bin_id
-        ).first()
-
-        if inv_to:
-            # Nếu kho đích đã có sản phẩm, cập nhật số lượng
-            inv_to.qty += qty
-        else:
-            # Nếu kho đích chưa có sản phẩm, tạo mới
-            inv_to = Bin_Value(
-                product_order=product_order,
-                purchase_no=purchase_no,
-                version_no=version_no,
-                version_seq=version_seq,
-                size=size,
-                bin=bin_to,
-                qty=qty,
-                status="IN_TRANSIT"  # Ví dụ trạng thái trong quá trình chuyển
-            )
-        inv_to.save()
-
-        return {"success": True, "message": "Chuyển hàng thành công."}
-
-    except Exception as e:
-        return {"success": False, "message": str(e)}
 
 def inventory_search(warehouse=None, area=None, location=None, product_order=None, purchase_order=None, size=None):
     db = vnedc_database()
@@ -144,32 +87,32 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
     item_type_name = get_item_type_name()
 
     sql = f"""
-                SELECT b.product_order
-                      ,b.size
-                      ,b.qty
-                      ,b.bin_id
-                      ,b.purchase_no
-                      ,b.version_no
-                      ,b.version_seq
-                      ,b.purchase_unit
-                      ,customer_no
-                      ,supplier
-                      ,lot_no
-                      ,purchase_qty
-                      ,b.purchase_unit
-                      ,{item_type_name} item_type
-                      ,post_date
-                      ,sap_mtr_no
-    				  ,d.[desc]
-                FROM [VNWMS].[dbo].[warehouse_bin_value] b
-                JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
-				JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
-                LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
-				and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
-    						and b.size = d.size
-				JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
-                WHERE qty > 0
-                """
+            SELECT b.product_order
+                  ,b.size
+                  ,b.qty
+                  ,b.bin_id
+                  ,b.purchase_no
+                  ,b.version_no
+                  ,b.version_seq
+                  ,b.purchase_unit
+                  ,customer_no
+                  ,supplier
+                  ,lot_no
+                  ,purchase_qty
+                  ,b.purchase_unit
+                  ,{item_type_name} item_type
+                  ,post_date
+                  ,sap_mtr_no
+                  ,d.[desc]
+            FROM [VNWMS].[dbo].[warehouse_bin_value] b
+            JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
+            JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
+            LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no
+            and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+                        and b.size = d.size
+            JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
+            WHERE qty > 0
+            """
 
     if product_order:
         sql += f" AND b.product_order = '{product_order}'"
@@ -192,6 +135,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
     results = db.select_sql_dict(sql)
 
     return results
+
 
 def inventory_history(location=None, product_order=None, purchase_order=None, size=None, from_date=None, to_date=None):
     bin_hists = Bin_Value_History.objects.filter()

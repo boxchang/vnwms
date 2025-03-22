@@ -48,21 +48,6 @@
                 qty: "{% trans "Quantity" %}"
             };
 
-            let params = new URLSearchParams(window.location.search);
-            let warehouse = params.get("warehouse");
-            let productOrder = params.get("product_order");
-            let purchaseNo = params.get("purchase_no");
-            let versionNo = params.get("version_no");
-            let versionSeq = params.get("version_seq");
-            let size = params.get("size");
-            let bin = params.get("bin");
-            let qty = params.get("qty");
-
-
-            console.log("Loaded Data:", {
-                warehouse, productOrder, purchaseNo, versionNo, versionSeq, size, bin, qty
-            });
-
             $.ajax({
                 url: '{% url "bin_transfer" %}',
                 method: 'GET',

@@ -21,6 +21,14 @@
     </div>
 {% endblock %}
 
+{% block css %}
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
 {% block javascript %}
     <script>
         $(document).ready(function() {
@@ -84,16 +92,17 @@
                 paging: true,
                 pageSize: 20,
                 fields: [
-                    { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", css: "text-center", width: 30 },
-                    { name: "product_order", title: "{% trans "Product Order" %}", type: "text", css: "text-center", width: 30 },
-                    { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", css: "text-center", width: 40 },
-                    { name: "version_no", title: "{% trans "Version No" %}", type: "text", css: "text-center", width: 25 },
-                    { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", css: "text-center", width: 25 },
-                    { name: "size", title: "{% trans "Size" %}", type: "text", css: "text-center", width: 25 },
-                    { name: "bin", title: "{% trans "Bin" %}", type: "text", css: "text-center", width: 25 },
-                    { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 25 },
+                    { name: "bin__area__warehouse__wh_code", title: "{% trans "Warehouse" %}", type: "text", width: 30 },
+                    { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 40 },
+                    { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", width: 35 },
+                    { name: "version_no", title: "{% trans "Version No" %}", type: "text", width: 40 },
+                    { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", width: 40 },
+                    { name: "size", title: "{% trans "Size" %}", type: "text", width: 25 },
+                    { name: "bin", title: "{% trans "Bin" %}", type: "text", width: 25 },
+                    { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 40 },
                     {
                         type: "control",
+                        width: 45,
                         itemTemplate: function(_, item) {
                             return $("<button>").text("{% trans "Transfer" %}")
                                 .addClass("btn btn-warning")
@@ -116,7 +125,7 @@
                     },
                     {
                         type: "control",
-                        width: 30,
+                        width: 45,
                         itemTemplate: function(_, item) {
                             return $("<button>").text("{% trans "Adjust" %}")
                                 .addClass("btn btn-warning")
