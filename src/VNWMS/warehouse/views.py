@@ -1527,7 +1527,7 @@ def delete_inventory(request):
 
             YYYYMM = datetime.now().strftime("%Y%m")
 
-            key = "OPEN" + YYYYMM
+            key = "DELT" + YYYYMM
 
             form_no = key + str(get_series_number(key, "DELT")).zfill(3)
 
