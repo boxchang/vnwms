@@ -47,9 +47,7 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
                     if stockout_form:
                         tmp1 = {'stockout_form': stockout_form}
 
-                    tmp = {'qty': remain_qty, 'purchase_unit': purchase_unit,
-                             'update_by': request.user,
-                             }
+                    tmp = {'qty': remain_qty, 'purchase_unit': purchase_unit, 'update_by': request.user}
                     tmp.update(tmp1)
                     Bin_Value.objects.update_or_create(product_order=product_order, purchase_no=purchase_no,
                                                        version_no=version_no,
@@ -87,7 +85,8 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
     item_type_name = get_item_type_name()
 
     sql = f"""
-            SELECT b.product_order
+            SELECT b.id 
+                  ,b.product_order
                   ,b.size
                   ,b.qty
                   ,b.bin_id

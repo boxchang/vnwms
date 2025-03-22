@@ -241,7 +241,7 @@
                     } else {
                         delete selectedItems[id];
                     }
-                });
+                 });
             });
 
             $("#jsGrid").on("change", ".rowCheckbox", function() {
@@ -263,7 +263,7 @@
                 let selectedIds = Object.keys(selectedItems); // Lấy danh sách ID đã chọn
 
                 if (selectedIds.length === 0) {
-                    alert("Vui lòng chọn ít nhất một dòng để xóa!");
+                    alert("Please select at least one row to delete!");
                     return;
                 }
 
@@ -356,7 +356,7 @@
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel
-                XLSX.writeFile(wb, "Transaction_History.xlsx");
+                XLSX.writeFile(wb, "Inventory_Deletion.xlsx");
             });
         });
     </script>
