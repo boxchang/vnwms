@@ -93,8 +93,13 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">{% trans "Confirm Delete" %}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="fas fa-exclamation-triangle" style="color: #FFC107; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);"></i>
+                        &nbsp;{% trans "Alert" %}
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     {% trans "Are you sure you want to delete the bin " %} "<strong id="modalBinName"></strong>"

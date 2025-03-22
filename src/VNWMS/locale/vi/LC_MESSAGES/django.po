@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-22 11:49+0700\n"
-"PO-Revision-Date: 2025-03-22 11:50+0700\n"
+"POT-Creation-Date: 2025-03-22 16:37+0700\n"
+"PO-Revision-Date: 2025-03-22 16:38+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -793,8 +793,8 @@ msgstr ""
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:69
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:76
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:69
-#: .\warehouse\templates\warehouse\list_warehouse.html:64
-#: .\warehouse\templates\warehouse\list_warehouse.html:67
+#: .\warehouse\templates\warehouse\list_warehouse.html:63
+#: .\warehouse\templates\warehouse\list_warehouse.html:66
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:381
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:155
 msgid "Delete"
@@ -1764,7 +1764,7 @@ msgstr "Ghi chú"
 #: .\warehouse\forms.py:400
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:38
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:37
-#: .\warehouse\templates\warehouse\list_warehouse.html:40
+#: .\warehouse\templates\warehouse\list_warehouse.html:39
 msgid "Add"
 msgstr "Thêm"
 
@@ -1825,7 +1825,7 @@ msgstr "Tên khu vực"
 #: .\warehouse\templates\warehouse\area\create_area.html:52
 #: .\warehouse\templates\warehouse\area\edit_area.html:57
 #: .\warehouse\templates\warehouse\edit_warehouse.html:14
-#: .\warehouse\templates\warehouse\list_warehouse.html:48
+#: .\warehouse\templates\warehouse\list_warehouse.html:47
 msgid "Warehouse Id"
 msgstr "Mã Kho"
 
@@ -1833,8 +1833,8 @@ msgstr "Mã Kho"
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:75
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:65
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:73
-#: .\warehouse\templates\warehouse\list_warehouse.html:62
-#: .\warehouse\templates\warehouse\list_warehouse.html:66
+#: .\warehouse\templates\warehouse\list_warehouse.html:61
+#: .\warehouse\templates\warehouse\list_warehouse.html:65
 msgid "Edit"
 msgstr "Sửa"
 
@@ -1855,7 +1855,7 @@ msgstr "Bạn chắc chắn muốn xoá kho"
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:105
 #: .\warehouse\templates\warehouse\list_warehouse.html:97
 msgid "Yes, Delete"
-msgstr "Có, xoá nó"
+msgstr "Xác nhận"
 
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:107
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:107
@@ -1949,6 +1949,7 @@ msgid "Inventory Search"
 msgstr "Hàng kiểm kê"
 
 #: .\warehouse\templates\warehouse\bases\base.html:68
+#: .\warehouse\templates\warehouse\product_order_bin_search.html:5
 msgid "Transaction History"
 msgstr "Lịch sử giao dịch"
 
@@ -2084,13 +2085,9 @@ msgstr "Không có dữ liệu"
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:155
 #: .\warehouse\templates\warehouse\create_warehouse.html:24
 #: .\warehouse\templates\warehouse\edit_warehouse.html:26
-#: .\warehouse\templates\warehouse\list_warehouse.html:47
+#: .\warehouse\templates\warehouse\list_warehouse.html:46
 msgid "Plant"
 msgstr "Nhà máy"
-
-#: .\warehouse\templates\warehouse\bin\delete_bin_value.html:270
-msgid "Are you sure you want to delete?"
-msgstr "Bạn có chắc muốn xóa không?"
 
 #: .\warehouse\templates\warehouse\bin\edit_bin.html:5
 #: .\warehouse\templates\warehouse\bin\edit_bin.html:13
@@ -2124,7 +2121,7 @@ msgstr "Mã Kho"
 
 #: .\warehouse\templates\warehouse\create_warehouse.html:19
 #: .\warehouse\templates\warehouse\edit_warehouse.html:20
-#: .\warehouse\templates\warehouse\list_warehouse.html:49
+#: .\warehouse\templates\warehouse\list_warehouse.html:48
 msgid "Warehouse Name"
 msgstr "Tên Kho"
 
@@ -2147,20 +2144,18 @@ msgid "Edit Warehouse"
 msgstr "Thêm mới Kho"
 
 #: .\warehouse\templates\warehouse\index.html:75
-#: .\warehouse\templates\warehouse\list_warehouse.html:75
+#: .\warehouse\templates\warehouse\list_warehouse.html:74
 msgid "No warehouses found."
 msgstr "Mã Kho"
 
 #: .\warehouse\templates\warehouse\list_warehouse.html:5
-#: .\warehouse\templates\warehouse\list_warehouse.html:38
+#: .\warehouse\templates\warehouse\list_warehouse.html:37
 msgid "Warehouse List"
 msgstr "Danh sách Kho"
 
 #: .\warehouse\templates\warehouse\list_warehouse.html:87
-#, fuzzy
-#| msgid "Delete"
-msgid "Delete Item"
-msgstr "Xóa"
+msgid "Alert"
+msgstr "Cảnh báo"
 
 #: .\warehouse\templates\warehouse\list_warehouse.html:92
 msgid "Are you sure you want to delete the warehouse"
@@ -2168,7 +2163,7 @@ msgstr "Bạn chắc chắn muốn xoá kho"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:5
 msgid "Stock In"
-msgstr ""
+msgstr "Nhập hàng"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:33
 msgid "Warehouse Stock In Form"
@@ -2214,36 +2209,36 @@ msgstr "Sao chép"
 msgid "Copy and insert below this row Success!"
 msgstr "Sao chép và chèn bên dưới hàng này Thành công!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:502
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:218
 msgid "No data in the table! Please enter at least one row."
 msgstr "Không có dữ liệu trong bảng! Vui lòng nhập ít nhất một hàng."
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:517
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:510
 #, fuzzy
 #| msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
 msgid "The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
 msgstr "\"Trường 'vị trí' ở dòng thứ \" + (i + 1) + \" không được để trống!\""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:522
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:515
 #, fuzzy
 #| msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
 msgid "The 'order quantity' field in row \" + (i + 1) + \" cannot be empty!"
 msgstr "\"Trường 'vị trí' ở dòng thứ \" + (i + 1) + \" không được để trống!\""
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:545
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:538
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:239
 msgid "Form submitted successfully!"
 msgstr "Đã gửi biểu mẫu thành công!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:549
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:542
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:243
 msgid "Form submission failed!"
 msgstr "Không thể gửi biểu mẫu!"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:5
 msgid "Stock Out"
-msgstr ""
+msgstr "Xuất hàng"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:34
 msgid "Warehouse Stock Out Form"
@@ -2251,10 +2246,6 @@ msgstr "Biểu mẫu xuất kho"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:166
 msgid "ID"
-msgstr ""
-
-#: .\warehouse\templates\warehouse\product_order_bin_search.html:5
-msgid "Transaction"
 msgstr ""
 
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:23
@@ -2283,10 +2274,8 @@ msgid "(Product Order/Location/Size/Comment) cannot all be null!"
 msgstr "(Vị trí/Đơn hàng/Size) không được để trống!"
 
 #: .\warehouse\templates\warehouse\search_bin_history.html:6
-#, fuzzy
-#| msgid "Transaction History"
-msgid "Search Bin Value History"
-msgstr "Lịch sử chuyển hàng"
+msgid "Inventory Check"
+msgstr "Hàng kiểm kê"
 
 #: .\warehouse\templates\warehouse\search_bin_history.html:143
 msgid "Current Inventory"
@@ -2323,6 +2312,17 @@ msgstr "Cập nhật vị trí"
 #| msgid "Warehouse Name"
 msgid "Packing Warehouse Map"
 msgstr "Tên Kho"
+
+#~ msgid "Delete Item"
+#~ msgstr "Cảnh báo"
+
+#~ msgid "Are you sure you want to delete?"
+#~ msgstr "Bạn có chắc muốn xóa không?"
+
+#, fuzzy
+#~| msgid "Transaction History"
+#~ msgid "Search Bin Value History"
+#~ msgstr "Lịch sử chuyển hàng"
 
 #, fuzzy
 #~| msgid "Inventory Sheet"
