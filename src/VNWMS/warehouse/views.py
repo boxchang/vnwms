@@ -1466,17 +1466,16 @@ def open_data_import1(request):
             else:
                 Bin_Value.objects.all().delete()
 
-                stock_in = StockInForm()
                 YYYYMM = datetime.now().strftime("%Y%m")
                 key = "OPEN" + YYYYMM
-                stock_in.form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
+                form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
 
                 mvt = MovementType.objects.get(mvt_code="OPEN")
 
                 for _, row in df.iterrows():
                     bin_id = row["Location"]
 
-                    Do_Transaction(request, stock_in.form_no, row["Product Order"], row['Purchase Order'],
+                    Do_Transaction(request, form_no, row["Product Order"], row['Purchase Order'],
                                    row["Version No"], row["Version Seq"], row["Size"], mvt, bin_map[bin_id],
                                    row["Qty"], row["Unit"], desc="")
 
@@ -1525,6 +1524,24 @@ def delete_inventory(request):
 
             data = json.loads(request.body)  # Đọc dữ liệu từ AJAX
             ids_to_delete = data.get("ids", [])
+
+            YYYYMM = datetime.now().strftime("%Y%m")
+
+            key = "OPEN" + YYYYMM
+
+            form_no = key + str(get_series_number(key, "DELT")).zfill(3)
+
+            mvt = MovementType.objects.get(mvt_code="DELT")
+
+            for row in data:
+                bin_id = row["Location"]
+
+                qty = int(row["Qty"]) * -1
+
+                Do_Transaction(request, form_no, row["Product Order"], row['Purchase Order'],
+                               row["Version No"], row["Version Seq"], row["Size"], mvt, row['Bin'],
+                               qty, row["Unit"], desc="")
+
 
             if not ids_to_delete:
                 return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
