@@ -114,7 +114,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             """
 
     if product_order:
-        sql += f" AND b.product_order = '{product_order}'"
+        sql += f" AND b.product_order LIKE '{product_order}%'"
 
     if purchase_order:
         sql += f" AND b.purchase_no = '{purchase_order}'"
@@ -126,10 +126,10 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
         sql += f" AND area.area_id = '{area}'"
 
     if location:
-        sql += f" AND bin.bin_id = '{location}'"
+        sql += f" AND bin.bin_id LIKE '{location}%'"
 
     if size:
-        sql += f" AND b.size = '{size}'"
+        sql += f" AND b.size LIKE '{size}%'"
 
     results = db.select_sql_dict(sql)
 

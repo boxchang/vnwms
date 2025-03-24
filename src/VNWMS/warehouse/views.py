@@ -280,8 +280,6 @@ def bin_search(request):
 
         if query_bin or query_po_no or query_size:
 
-            item_type_name = get_item_type_name()
-
             bin_hists = inventory_history(location=query_bin, product_order=query_po_no, size=query_size, from_date=query_from, to_date=query_to)
             if not bin_hists.exists():
                 message = "No matching records found."
@@ -291,18 +289,6 @@ def bin_search(request):
             # Lọc kết quả cuối cùng
             result_history = bin_hists
             result_value = bin_values
-
-            page_obj = None
-            range_pages = []
-
-            if result_history or result_value:
-                result_history = result_history.order_by('create_at')
-                paginator = Paginator(result_history, 15)
-                page_number = request.GET.get('page')
-                page_obj = paginator.get_page(page_number)
-
-                total_pages = paginator.num_pages
-                current_page = page_obj.number
 
         else:
             result_history = None
@@ -1515,13 +1501,6 @@ def delete_inventory(request):
     if request.method == "POST":
         try:
 
-            # Debug Id
-            # print(Bin_Value._meta.get_fields())
-            #
-            # # Kiểm tra ID của một bản ghi cụ thể
-            # obj = Bin_Value.objects.first()
-            # print(obj.id)  # Nếu có dữ liệu, nó sẽ in ra ID
-
             data = json.loads(request.body)  # Đọc dữ liệu từ AJAX
             ids_to_delete = data.get("ids", [])
 
@@ -1533,15 +1512,13 @@ def delete_inventory(request):
 
             mvt = MovementType.objects.get(mvt_code="DELT")
 
-            for row in data:
-                bin_id = row["Location"]
+            for row in data["list_data"]:
+                test = row['qty']
+                qty = int(row['qty']) * -1
 
-                qty = int(row["Qty"]) * -1
-
-                Do_Transaction(request, form_no, row["Product Order"], row['Purchase Order'],
-                               row["Version No"], row["Version Seq"], row["Size"], mvt, row['Bin'],
-                               qty, row["Unit"], desc="")
-
+                Do_Transaction(request, form_no, row['productOrder'], row['purchaseNo'],
+                               row['versionNo'], row['versionSeq'], row['size'],
+                               mvt, row['binId'], qty, row['purchaseUnit'], desc="")
 
             if not ids_to_delete:
                 return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})

@@ -133,23 +133,27 @@
             });
 
             $("#id_po").on("keydown", function (event) {
-                let warehouseId = $("#warehouse").val();
-                let areaId = $("#id_area").val();
-                let binId = $("#id_bin").val();
-                let poId = $("#id_po").val().trim();
 
-                if (warehouseId || areaId || binId || poId) {
-                    $.getJSON("{% url 'get_bin_data' %}", {
-                            warehouse: warehouseId,
-                            area: areaId,
-                            bin: binId,
-                            po: poId
-                        }, function (data) {
-                            console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
+                if (event.key === 'Enter'){
+                    let warehouseId = $("#warehouse").val();
+                    let areaId = $("#id_area").val();
+                    let binId = $("#id_bin").val();
+                    let poId = $("#id_po").val().trim();
 
-                            $("#jsGrid").jsGrid("option", "data", data);
-                    });
+                    if (warehouseId || areaId || binId || poId) {
+                        $.getJSON("{% url 'get_bin_data' %}", {
+                                warehouse: warehouseId,
+                                area: areaId,
+                                bin: binId,
+                                po: poId
+                            }, function (data) {
+                                console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
+
+                                $("#jsGrid").jsGrid("option", "data", data);
+                        });
+                    }
                 }
+
             });
 
             $("#Search").click(function () {
@@ -193,8 +197,15 @@
                         itemTemplate: function(_, item) {
                             let $checkbox = $("<input>").attr("type", "checkbox")
                                 .addClass("rowCheckbox")
-                                .attr("data-id", item.id);
-
+                                .attr("data-id", item.id)
+                                .attr("data-product-order", item.product_order)
+                                .attr("data-purchase-no", item.purchase_no)
+                                .attr("data-version-no", item.version_no)
+                                .attr("data-version-seq", item.version_seq)
+                                .attr("data-size", item.size)
+                                .attr("data-bin-id", item.bin_id)
+                                .attr("data-qty", item.qty)
+                                .attr("data-purchase-unit", item.purchase_unit);
 
                             if (selectedItems[item.id]) {
                                 $checkbox.prop("checked", true);  // Dùng prop thay vì attr
@@ -261,8 +272,14 @@
 
             $("#deleteSelected").click(function () {
                 let selectedIds = Object.keys(selectedItems); // Lấy danh sách ID đã chọn
+                let selectedData = [];
 
-                if (selectedIds.length === 0) {
+                $(".rowCheckbox:checked").each(function() {
+                    let rowData = $(this).data(); // Lấy toàn bộ data-* attributes
+                    selectedData.push(rowData);
+                });
+
+                if (selectedData.length === 0) {
                     alert("Please select at least one row to delete!");
                     return;
                 }
@@ -272,7 +289,10 @@
                 $.ajax({
                     type: "POST",
                     url: "{% url 'delete_inventory' %}",
-                    data: JSON.stringify({ ids: selectedIds }),
+                    data: JSON.stringify({
+                        ids: selectedIds ,
+                        list_data: selectedData,
+                    }),
                     contentType: "application/json",
                     success: function (response) {
                         alert("Deleted successfully!");
