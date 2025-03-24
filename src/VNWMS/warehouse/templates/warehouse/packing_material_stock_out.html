@@ -55,7 +55,6 @@
             let product_order = $('#id_product_order').val().trim();
             if (event.key === "Enter" && product_order) {
                 event.preventDefault();
-                event.stopPropagation();
                 get_order_info();
             }
         });
@@ -67,7 +66,6 @@
                 get_no_info();
             }
         });
-
 
         get_order_info = function() {
 
@@ -90,7 +88,7 @@
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("資料加載失敗：", error);
+                    console.error("Error：", error);
                 }
             });
         };
@@ -118,7 +116,7 @@
 
                 },
                 error: function (xhr, status, error) {
-                    console.error("資料加載失敗：", error);
+                    console.error("Error：", error);
                 }
             });
         };
@@ -187,16 +185,12 @@
 
         {# Shortcut Keyboard #}
         $(document).on('keydown', function(e) {
-            if (e.key === 'Escape' || e.which === 27) {  // Kiểm tra phím ESC
-                const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
 
-                if (cancelButton .length) {
-                    e.preventDefault();
-                    cancelButton .click();  // Mô phỏng click vào nút cập nhật
-                }
+            if ($(e.target).is('input')) {
+                return;
             }
 
-            if (e.which === 13) {  // Kiểm tra nếu phím Enter (key code 13) được nhấn
+            if (e.key === 'Enter') {  // Kiểm tra nếu phím Enter (key code 13) được nhấn
                 const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
 
                 // Nếu nút "Cập nhật" tồn tại, mô phỏng sự kiện click
@@ -204,7 +198,14 @@
                     e.preventDefault();
                     updateButton.click();  // Mô phỏng click vào nút cập nhật
                 }
-              }
+            } else if (e.key === 'Escape') {  // Kiểm tra phím ESC
+                const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
+
+                if (cancelButton.length) {
+                    e.preventDefault();
+                    cancelButton.click();  // Mô phỏng click vào nút cập nhật
+                }
+            }
         });
 
 

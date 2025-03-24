@@ -64,7 +64,7 @@
 
     <!-- Form for search -->
     <div class="table-container mt-4">
-        <form method="get" action="{% url 'bin_search' %}">
+        <form method="get" action="{% url 'bin_search' %}" id="form">
 
             {% if form.non_field_errors %}
                 <div class="alert alert-danger">
@@ -260,6 +260,36 @@
                     alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
                 }
             });
+
+            $("#form").on("submit", function (e) {
+                e.preventDefault(); // Ngăn chặn hành động gửi form mặc định
+
+                var $btn = $(this).find("button[type='submit']");
+                $btn.prop("disabled", true).text("{% trans 'Searching...' %}"); // Vô hiệu hóa và đổi text nút
+
+                var formData = $(this).serialize(); // Thu thập dữ liệu form
+
+                // Gửi dữ liệu qua Ajax
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: formData,
+                    success: function (response) {
+                        // Cập nhật dữ liệu bảng mà không cần tải lại trang
+                        $(".bin_value tbody").html($(response).find(".bin_value tbody").html());
+                        $(".bin_hist tbody").html($(response).find(".bin_hist tbody").html());
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error:", error);
+                    },
+                    complete: function () {
+                        setTimeout(function () {
+                            $btn.prop("disabled", false).text("{% trans 'Search' %}");
+                        }, 2000);
+                    }
+                });
+            });
+
         });
     </script>
 {% endblock %}

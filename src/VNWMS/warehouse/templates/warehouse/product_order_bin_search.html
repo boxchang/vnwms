@@ -63,8 +63,6 @@
 {% endblock %}
 
 {% block javascript %}
-
-
     <script>
         $(document).ready(function() {
 
@@ -111,7 +109,7 @@
                 ]
             });
 
-            $("#productOrder, #bin, #size, #comment").on("keydown", function (e) {
+            $("#productOrder, #bin, #size, #comment").on("keyup", function (e) {
                 let product_order = $("#productOrder").val().trim();
                 let bin = $("#bin").val().trim();
                 let size = $("#size").val().trim();

@@ -9,10 +9,45 @@
         width: 15%;
     }
 
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+
+    .blinking-text {
+        animation: blink 5s infinite;
+    }
+
     .upload, .download {
         padding: 0;
         margin-top: 32px;
         height: 51%;
+    }
+
+    form {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        border-radius: 10px;
+    }
+
+    /* Hiệu ứng hover cho nút bấm */
+    .upload-btn:hover {
+        background: #28a745;
+        box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+    }
+
+    .download-btn:hover {
+        background: #17a2b8;
+        box-shadow: 0 0 15px rgba(23, 162, 184, 0.5);
+    }
+
+    /* Nút upload nhấp nháy nhẹ */
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    .upload-btn i {
+        animation: blink 1s infinite;
     }
 </style>
 {% endblock js %}
@@ -40,30 +75,32 @@
         </div>
 
 
-        <h3 class="mt-5 text-center">{% trans "Upload Location Excel File" %}</h3>
-        <form method="post" enctype="multipart/form-data">
+        <h3 class="mt-5 mb-4 text-center">{% trans "Upload Location Excel File" %}</h3>
+
+        <form method="post" enctype="multipart/form-data" class="p-4 bg-light shadow rounded">
             {% csrf_token %}
-            <div class="row d-flex justify-content-center">
-                <div class="col-md-5">
+            <div class="row justify-content-center">
+                <!-- Form nhập liệu -->
+                <div class="col-md-6">
                     {% crispy form %}
                 </div>
 
-                <div class="col-12 col-md-1 text-center upload">
-                    <button type="submit" class="btn btn-success">
+                <!-- Nút Upload -->
+                <div class="col-12 text-center mt-3">
+                    <button type="submit" class="btn btn-success btn-lg px-4 shadow upload-btn">
                         <i class="fa fa-upload"></i> {% trans "Upload" %}
                     </button>
                 </div>
 
-                <a href="{% url 'download_excel_template' 'Location_basic_data_import.xlsx' %}"
-                   class="download col-12 col-md-1 text-center">
-                    <button id="exportExcel" type="button" class="btn btn-info" aria-label="template">
-                        <i class="fas fa-download">
-                        </i>
-                    </button>
-                </a>
-
+                <!-- Nút tải template -->
+                <div class="col-12 text-center mt-2">
+                    <a href="{% url 'download_excel_template' 'Location_basic_data_import.xlsx' %}" class="btn btn-info btn-lg px-4 shadow download-btn">
+                        <i class="fas fa-download"></i> {% trans "Download Template" %}
+                    </a>
+                </div>
             </div>
         </form>
+
 
 
 {% endblock content %}
