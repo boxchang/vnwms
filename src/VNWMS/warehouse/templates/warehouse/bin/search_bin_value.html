@@ -102,8 +102,7 @@
                 }
             });
 
-
-            $("#id_po").on("keydown", function (e) {
+            $("#id_po").on("keyup", function (e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     let warehouse = $("#warehouse").val().trim();
@@ -127,6 +126,10 @@
                 }
             });
 
+
+            $("#searchForm").on("submit", function (e) {
+               e.preventDefault();
+            });
 
             $("#Search").click(function () {
                 let warehouseId = $("#warehouse").val();

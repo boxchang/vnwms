@@ -132,7 +132,7 @@
                 event.preventDefault();
             });
 
-            $("#id_po").on("keydown", function (event) {
+            $("#id_po").on("keyup", function (event) {
 
                 if (event.key === 'Enter'){
                     let warehouseId = $("#warehouse").val();
