@@ -265,7 +265,7 @@
                 e.preventDefault(); // Ngăn chặn hành động gửi form mặc định
 
                 var $btn = $(this).find("button[type='submit']");
-                $btn.prop("disabled", true).text("{% trans 'Searching...' %}"); // Vô hiệu hóa và đổi text nút
+                $btn.prop("disabled", true).text("{% trans 'Searching' %}..."); // Vô hiệu hóa và đổi text nút
 
                 var formData = $(this).serialize(); // Thu thập dữ liệu form
 

@@ -4,6 +4,7 @@
 {% block title %} {% trans "Inventory Sheet" %} {% endblock %}
 
 {% block css %}
+    {{ block.super }}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
 
     <style>
@@ -14,13 +15,6 @@
         th {
             text-align: center;
         }
-
-
-
-
-
-
-
     </style>
 {% endblock %}
 
@@ -73,7 +67,6 @@
     <script>
         $(document).ready(function () {
 
-            // Load động danh sách Area khi chọn Warehouse
             $("#warehouse").change(function () {
                 var warehouseId = $(this).val();
                 $("#id_area").prop("disabled", true).html('<option value="">{% trans "Choose Area" %}</option>');
@@ -88,7 +81,7 @@
                 }
             });
 
-            // Load động danh sách Bin khi chọn Area
+
             $("#id_area").change(function () {
                 var areaId = $(this).val();
                 $("#id_bin").prop("disabled", true).html('<option value="">{% trans "Choose Location" %}</option>');
@@ -130,6 +123,7 @@
             $("#searchForm").on("submit", function (e) {
                e.preventDefault();
             });
+
 
             $("#Search").click(function () {
                 let warehouseId = $("#warehouse").val();
@@ -187,21 +181,21 @@
                 editing: false,
                 data: [],
                 fields: [
-                    { name: "bin__area__warehouse__wh_plant", title: translations.plant, type: "text"},
-                    { name: "bin__area__warehouse__wh_name", title: translations.warehouse, type: "text"},
-                    { name: "product_order", title: translations.product_order, type: "text"},
-                    { name: "purchase_no", title: translations.purchase_order, type: "text"},
-                    { name: "version_no", title: translations.version_no, type: "text"},
-                    { name: "version_seq", title: translations.version_seq, type: "text"},
-                    { name: "size", title: translations.size, type: "text"},
-                    { name: "bin_id", title: translations.location, type: "text"},
-                    { name: "qty", title: translations.qty, type: "number"},
-                    { name: "item_type", title: translations.item_type, type: "text", width: "200px"},
-                    { name: "post_date", title: translations.post_date, type: "date"},
-                    { name: "supplier", title: translations.supplier, type: "text"},
-                    { name: "customer_no", title: translations.customer_no, type: "text"},
-                    { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text"},
-                    { name: "lot_no", title: translations.lot_no, type: "text"}
+                    { name: "wh_plant", title: translations.plant, type: "text", width: 100},
+                    { name: "wh_name", title: translations.warehouse, type: "text", width: 120},
+                    { name: "product_order", title: translations.product_order, type: "text", width: 120},
+                    { name: "purchase_no", title: translations.purchase_order, type: "text", width: 120},
+                    { name: "version_no", title: translations.version_no, type: "text", width: 120},
+                    { name: "version_seq", title: translations.version_seq, type: "text", width: 120},
+                    { name: "size", title: translations.size, type: "text", width: 60},
+                    { name: "bin_id", title: translations.location, type: "text", width: 60},
+                    { name: "qty", title: translations.qty, type: "number", width: 200},
+                    { name: "item_type", title: translations.item_type, type: "text", width: 200},
+                    { name: "post_date", title: translations.post_date, type: "date", width: 120},
+                    { name: "supplier", title: translations.supplier, type: "text", width: 120},
+                    { name: "customer_no", title: translations.customer_no, type: "text", width: 100},
+                    { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text", width: 120},
+                    { name: "lot_no", title: translations.lot_no, type: "text", width: 120}
                 ]
             });
 

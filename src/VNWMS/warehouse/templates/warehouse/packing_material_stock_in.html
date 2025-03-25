@@ -69,23 +69,23 @@
 {% block javascript %}
 
     <script>
-        function openMapPage(warehouse_id, obj) {
-
-            let childWindow = window.open('{% url 'warehouse_map' warehouse_code %}', "Warehouse Map", "width=1400,height=800");
-
-            // 監聽來自子頁面的回傳數據
-            window.addEventListener("message", function(event) {
-                if (event.origin !== window.location.origin) {
-                    return;  // 確保安全性，只接受同源的消息
-                }
-
-                obj.val(event.data);
-                obj.focus();
-            }, false);
-
-        }
-
         $(document).ready(function() {
+
+            function openMapPage(warehouse_id, obj) {
+
+                let childWindow = window.open('{% url 'warehouse_map' warehouse_code %}', "Warehouse Map", "width=1400,height=800");
+
+                // 監聽來自子頁面的回傳數據
+                window.addEventListener("message", function(event) {
+                    if (event.origin !== window.location.origin) {
+                        return;  // 確保安全性，只接受同源的消息
+                    }
+
+                    obj.val(event.data);
+                    obj.focus();
+                }, false);
+
+            }
 
             $('.select2-bin').select2({
                 tags: true,  // Cho phép nhập giá trị mới
@@ -122,76 +122,78 @@
                 qty: "{% trans 'Qty' %}"
             };
 
-            {# Keydown #}
 
-            $("#id_product_order").on("keydown", function (event) {
-                if (event.which === 13) {
-                    event.preventDefault();
+            $("#id_product_order").on("keyup", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (event.key === 'Enter') {
+
                     get_order_info();
+                    event.stopPropagation();
+
                 }
             });
 
-            $("#id_purchase_no").on("keydown", function (event) {
-                if (event.which === 13) {
-                    event.preventDefault();
+            $("#id_purchase_no").on("keyup", function (event) {
+                if (event.key === 'Enter') {
                     get_no_info();
+                    event.stopPropagation();
                 }
             });
 
-            $(document).on("keydown", "input", function (e) {
-                if (e.which === 13 && !$(this).is("#id_purchase_no, #id_product_order, #jsGrid input")) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            });
 
             $(document).on("keydown", function (e) {
                 if (e.which !== 27 && e.which !== 13) {
                     return;
                 }
 
-                if (e.which === 13) {  // Phím Escape
+                if (e.which === 13) {
                     const cancelButton = $(".jsgrid-button.jsgrid-update-button");
                     if (cancelButton.length) {
                         cancelButton.click();
 
                     }
-                } else if (e.which === 27) {  // Phím Enter
+                } else if (e.which === 27) {
                     const updateButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
                     if (updateButton.length) {
                         updateButton.click();
-                        e.stopPropagation();
-                        e.preventDefault();
+
                     }
                 }
+                e.preventDefault();
+                e.stopPropagation();
             });
 
             {# Search by Product Order, Purchase No #}
-            $("#_product_order").on("click", function() {
+            $("#_product_order").on("click", function(event) {
 
-                let product_order = $("#id_product_order").value.trim();
+                let product_order = $("#id_product_order").val().trim();
 
                 if (!product_order) {
-                    event.preventDefault(); // Ngăn gửi request lên server
                     alert("{% trans 'Product Order cannot be null!' %}");
 
                 } else {
                     get_order_info();
                 }
+                event.stopPropagation();
+
 
             });
 
-            $("#_purchase_no").on("click", function() {
+            $("#_purchase_no").on("click", function(event) {
 
-                let purchase_no = $("#id_purchase_no").value.trim();
+                let purchase_no = $("#id_purchase_no").val().trim();
+
 
                 if (!purchase_no) {
-                    event.preventDefault(); // Ngăn gửi request lên server
                     alert("{% trans 'Purchase Order cannot be null!' %}");
 
                 } else {
                     get_no_info();
+
                 }
+                event.stopPropagation();
+
 
             });
 
@@ -244,8 +246,9 @@
 
 
             {# Create new fields #}
-            $("#create").on("click", function() {
+            $("#create").on("click", function(event) {
                 add_item();
+                event.stopPropagation();
             });
 
             function add_item() {
@@ -380,9 +383,8 @@
                                 .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
                                 .text("{% trans "Delete" %}")
                                 .on("click", function(e) {
-                                    e.stopPropagation(); // 防止觸發行點擊事件
                                     $("#jsGrid").jsGrid("deleteItem", item);
-
+                                    e.stopPropagation(); // 防止觸發行點擊事件
                                 });
 
                             return deleteButton;
@@ -411,8 +413,6 @@
                         },
                         editTemplate: function (value, item) {
 
-
-
                             const $input = $("<input>").val(value).addClass("form-control input-custom").css({
                                                 "padding-right": "1px"
                                            });
@@ -424,7 +424,6 @@
                                                height: "40px",
                                                marginLeft: "20px"
                                            });
-
 
                             var $container = $("<div>").css({
                                                 "--bs-gutter-x": "0", "display": "flex", "flex-wrap": "wrap"
@@ -474,7 +473,7 @@
 
 
             // Khi click vào một zone (div chứa bin_id)
-            $(".zone").on("click", function() {
+            $(".zone").on("click", function(event) {
                 // Lấy giá trị của bin_id từ data-value của div
                 var bin_id = $(this).data("value");
                 const updateInput = $("#zonePopup").data("updateInput"); // 取得回調函數
@@ -483,12 +482,14 @@
                 }
                 // Đóng popup
                 $("#zonePopup").fadeOut();
+                event.stopPropagation();
             });
 
 
             // 關閉彈窗
-            $("#closePopup").on("click", function () {
+            $("#closePopup").on("click", function (event) {
                 $("#zonePopup").fadeOut();
+                event.stopPropagation();
             });
 
 
@@ -500,6 +501,7 @@
 
                 if (!gridData || gridData.length === 0) {
                     alert("{% trans "No data in the table! Please enter at least one row." %}");
+                    event.stopPropagation();
                     return; // Dừng xử lý nếu không có dữ liệu
                 }
 
@@ -507,12 +509,14 @@
                 for (var i = 0; i < gridData.length; i++) {
                     if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
                         {#alert({% blocktrans %}"第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！"{% endblocktrans %});#}
-                        alert("{% blocktrans %}The 'location' field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
+                        alert("({% trans "Location" %}) {% trans "in" %} {% trans "row" %} " + (i + 1) + " {% trans "cannot be empty" %}!");
+                        event.stopPropagation();
                         return; // 阻止繼續執行
                     }
 
                     if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
-                        alert("{% blocktrans %}The 'order quantity' field in row " + (i + 1) + " cannot be empty!{% endblocktrans %}");
+                        alert("({% trans "Qty" %}) {% trans "in" %} {% trans "row" %} " + (i + 1) + " {% trans "cannot be empty" %}!");
+                        event.stopPropagation();
                         return;
                     }
                 }
@@ -543,6 +547,9 @@
                         console.log(error);
                     }
                 });
+
+                event.stopPropagation();
+
             });
 
         });

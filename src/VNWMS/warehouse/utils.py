@@ -85,7 +85,9 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
     item_type_name = get_item_type_name()
 
     sql = f"""
-            SELECT b.id 
+            SELECT b.id
+                  , w.wh_name
+                  , w.wh_plant
                   ,b.product_order
                   ,b.size
                   ,b.qty
@@ -110,6 +112,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
                         and b.size = d.size
             JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
+            JOIN [VNWMS].[dbo].[warehouse_warehouse] w on w.wh_code = area.warehouse_id
             WHERE qty > 0
             """
 

@@ -6,7 +6,8 @@
 {% block title %}{% endblock title %}
 {% block breadcrumb %}{% endblock %}
 
-{% block base_js %}
+
+{% block css %}
     <style>
 
         .dropdown-item i {
@@ -15,11 +16,17 @@
             margin-right: 8px;
         }
 
+        .dropdown-menu {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .dropdown-item:hover {
+            background-color: #6f42c1;
+            color: white;
+        }
+
     </style>
-
 {% endblock %}
-
-{% block ready %}{% endblock %}
 
 {% block container %}
     <div class="card-header">

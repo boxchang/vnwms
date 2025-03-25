@@ -730,8 +730,6 @@ def packing_material_stock_in_post(request):
 def packing_material_stock_out(request):
     if request.method == 'POST':
         form = StockOutPForm(request.POST)
-        if form.is_valid():
-            pass
     else:
         form = StockOutPForm()
     return render(request, 'warehouse/packing_material_stock_out.html', {'form': form})

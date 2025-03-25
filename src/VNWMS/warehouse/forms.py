@@ -429,7 +429,6 @@ class StockOutPForm(forms.Form):
                 Div('product_order', css_class='col-md-6'),
                 Div('purchase_no', css_class='col-md-6'),
                 css_class='row')
-
         )
 
 
