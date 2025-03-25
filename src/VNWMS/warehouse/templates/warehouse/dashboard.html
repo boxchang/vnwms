@@ -3,7 +3,9 @@
 {% load static %}
 {% load i18n %}
 {% block title %} {% trans "Dashboard" %} {% endblock %}
-{% block css %}{% endblock %}
+{% block css %}
+    {{ block.super }}
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
