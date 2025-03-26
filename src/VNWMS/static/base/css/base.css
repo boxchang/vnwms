@@ -217,11 +217,6 @@ body {
     margin-left: 200px;
 }
 
-h3:lang(en),
-h3:lang(zh-hant) {
-    font-weight: 600;
-}
-
 h2:lang(vi),
 h3:lang(vi) {
     font-family: "Times New Roman", "Be Vietnam Pro", "Merriweather", "Noto Serif", serif;
