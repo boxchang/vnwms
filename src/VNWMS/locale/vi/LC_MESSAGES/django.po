@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-26 11:18+0700\n"
-"PO-Revision-Date: 2025-03-26 11:53+0700\n"
+"POT-Creation-Date: 2025-03-26 16:14+0700\n"
+"PO-Revision-Date: 2025-03-26 16:46+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -795,7 +795,7 @@ msgstr ""
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:69
 #: .\warehouse\templates\warehouse\list_warehouse.html:63
 #: .\warehouse\templates\warehouse\list_warehouse.html:66
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:384
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:379
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:170
 msgid "Delete"
 msgstr "Xóa"
@@ -1582,7 +1582,7 @@ msgstr "Chọn nhà máy"
 msgid "Bin"
 msgstr "Vị trí"
 
-#: .\warehouse\forms.py:165 .\warehouse\forms.py:315 .\warehouse\forms.py:417
+#: .\warehouse\forms.py:165 .\warehouse\forms.py:315 .\warehouse\forms.py:416
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:42
 #: .\warehouse\templates\warehouse\bin\bin_transfer.html:57
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:48
@@ -1622,7 +1622,7 @@ msgstr "Size"
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:97
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:160
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:122
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:518
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:180
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:84
 #: .\warehouse\templates\warehouse\search_bin_history.html:157
@@ -1630,7 +1630,7 @@ msgstr "Size"
 msgid "Qty"
 msgstr "Số lượng"
 
-#: .\warehouse\forms.py:202 .\warehouse\forms.py:253 .\warehouse\forms.py:330
+#: .\warehouse\forms.py:202 .\warehouse\forms.py:253 .\warehouse\forms.py:329
 msgid "Location:"
 msgstr "Vị trí"
 
@@ -1708,7 +1708,7 @@ msgstr "Lot"
 msgid "Item Type"
 msgstr "Loại hàng"
 
-#: .\warehouse\forms.py:321 .\warehouse\forms.py:418
+#: .\warehouse\forms.py:321 .\warehouse\forms.py:417
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:92
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:155
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
@@ -1739,7 +1739,7 @@ msgstr "Đơn vị"
 msgid "Post Date"
 msgstr "Ngày nhận hàng"
 
-#: .\warehouse\forms.py:334
+#: .\warehouse\forms.py:333
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:165
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:119
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:190
@@ -1747,12 +1747,12 @@ msgstr "Ngày nhận hàng"
 msgid "Supplier"
 msgstr "Nhà cung cấp"
 
-#: .\warehouse\forms.py:335
+#: .\warehouse\forms.py:334
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:195
 msgid "SAP Material Number"
 msgstr "Chứng từ ghi sổ"
 
-#: .\warehouse\forms.py:336
+#: .\warehouse\forms.py:335
 #: .\warehouse\templates\warehouse\create_warehouse.html:30
 #: .\warehouse\templates\warehouse\edit_warehouse.html:32
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:108
@@ -1762,30 +1762,30 @@ msgstr "Chứng từ ghi sổ"
 msgid "Comment"
 msgstr "Ghi chú"
 
-#: .\warehouse\forms.py:400
+#: .\warehouse\forms.py:399
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:38
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:37
 #: .\warehouse\templates\warehouse\list_warehouse.html:39
 msgid "Add"
 msgstr "Thêm"
 
-#: .\warehouse\forms.py:437
+#: .\warehouse\forms.py:436
 msgid "Choose Excel File"
 msgstr "Chọn file Excel"
 
-#: .\warehouse\forms.py:468 .\warehouse\forms.py:492
+#: .\warehouse\forms.py:467 .\warehouse\forms.py:491
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:32
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:31
 msgid "Choose Warehouse"
 msgstr "Chọn kho"
 
-#: .\warehouse\forms.py:470 .\warehouse\forms.py:494
+#: .\warehouse\forms.py:469 .\warehouse\forms.py:493
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:105
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:72
 msgid "Choose Area"
 msgstr "Chọn khu vực"
 
-#: .\warehouse\forms.py:471 .\warehouse\forms.py:495
+#: .\warehouse\forms.py:470 .\warehouse\forms.py:494
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:106
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:120
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:73
@@ -1918,64 +1918,64 @@ msgstr ""
 msgid "Save Changes"
 msgstr "Lưu thay đổi"
 
-#: .\warehouse\templates\warehouse\bases\base.html:42
+#: .\warehouse\templates\warehouse\bases\base.html:44
 msgid "Transaction Function"
 msgstr "Giao dịch"
 
-#: .\warehouse\templates\warehouse\bases\base.html:47
+#: .\warehouse\templates\warehouse\bases\base.html:49
 msgid "Packing Material Stock In"
 msgstr "Nhập hàng"
 
-#: .\warehouse\templates\warehouse\bases\base.html:52
+#: .\warehouse\templates\warehouse\bases\base.html:54
 msgid "Packing Material Stock Out"
 msgstr "Xuất hàng"
 
-#: .\warehouse\templates\warehouse\bases\base.html:59
+#: .\warehouse\templates\warehouse\bases\base.html:61
 #: .\warehouse\templates\warehouse\transfer_and_adjust.html:5
 #: .\warehouse\templates\warehouse\transfer_and_adjust.html:9
 msgid "Quantity Transfer & Adjust Form"
 msgstr "Chuyển hàng & Điều chỉnh"
 
-#: .\warehouse\templates\warehouse\bases\base.html:62
+#: .\warehouse\templates\warehouse\bases\base.html:64
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:4
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:25
 msgid "Inventory Deletion"
 msgstr "Xóa dữ liệu kho"
 
-#: .\warehouse\templates\warehouse\bases\base.html:70
+#: .\warehouse\templates\warehouse\bases\base.html:72
 msgid "Search Function"
 msgstr "Tra cứu"
 
-#: .\warehouse\templates\warehouse\bases\base.html:75
+#: .\warehouse\templates\warehouse\bases\base.html:77
 msgid "Inventory Search"
 msgstr "Hàng kiểm kê"
 
-#: .\warehouse\templates\warehouse\bases\base.html:80
+#: .\warehouse\templates\warehouse\bases\base.html:82
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:5
 msgid "Transaction History"
 msgstr "Lịch sử giao dịch"
 
-#: .\warehouse\templates\warehouse\bases\base.html:85
+#: .\warehouse\templates\warehouse\bases\base.html:87
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:4
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:24
 msgid "Inventory Sheet"
 msgstr "Bảng kiểm kê"
 
-#: .\warehouse\templates\warehouse\bases\base.html:93
+#: .\warehouse\templates\warehouse\bases\base.html:95
 msgid "Basic Data"
 msgstr "Cơ sở dữ liệu"
 
-#: .\warehouse\templates\warehouse\bases\base.html:98
+#: .\warehouse\templates\warehouse\bases\base.html:100
 msgid "Storage Data Editor"
 msgstr "Biên tập dữ liệu kho"
 
-#: .\warehouse\templates\warehouse\bases\base.html:104
-msgid "Bulk Import - WAB"
-msgstr "Nhập hàng loạt - WAB"
+#: .\warehouse\templates\warehouse\bases\base.html:106
+msgid "Warehouse - Bulk Import"
+msgstr "Kho - Tự động"
 
-#: .\warehouse\templates\warehouse\bases\base.html:109
-msgid "Bulk Import - Open Data"
-msgstr "Nhập hàng loạt - Dữ liệu mở"
+#: .\warehouse\templates\warehouse\bases\base.html:111
+msgid "Open Data &nbsp;- Bulk Import"
+msgstr "Mở - Tự động"
 
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:5
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:27
@@ -2053,8 +2053,8 @@ msgstr "Khu vực"
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:96
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:42
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:159
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:410
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:512
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:405
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:181
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:33
 #: .\warehouse\templates\warehouse\search_bin_history.html:150
@@ -2073,7 +2073,7 @@ msgstr "Tìm kiếm"
 
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:88
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:151
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:334
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:329
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:149
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:73
 #: .\warehouse\templates\warehouse\search_bin_history.html:192
@@ -2100,8 +2100,10 @@ msgid "Open Data Importing"
 msgstr "Nhập dữ liệu mở"
 
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:126
-msgid "Upload Open Data Excel File"
-msgstr "Cập nhật dữ liệu mở"
+#, fuzzy
+#| msgid "Bulk Import - Open Data"
+msgid "Excel Import Tool (Open Data)"
+msgstr "Nhập hàng loạt - Dữ liệu mở"
 
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:138
 #: .\warehouse\templates\warehouse\upload.html:91
@@ -2202,40 +2204,40 @@ msgstr "(Chứng từ mua hàng) không được để trống !"
 msgid "are required"
 msgstr "không được để trống!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:351
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:346
 msgid "Copy"
 msgstr "Sao chép"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:370
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:365
 msgid "Copy and insert below this row Success!"
 msgstr "Sao chép và chèn bên dưới hàng này Thành công!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:498
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:236
 msgid "No data in the table! Please enter at least one row."
 msgstr "Không có dữ liệu trong bảng! Vui lòng nhập ít nhất một hàng."
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:512
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:518
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
 msgid "in"
 msgstr "ở"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:512
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:518
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
 msgid "row"
 msgstr "hàng"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:512
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:518
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
 msgid "cannot be empty"
 msgstr "không thể để trống"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:542
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:537
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:258
 msgid "Form submitted successfully!"
 msgstr "Đã gửi biểu mẫu thành công!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:546
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:541
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:262
 msgid "Form submission failed!"
 msgstr "Không thể gửi biểu mẫu!"
@@ -2311,19 +2313,28 @@ msgid "Adjust"
 msgstr "Điều chỉnh"
 
 #: .\warehouse\templates\warehouse\upload.html:5
-#: .\warehouse\templates\warehouse\upload.html:78
 msgid "Upload Location Excel File"
 msgstr "Cập nhật vị trí"
 
+#: .\warehouse\templates\warehouse\upload.html:78
+msgid "Excel Import Tool (Warehouse, Area, Bin)"
+msgstr "Nhập hàng loạt (Kho, Khu, Kệ)"
+
 #: .\warehouse\templates\warehouse\upload.html:98
 msgid "Download Template"
-msgstr "Tải bản mẫu"
+msgstr "Tải xuống bản mẫu"
 
 #: .\warehouse\templates\warehouse\warehouse_map.html:7
 #, fuzzy
 #| msgid "Warehouse Name"
 msgid "Packing Warehouse Map"
 msgstr "Tên Kho"
+
+#~ msgid "Bulk Import - WAB"
+#~ msgstr "Nhập hàng loạt - WAB"
+
+#~ msgid "Upload Open Data Excel File"
+#~ msgstr "Cập nhật dữ liệu mở"
 
 #~ msgid "Warehouse Data Editor"
 #~ msgstr "Chỉnh sửa dữ liệu kho"

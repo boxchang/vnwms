@@ -274,14 +274,9 @@
                     alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %}) {% trans "are required" %}");
                     return false;
                 } else {
-                    $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
-                    $("#id_purchase_qty").val(0);
-                    $("#id_order_qty").val(0);
-                    $("#id_purchase_qty").val(0);
-                    $("#id_item_type").val(0);
-                    $("#id_purchase_unit").val(0);
-                    $("#id_size").val(0);
-
+                    $("#myForm input, #id_item_type, #id_desc, #id_purchase_unit").not("#id_post_date").val("");
+                    $("#id_order_bin").val(null).trigger("change");
+                    $("#id_purchase_qty, #id_order_qty, #id_size").val(0);
                 }
 
                 const newItem = {

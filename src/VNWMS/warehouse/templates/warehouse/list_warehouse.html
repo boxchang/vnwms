@@ -96,9 +96,13 @@
                 <div class="modal-footer">
                     <form method="post" id="deleteForm">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">{% trans "Yes, Delete" %}</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-check"></i>&nbsp;{% trans "Yes, Delete" %}
+                        </button>
                     </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i>&nbsp;{% trans "Cancel" %}
+                    </button>
                 </div>
             </div>
         </div>

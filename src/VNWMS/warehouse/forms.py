@@ -302,7 +302,7 @@ class QuantityAdjustForm(forms.Form):
 
 class StockInPForm(forms.Form):
     SIZE_CHOICES = [
-        ('', '---------'),
+        (0, '---------'),
         ('XXS', 'XXS'),
         ('XS', 'XS'),
         ('S', 'S'),
@@ -324,7 +324,6 @@ class StockInPForm(forms.Form):
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
     order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
-    # order_bin = forms.CharField(max_length=20, label=_("Location"), required=False)
     order_bin = forms.ModelChoiceField(
         queryset=Bin.objects.all().order_by('bin_id'),
         label=_("Location:"),
