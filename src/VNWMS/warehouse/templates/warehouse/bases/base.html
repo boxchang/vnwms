@@ -74,7 +74,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a class="dropdown-item" href="{% url 'bin_search' %}">
-                                <i class="fas fa-search"></i> {% trans "Inventory Search" %}
+                                <i class="fas fa-search"></i> {% trans "Inventory Log" %}
                             </a>
                         </li>
                         <li>
@@ -97,18 +97,18 @@
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li>
                             <a class="dropdown-item" href="{% url 'warehouse_list' %}">
-                                <i class="fas fa-warehouse"></i> {% trans "Storage Data Editor" %}
+                                <i class="fas fa-warehouse"></i> {% trans "Stock Location Manager" %}
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item" href="{% url 'upload_excel' %}">
-                                <i class="fas fa-cloud-upload-alt"></i> {% trans "Warehouse - Bulk Import" %}
+                                <i class="fas fa-cloud-upload-alt"></i> {% trans "Shelf Locations Import" %}
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="{% url 'open_data_import' %}">
-                                <i class="fas fa-cloud-upload-alt"></i> {% trans "Open Data &nbsp;- Bulk Import" %}
+                                <i class="fas fa-cloud-upload-alt"></i> {% trans "Bulk Stock Import" %}
                             </a>
                         </li>
                     </ul>

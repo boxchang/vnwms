@@ -240,6 +240,14 @@
                 });
             };
 
+            $("#id_order_qty, #id_purchase_qty").on("input", function () {
+                let value = $(this).val();
+
+                value = value.replace(/[^0-9]/g, '');
+
+                $(this).val(value);
+            });
+
 
             {# Create new fields #}
             $("#create").on("click", function(event) {
@@ -533,7 +541,11 @@
                     },
                     error: function(xhr) {
                         const errorMsg = JSON.parse(xhr.responseText);
-                        alert(errorMsg.error.message);
+                        if (errorMsg.status === "error") {
+                            alert(errorMsg.message); // Hiển thị thông báo lỗi từ server
+                        } else {
+                            alert("An unknown error occurred.");
+                        }
                     }
                 });
 

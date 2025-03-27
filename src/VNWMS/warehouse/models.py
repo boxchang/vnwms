@@ -150,6 +150,7 @@ class MovementType(models.Model):
     def __str__(self):
         return self.mvt_code
 
+
 class Bin_Value_History(models.Model):
     batch_no = models.CharField(max_length=50, null=False, blank=False)
     bin = models.ForeignKey('Bin', related_name='value_hist_bin', on_delete=models.CASCADE)

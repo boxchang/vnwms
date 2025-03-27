@@ -319,11 +319,24 @@ class StockInPForm(forms.Form):
     lot_no = forms.CharField(max_length=20, label=_("Lot Number"), required=False, )  # LOTNO
     item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=True)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
-    purchase_qty = forms.CharField(max_length=20, label=_("Purchase Quantity"), required=False, initial=0)  # MENGE_PO 採購數量
+    purchase_qty = forms.CharField(
+        max_length=20,
+        label=_("Purchase Quantity"),
+        required=False,
+        initial=0,
+        widget=forms.TextInput(attrs={'class': 'text-right'})
+
+    )  # MENGE_PO 採購數量
     size = forms.ChoiceField(choices=SIZE_CHOICES, label=_("Size"), required=True)
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
-    order_qty = forms.CharField(max_length=20, label=_("Quantity"), required=False, initial=0)  # MENGE
+    order_qty = forms.CharField(
+        max_length=20,
+        label=_("Quantity"),
+        required=False,
+        initial=0,
+        widget=forms.TextInput(attrs={'class': 'text-right'})
+    )  # MENGE
     order_bin = forms.ModelChoiceField(
         queryset=Bin.objects.all().order_by('bin_id'),
         label=_("Location:"),

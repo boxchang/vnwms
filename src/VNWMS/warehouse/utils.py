@@ -86,8 +86,8 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
 
     sql = f"""
             SELECT b.id
-                  , w.wh_name
-                  , w.wh_plant
+                  ,w.wh_name
+                  ,w.wh_plant
                   ,b.product_order
                   ,b.size
                   ,b.qty

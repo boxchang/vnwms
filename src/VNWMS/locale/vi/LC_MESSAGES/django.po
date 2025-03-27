@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-27 09:40+0700\n"
-"PO-Revision-Date: 2025-03-27 10:03+0700\n"
+"POT-Creation-Date: 2025-03-27 14:00+0700\n"
+"PO-Revision-Date: 2025-03-27 14:01+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -795,7 +795,7 @@ msgstr ""
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:69
 #: .\warehouse\templates\warehouse\list_warehouse.html:63
 #: .\warehouse\templates\warehouse\list_warehouse.html:66
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:375
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:374
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:170
 msgid "Delete"
 msgstr "Xóa"
@@ -1622,7 +1622,7 @@ msgstr "Size"
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:97
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:160
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:118
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:180
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:84
 #: .\warehouse\templates\warehouse\search_bin_history.html:157
@@ -1947,8 +1947,8 @@ msgid "Search Function"
 msgstr "Tra cứu"
 
 #: .\warehouse\templates\warehouse\bases\base.html:77
-msgid "Inventory Search"
-msgstr "Hàng kiểm kê"
+msgid "Inventory Log"
+msgstr "Nhật ký tồn kho"
 
 #: .\warehouse\templates\warehouse\bases\base.html:82
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:5
@@ -1966,16 +1966,16 @@ msgid "Basic Data"
 msgstr "Cơ sở dữ liệu"
 
 #: .\warehouse\templates\warehouse\bases\base.html:100
-msgid "Storage Data Editor"
-msgstr "Biên tập dữ liệu kho"
+msgid "Stock Location Manager"
+msgstr "Quản lý kệ kho"
 
 #: .\warehouse\templates\warehouse\bases\base.html:106
-msgid "Warehouse - Bulk Import"
-msgstr "Kho - Tự động"
+msgid "Shelf Locations Import"
+msgstr "Nhập vị trí kệ kho"
 
 #: .\warehouse\templates\warehouse\bases\base.html:111
-msgid "Open Data &nbsp;- Bulk Import"
-msgstr "Mở - Tự động"
+msgid "Bulk Stock Import"
+msgstr "Nhập kho hàng loạt"
 
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:5
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:27
@@ -2053,8 +2053,8 @@ msgstr "Khu vực"
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:96
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:42
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:159
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:401
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:400
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:501
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:181
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:33
 #: .\warehouse\templates\warehouse\search_bin_history.html:150
@@ -2073,7 +2073,7 @@ msgstr "Tìm kiếm"
 
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:88
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:151
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:325
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:324
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:149
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:73
 #: .\warehouse\templates\warehouse\search_bin_history.html:192
@@ -2204,35 +2204,35 @@ msgstr "(Chứng từ mua hàng) không được để trống !"
 msgid "are required"
 msgstr "không được để trống!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:342
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:341
 msgid "Copy"
 msgstr "Sao chép"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:361
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:360
 msgid "Copy and insert below this row Success!"
 msgstr "Sao chép và chèn bên dưới hàng này Thành công!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:494
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:493
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:236
 msgid "No data in the table! Please enter at least one row."
 msgstr "Không có dữ liệu trong bảng! Vui lòng nhập ít nhất một hàng."
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:501
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
 msgid "in"
 msgstr "ở"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:501
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
 msgid "row"
 msgstr "hàng"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:501
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
 msgid "cannot be empty"
 msgstr "không thể để trống"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:533
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:531
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:258
 msgid "Form submitted successfully!"
 msgstr "Đã gửi biểu mẫu thành công!"
@@ -2337,6 +2337,18 @@ msgstr "(Số lượng) phải là số dương!"
 msgid "Invalid request method"
 msgstr "Yêu cầu không hợp lệ!"
 
+#~ msgid "Open Data &nbsp;- Bulk Import"
+#~ msgstr "Mở - Tự động"
+
+#~ msgid "Warehouse - Bulk Import"
+#~ msgstr "Kho - Tự động"
+
+#~ msgid "Storage Data Editor"
+#~ msgstr "Biên tập dữ liệu kho"
+
+#~ msgid "Inventory Search"
+#~ msgstr "Hàng kiểm kê"
+
 #~ msgid "Bulk Import - WAB"
 #~ msgstr "Nhập hàng loạt - WAB"
 
@@ -2380,9 +2392,6 @@ msgstr "Yêu cầu không hợp lệ!"
 #~ msgid "Customer No"
 #~ msgstr "Tên khách hàng"
 
-#~ msgid "Stock In No"
-#~ msgstr "Mã nhập kho"
-
 #~ msgid "Receive Type"
 #~ msgstr "Phương thức đóng gói"
 
@@ -2391,9 +2400,6 @@ msgstr "Yêu cầu không hợp lệ!"
 
 #~ msgid "Enter Product Order"
 #~ msgstr "Mã Đơn hàng"
-
-#~ msgid "Enter Location"
-#~ msgstr "Mã Bin"
 
 #~ msgid "Warehouse倉管系統"
 #~ msgstr "Kho"
@@ -2407,9 +2413,6 @@ msgstr "Yêu cầu không hợp lệ!"
 #~| msgid "Location"
 #~ msgid "Action"
 #~ msgstr "Vị trí"
-
-#~ msgid "Inventory Form"
-#~ msgstr "Biểu mẫu kiểm kê"
 
 #~ msgid "Key Parameter"
 #~ msgstr "Thông số chính"
