@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-26 16:14+0700\n"
-"PO-Revision-Date: 2025-03-26 16:46+0700\n"
+"POT-Creation-Date: 2025-03-27 09:40+0700\n"
+"PO-Revision-Date: 2025-03-27 10:03+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -795,7 +795,7 @@ msgstr ""
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:69
 #: .\warehouse\templates\warehouse\list_warehouse.html:63
 #: .\warehouse\templates\warehouse\list_warehouse.html:66
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:379
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:375
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:170
 msgid "Delete"
 msgstr "Xóa"
@@ -1589,8 +1589,8 @@ msgstr "Vị trí"
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:91
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:46
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:154
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:109
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:105
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:183
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:29
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:74
@@ -1606,8 +1606,8 @@ msgstr "Đơn hàng"
 #: .\warehouse\templates\warehouse\bin\bin_transfer.html:61
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:95
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:158
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:113
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:109
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:187
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:37
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:78
@@ -1621,8 +1621,8 @@ msgstr "Size"
 #: .\warehouse\forms.py:167
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:97
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:160
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:122
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:118
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:180
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:84
 #: .\warehouse\templates\warehouse\search_bin_history.html:157
@@ -1668,7 +1668,7 @@ msgstr "Số lượng mới"
 
 #: .\warehouse\forms.py:316
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:166
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:120
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:116
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:189
 #: .\warehouse\templates\warehouse\search_bin_history.html:151
 msgid "Customer"
@@ -1679,8 +1679,8 @@ msgstr "Tên khách hàng"
 #: .\warehouse\templates\warehouse\bin\bin_transfer.html:59
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:93
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:156
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:111
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:107
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:185
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:76
 #: .\warehouse\templates\warehouse\search_bin_history.html:153
@@ -1689,7 +1689,7 @@ msgid "Version No"
 msgstr "Bản In"
 
 #: .\warehouse\forms.py:318
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 #: .\warehouse\templates\warehouse\search_bin_history.html:154
 msgid "Version Sequence"
 msgstr "Phiên bản"
@@ -1701,8 +1701,8 @@ msgstr "Lot"
 
 #: .\warehouse\forms.py:320
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:163
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:117
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:113
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:193
 #: .\warehouse\templates\warehouse\search_bin_history.html:162
 msgid "Item Type"
@@ -1711,7 +1711,7 @@ msgstr "Loại hàng"
 #: .\warehouse\forms.py:321 .\warehouse\forms.py:417
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:92
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:155
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:184
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:75
 #: .\warehouse\templates\warehouse\search_bin_history.html:163
@@ -1733,7 +1733,7 @@ msgstr "Đơn vị"
 
 #: .\warehouse\forms.py:325
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:164
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:118
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:114
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:194
 #: .\warehouse\templates\warehouse\search_bin_history.html:161
 msgid "Post Date"
@@ -1741,7 +1741,7 @@ msgstr "Ngày nhận hàng"
 
 #: .\warehouse\forms.py:333
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:165
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:119
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:115
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:190
 #: .\warehouse\templates\warehouse\search_bin_history.html:160
 msgid "Supplier"
@@ -1755,7 +1755,7 @@ msgstr "Chứng từ ghi sổ"
 #: .\warehouse\forms.py:335
 #: .\warehouse\templates\warehouse\create_warehouse.html:30
 #: .\warehouse\templates\warehouse\edit_warehouse.html:32
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:108
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:104
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:182
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:41
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:79
@@ -1853,15 +1853,15 @@ msgstr "Cảnh báo"
 msgid "Are you sure you want to delete the area"
 msgstr "Bạn chắc chắn muốn xoá kho"
 
-#: .\warehouse\templates\warehouse\area\area_by_warehouse.html:110
-#: .\warehouse\templates\warehouse\bin\bin_by_area.html:110
-#: .\warehouse\templates\warehouse\list_warehouse.html:99
+#: .\warehouse\templates\warehouse\area\area_by_warehouse.html:111
+#: .\warehouse\templates\warehouse\bin\bin_by_area.html:111
+#: .\warehouse\templates\warehouse\list_warehouse.html:100
 msgid "Yes, Delete"
 msgstr "Xác nhận"
 
-#: .\warehouse\templates\warehouse\area\area_by_warehouse.html:112
-#: .\warehouse\templates\warehouse\bin\bin_by_area.html:112
-#: .\warehouse\templates\warehouse\list_warehouse.html:101
+#: .\warehouse\templates\warehouse\area\area_by_warehouse.html:115
+#: .\warehouse\templates\warehouse\bin\bin_by_area.html:115
+#: .\warehouse\templates\warehouse\list_warehouse.html:104
 #: .\warehouse\templates\warehouse\test.html:112
 msgid "Cancel"
 msgstr "Huỷ bỏ"
@@ -1994,7 +1994,7 @@ msgstr "Kho"
 
 #: .\warehouse\templates\warehouse\bin\bin_adjust.html:43
 #: .\warehouse\templates\warehouse\bin\bin_transfer.html:58
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:110
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:106
 #: .\warehouse\templates\warehouse\transfer_and_adjust.html:98
 msgid "Purchase No"
 msgstr "Chứng từ mua hàng"
@@ -2003,7 +2003,7 @@ msgstr "Chứng từ mua hàng"
 #: .\warehouse\templates\warehouse\bin\bin_transfer.html:60
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:94
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:157
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:112
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:108
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:186
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:77
 #: .\warehouse\templates\warehouse\transfer_and_adjust.html:100
@@ -2053,8 +2053,8 @@ msgstr "Khu vực"
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:96
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:42
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:159
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:405
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:401
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:181
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:33
 #: .\warehouse\templates\warehouse\search_bin_history.html:150
@@ -2073,7 +2073,7 @@ msgstr "Tìm kiếm"
 
 #: .\warehouse\templates\warehouse\bin\delete_bin_value.html:88
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:151
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:329
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:325
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:149
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:73
 #: .\warehouse\templates\warehouse\search_bin_history.html:192
@@ -2111,13 +2111,13 @@ msgid "Upload"
 msgstr "Tải lên"
 
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:167
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:121
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:117
 #: .\warehouse\templates\warehouse\search_bin_history.html:164
 msgid "Mtr No"
 msgstr "Chứng từ ghi sổ"
 
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:168
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:114
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:110
 #: .\warehouse\templates\warehouse\search_bin_history.html:155
 msgid "Lot No"
 msgstr "Lot"
@@ -2181,66 +2181,61 @@ msgstr "Đóng"
 msgid "Post"
 msgstr "Gửi"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:115
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:111
 #: .\warehouse\templates\warehouse\search_bin_history.html:158
 msgid "Purchase Qty"
 msgstr "Số lượng đặt hàng"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:116
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:112
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:188
 #: .\warehouse\templates\warehouse\search_bin_history.html:159
 msgid "Purchase Unit"
 msgstr "Đơn vị"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:173
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:169
 msgid "Product Order cannot be null!"
 msgstr "(Đơn hàng) không được để trống !"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:189
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:185
 msgid "Purchase Order cannot be null!"
 msgstr "(Chứng từ mua hàng) không được để trống !"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:274
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:270
 msgid "are required"
 msgstr "không được để trống!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:346
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:342
 msgid "Copy"
 msgstr "Sao chép"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:365
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:361
 msgid "Copy and insert below this row Success!"
 msgstr "Sao chép và chèn bên dưới hàng này Thành công!"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:498
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:494
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:236
 msgid "No data in the table! Please enter at least one row."
 msgstr "Không có dữ liệu trong bảng! Vui lòng nhập ít nhất một hàng."
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
 msgid "in"
 msgstr "ở"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
 msgid "row"
 msgstr "hàng"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:507
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:513
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:503
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:509
 msgid "cannot be empty"
 msgstr "không thể để trống"
 
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:537
+#: .\warehouse\templates\warehouse\packing_material_stock_in.html:533
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:258
 msgid "Form submitted successfully!"
 msgstr "Đã gửi biểu mẫu thành công!"
-
-#: .\warehouse\templates\warehouse\packing_material_stock_in.html:541
-#: .\warehouse\templates\warehouse\packing_material_stock_out.html:262
-msgid "Form submission failed!"
-msgstr "Không thể gửi biểu mẫu!"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:5
 msgid "Stock Out"
@@ -2253,6 +2248,10 @@ msgstr "Biểu mẫu xuất kho"
 #: .\warehouse\templates\warehouse\packing_material_stock_out.html:179
 msgid "ID"
 msgstr ""
+
+#: .\warehouse\templates\warehouse\packing_material_stock_out.html:262
+msgid "Form submission failed!"
+msgstr "Không thể gửi biểu mẫu!"
 
 #: .\warehouse\templates\warehouse\product_order_bin_search.html:24
 msgid "Transaction History Search"
@@ -2329,6 +2328,14 @@ msgstr "Tải xuống bản mẫu"
 #| msgid "Warehouse Name"
 msgid "Packing Warehouse Map"
 msgstr "Tên Kho"
+
+#: .\warehouse\views.py:684
+msgid "The quantity must be a positive number!"
+msgstr "(Số lượng) phải là số dương!"
+
+#: .\warehouse\views.py:738
+msgid "Invalid request method"
+msgstr "Yêu cầu không hợp lệ!"
 
 #~ msgid "Bulk Import - WAB"
 #~ msgstr "Nhập hàng loạt - WAB"

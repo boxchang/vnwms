@@ -675,6 +675,19 @@ def packing_material_stock_in_post(request):
             for item in data:
                 bin = Bin.objects.get(bin_id=item['order_bin'])
 
+                if 'order_qty' in item and int(item['order_qty']) <= 0:
+                    return JsonResponse(
+                        {
+                            "status": "fail",
+                            "error": {
+                                "field": "order_qty",
+                                "message": _("The quantity must be a positive number!")
+                            }
+
+                        },
+                        status=400
+                    )
+
                 if 'item_type' in item and item['item_type']:
                     try:
                         item_type = ItemType.objects.get(
@@ -707,11 +720,11 @@ def packing_material_stock_in_post(request):
                         )
                         stockin_form.save()
 
-                        result = Do_Transaction(request, form_no, item['product_order'],
-                                                item['purchase_no'], item['version_no'], item['version_seq'],
-                                                item['size'], mvt,
-                                                item['order_bin'], item['order_qty'], item['purchase_unit'], item['desc'],
-                                                stockin_form=form_no)
+                        Do_Transaction(request,
+                                       form_no,
+                                       item['product_order'], item['purchase_no'], item['version_no'],
+                                       item['version_seq'], item['size'], mvt, item['order_bin'], item['order_qty'],
+                                       item['purchase_unit'], item['desc'], stockin_form=form_no)
 
                     except Exception as e:
                         raise ValueError(f"{e}")
@@ -722,7 +735,7 @@ def packing_material_stock_in_post(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+    return JsonResponse({'status': 'error', 'message': _('Invalid request method')}, status=405)
 
 
 # @transaction.atomic

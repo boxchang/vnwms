@@ -87,13 +87,9 @@
 
             }
 
-            $('.select2-bin').select2({
-                tags: true,  // Cho phép nhập giá trị mới
-                allowClear: false,
-                createTag: function(params) {
-                    return null;  // Không cho phép nhập giá trị mới
-                }
-             });
+            $(".select2-bin").select2({
+                width: "100%"
+            });
 
             $('.select2-selection.select2-selection--single').css({
                 'height': '38px',
@@ -104,7 +100,7 @@
                 'margin-left': '5px'
             });
 
-            var translations = {
+            const translations = {
                 comment: "{% trans 'Comment' %}",
                 productOrder: "{% trans 'Product Order' %}",
                 purchaseNo: "{% trans 'Purchase No' %}",
@@ -199,7 +195,7 @@
 
             get_order_info = function() {
 
-                var product_order = $("#id_product_order").val();
+                let product_order = $("#id_product_order").val();
 
                 $.ajax({
                     url: '{% url 'get_product_order_info' %}',
@@ -222,7 +218,7 @@
 
             get_no_info = function() {
 
-                var purchase_no = $("#id_purchase_no").val();
+                let purchase_no = $("#id_purchase_no").val();
 
                 $.ajax({
                     url: '{% url 'get_purchase_no_info' %}',
@@ -299,7 +295,7 @@
                 };
 
                 // Lấy dữ liệu hiện tại của jsGrid
-                var gridData = $("#jsGrid").jsGrid("option", "data");
+                let gridData = $("#jsGrid").jsGrid("option", "data");
 
                 // Thêm mục mới vào dữ liệu grid
                 gridData.push(newItem);
@@ -315,7 +311,6 @@
 
             {# Main JsGrid #}
             data: []; // 初始為空，將透過 AJAX 加載資料
-            var currentLang = "{{ request.LANGUAGE_CODE }}";
 
             // 初始化 jsGrid
             $("#jsGrid").jsGrid({
@@ -374,7 +369,7 @@
                         width: 80,
                         itemTemplate: function(_, item) {
                             // 建立刪除按鈕
-                            var deleteButton = $("<button>")
+                            const deleteButton = $("<button>")
                                 .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
                                 .text("{% trans "Delete" %}")
                                 .on("click", function(e) {
@@ -388,13 +383,13 @@
                     { name: "id", type: "number", width: 50, title: "ID", readOnly: true, visible: false },
                     {
                         name: "order_qty",
-                        type: "text",
+                        type: "number",
                         width: 125,
                         title: translations.qty,
                         validate: {
-                            message: "Số lượng không thể là 0",
+                            message: "Số lượng phải lớn hơn 0!",
                             validator: function(value) {
-                                return value !== "0" && value !== 0;
+                                return Number(value) > 0;
                             }
                         }
                     },
@@ -412,7 +407,7 @@
                                                 "padding-right": "1px"
                                            });
 
-                            var $button = $("<button>", {type: "button"})
+                            const $button = $("<button>", {type: "button"})
                                            .addClass("btn btn-primary")
                                            .css({
                                                width: "auto",
@@ -420,7 +415,7 @@
                                                marginLeft: "20px"
                                            });
 
-                            var $container = $("<div>").css({
+                            const $container = $("<div>").css({
                                                 "--bs-gutter-x": "0", "display": "flex", "flex-wrap": "wrap"
                                             })
                                            .append($("<div>")
@@ -467,15 +462,15 @@
             });
 
 
-            // Khi click vào một zone (div chứa bin_id)
             $(".zone").on("click", function(event) {
-                // Lấy giá trị của bin_id từ data-value của div
-                var bin_id = $(this).data("value");
+
+                let bin_id = $(this).data("value");
                 const updateInput = $("#zonePopup").data("updateInput"); // 取得回調函數
+
                 if (updateInput) {
                     updateInput(bin_id); // 更新輸入框的值
                 }
-                // Đóng popup
+
                 $("#zonePopup").fadeOut();
                 event.stopPropagation();
             });
@@ -492,24 +487,23 @@
             $('#postDataButton').click(function(event) {
                 event.preventDefault();
                 // 獲取 jsGrid 的所有數據
-                var gridData = $("#jsGrid").data("JSGrid").data;
+                let gridData = $("#jsGrid").data("JSGrid").data;
 
                 if (!gridData || gridData.length === 0) {
                     alert("{% trans "No data in the table! Please enter at least one row." %}");
                     event.stopPropagation();
-                    return; // Dừng xử lý nếu không có dữ liệu
+                    return;
                 }
 
                 // 檢查 order_qty 是否都有值
-                for (var i = 0; i < gridData.length; i++) {
+                for (let i = 0; i < gridData.length; i++) {
                     if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
-                        {#alert({% blocktrans %}"第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！"{% endblocktrans %});#}
                         alert("({% trans "Location" %}) {% trans "in" %} {% trans "row" %} " + (i + 1) + " {% trans "cannot be empty" %}!");
                         event.stopPropagation();
                         return; // 阻止繼續執行
                     }
 
-                    if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
+                    if (!gridData[i].order_qty || gridData[i].order_qty <= 0) {
                         alert("({% trans "Qty" %}) {% trans "in" %} {% trans "row" %} " + (i + 1) + " {% trans "cannot be empty" %}!");
                         event.stopPropagation();
                         return;
@@ -517,7 +511,7 @@
                 }
 
                 // 將數據轉換為 JSON 格式
-                var jsonData = JSON.stringify(gridData);
+                let jsonData = JSON.stringify(gridData);
 
                 // 使用 Ajax 發送數據到後端
                 $.ajax({
@@ -537,9 +531,9 @@
                         alert("{% trans "Form submitted successfully!" %}");
                         console.log(response);
                     },
-                    error: function(xhr, status, error) {
-                        alert("{% trans "Form submission failed!" %}");
-                        console.log(error);
+                    error: function(xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.error.message);
                     }
                 });
 
