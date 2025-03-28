@@ -7,12 +7,12 @@ from warehouse.views import index, packing_material_stock_in, packing_material_s
     transfer_and_adjust, bin_transfer, \
     bin_transfer_page, get_product_order_stout, product_order_bin_search, product_order_hist_data, \
     get_purchase_no_stout, \
-    bin_adjust_page, bin_adjust, upload_excel, open_data_import, inventory_sheet, warehouse_map, get_all_areas, \
+    bin_adjust_page, bin_adjust, open_data_import, inventory_sheet, warehouse_map, get_all_areas, \
     check_bin_exists, download_excel_template, result_search, warehouse_list, get_bin_data, get_bins, get_areas, \
     bin_search, bin_list, edit_bin, check_po_exists, bin_action, create_bin, area_list, area_delete, create_area, \
     edit_area, warehouse_delete, create_warehouse, edit_warehouse, show_warehouse, test, bin_by_area, bin_delete, \
     area_by_warehouse, delete_inventory, inventory_deletion, open_data_import_api, open_data_import_confirm_api, \
-    stockin_form
+    stockin_form, import_excel_data
 
 urlpatterns = [
     url(r'^test/$', test, name='test'),
@@ -59,7 +59,7 @@ urlpatterns = [
     url(r'^packing_material_stock_in_post/', packing_material_stock_in_post, name='packing_material_stock_in_post'),
     url(r'^packing_material_stock_out_post/', packing_material_stock_out_post, name='packing_material_stock_out_post'),
     url(r'^dashboard/', dashboard, name='warehouse_dashboard'),
-    url(r'^upload/$', upload_excel, name="upload_excel"),
+    url(r'^upload/$', import_excel_data, name="import_excel_data"),
 
     url(r'^product_order_search/$', product_order_search, name='product_order_search'),
     url(r'^product_order_hist_data/$', product_order_hist_data, name='product_order_hist_data'),

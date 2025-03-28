@@ -1094,185 +1094,9 @@ def product_order_hist_data(request):
     return JsonResponse(data, safe=False)
 
 
+# EXCEL_IMPORT
 def product_order_bin_search(request):
     return render(request, 'warehouse/product_order_bin_search.html')
-
-
-def upload_excel(request):
-    if request.method == "POST":
-        form = ExcelUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            excel_file = request.FILES["file"]
-            df_dict = pd.read_excel(excel_file, sheet_name=None)  # Đọc tất cả các sheet
-
-            for sheet_name, df in df_dict.items():
-                # Warehouse (Sheet Warehouse)
-                if sheet_name == "Warehouse":
-                    warehouse_codes = df["Warehouse Code"].unique()
-                    warehouse_dict = {w.wh_code: w for w in Warehouse.objects.filter(wh_code__in=warehouse_codes)}
-
-                    warehouses_to_update = []
-                    warehouses_to_create = []
-
-                    for _, row in df.iterrows():
-                        wh_code = row["Warehouse Code"]
-                        wh_name = to_string_or_none(row["Warehouse"])
-                        wh_plant = to_string_or_none(row["Plant"])
-                        wh_comment = to_string_or_none(row["Warehouse comment"])
-
-                        if wh_code in warehouse_dict:
-                            obj = warehouse_dict[wh_code]
-                            if obj.wh_name != wh_name or obj.wh_comment != wh_comment or obj.wh_plant != wh_plant:
-                                obj.wh_name = wh_name
-                                obj.wh_plant = wh_plant
-                                obj.wh_comment = wh_comment
-                                obj.update_at = timezone.now()
-                                obj.update_by = request.user
-                                warehouses_to_update.append(obj)
-                        else:
-                            warehouses_to_create.append(Warehouse(
-                                wh_code=wh_code,
-                                wh_name=wh_name,
-                                wh_plant=wh_plant,
-                                wh_comment=wh_comment,
-                                create_at=timezone.now(),
-                                create_by=request.user,
-                                update_at=timezone.now(),
-                                update_by=request.user
-                            ))
-
-                    # Dùng transaction để đảm bảo tính toàn vẹn
-                    with transaction.atomic():
-                        if warehouses_to_update:
-                            Warehouse.objects.bulk_update(warehouses_to_update,
-                                                          ["wh_name", "wh_comment", "wh_plant", "update_at", "update_by"])
-                        if warehouses_to_create:
-                            Warehouse.objects.bulk_create(warehouses_to_create)
-
-                # Area (Sheet Area)
-                if sheet_name == "Area":
-                    warehouse_codes = df["Warehouse Code"].unique()
-                    warehouses = {w.wh_code: w for w in Warehouse.objects.filter(wh_code__in=warehouse_codes)}
-
-                    area_ids = df["Area Id"].unique()
-                    existing_areas = {a.area_id: a for a in Area.objects.filter(area_id__in=area_ids)}
-
-                    areas_to_update = []
-                    areas_to_create = []
-
-                    for _, row in df.iterrows():
-                        area_id = row["Area Id"]
-                        area_name = to_string_or_none(row["Area Name"])
-                        warehouse_instance = warehouses.get(row["Warehouse Code"])  # Lấy warehouse từ cache
-                        pos_x = row["Position X"]
-                        pos_y = row["Position Y"]
-                        area_l = row["Area Length"]
-                        area_w = row["Area Width"]
-                        if area_id in existing_areas:
-                            obj = existing_areas[area_id]
-                            if obj.warehouse != warehouse_instance or obj.area_name != area_name or obj.area_l != area_l or \
-                                        obj.area_w != area_w or obj.pos_x != pos_x or obj.pos_y != pos_y:
-                                obj.warehouse = warehouse_instance
-                                obj.area_name = area_name
-                                obj.update_at = timezone.now()
-                                obj.update_by = request.user
-                                areas_to_update.append(obj)
-                        else:
-                            areas_to_create.append(Area(
-                                area_id=area_id,
-                                warehouse=warehouse_instance,
-                                area_name=area_name,
-                                area_w=area_w,
-                                area_l=area_w,
-                                pos_x=pos_x,
-                                pos_y=pos_y,
-                                create_at=timezone.now(),
-                                create_by=request.user,
-                                update_at=timezone.now(),
-                                update_by=request.user
-                            ))
-
-                    with transaction.atomic():
-                        if areas_to_update:
-                            Area.objects.bulk_update(areas_to_update,
-                                                     ["warehouse", "area_name", "area_w", "area_l", "pos_x",
-                                                      "pos_y", "update_at", "update_by"])
-                        if areas_to_create:
-                            Area.objects.bulk_create(areas_to_create)
-
-                # Bin (Sheet Location)
-                if sheet_name == "Location":
-                    with transaction.atomic():  # 🔹 Đảm bảo tính toàn vẹn dữ liệu
-
-                        # 🔹 Tạo mapping warehouse và area để giảm số lượng truy vấn
-                        warehouse_map = {
-                            w.wh_code: w for w in Warehouse.objects.filter(wh_code__in=df["Warehouse"])
-                        }
-
-                        area_map = {
-                            a.area_id: a for a in Area.objects.filter(area_id__in=df["Area"])
-                        }
-
-                        existing_bins = {
-                            b.bin_id: b for b in Bin.objects.filter(bin_id__in=df["Bin Id"])
-                        }
-
-                        bin_instances = []  # Lưu danh sách để bulk_create
-
-                        for _, row in df.iterrows():
-                            warehouse_instance = warehouse_map.get(row["Warehouse"])
-                            if not warehouse_instance:
-                                continue  # 🔹 Bỏ qua nếu Warehouse không tồn tại
-
-                            area_instance = area_map.get(row["Area"])
-                            if not area_instance:
-                                continue  # 🔹 Bỏ qua nếu Area không tồn tại
-
-                            bin_id = row["Bin Id"]
-                            bin_name = to_string_or_none(row["Bin Name"])
-                            bin_w = to_int_or_none(row["bin_w"])
-                            bin_l = to_int_or_none(row["bin_l"])
-                            pos_x = to_int_or_none(row["pos_x"])
-                            pos_y = to_int_or_none(row["pos_y"])
-
-                            if bin_id in existing_bins:
-                                obj = existing_bins[bin_id]
-                                if obj.bin_name != bin_name or obj.area != area_instance or obj.bin_l != bin_l or \
-                                        obj.bin_w != bin_w or obj.pos_x != pos_x or obj.pos_y != pos_y:
-                                    obj.bin_name = bin_name
-                                    obj.area = area_instance
-                                    obj.bin_l = bin_l
-                                    obj.bin_w = bin_w
-                                    obj.pos_x = pos_x
-                                    obj.pos_y = pos_y
-                                    obj.update_at = timezone.now()
-                                    obj.update_by = request.user
-                                    obj.save(update_fields=["bin_name", "area", "bin_l", "bin_w", "pos_x", "pos_y",
-                                                            "update_at", "update_by"])
-                            else:
-                                bin_instances.append(Bin(
-                                    bin_id=bin_id,
-                                    bin_name=bin_name,
-                                    area=area_instance,
-                                    bin_w=bin_w,
-                                    bin_l=bin_l,
-                                    pos_x=pos_x,
-                                    pos_y=pos_y,
-                                    create_at=timezone.now(),
-                                    create_by=request.user,
-                                    update_at=timezone.now(),
-                                    update_by=request.user,
-                                ))
-
-                        if bin_instances:
-                            Bin.objects.bulk_create(bin_instances)  # 🔹 Chèn nhiều dòng một lần
-
-            return render(request, "warehouse/upload.html", {"form": form, "message": "Upload successfully!"})
-
-    else:
-        form = ExcelUploadForm()
-
-    return render(request, "warehouse/upload.html", locals())
 
 
 def to_int_or_none(value):
@@ -1282,6 +1106,164 @@ def to_int_or_none(value):
 
 def to_string_or_none(value):
     return "" if pd.isna(value) else value
+
+
+def warehouse_sheet(df, request):
+    try:
+        for _, row in df.iterrows():
+            plant_code = to_string_or_none(row["Plant Code"])
+            wh_code = to_string_or_none(row["Warehouse Code"])
+            wh_name = to_string_or_none(row["Warehouse Name"])
+            wh_comment = to_string_or_none(row["Warehouse Comment"])
+
+            created = Warehouse.objects.get_or_create(
+                wh_plant=plant_code,
+                wh_code=wh_code,
+                defaults={
+                    'wh_name': wh_name,
+                    'wh_comment': wh_comment,
+                    'create_at': timezone.now(),
+                    'create_by_id': request.user.id,
+                    'update_at': timezone.now(),
+                    'update_by': request.user
+                }
+            )
+            if not created[1]:
+                Warehouse.objects.filter(wh_plant=plant_code, wh_code=wh_code).update(
+                    wh_name=wh_name,
+                    wh_comment=wh_comment,
+                    update_at=timezone.now(),
+                    update_by=request.user
+                )
+    except Exception as e:
+        print(e)
+
+
+def area_sheet(df, request):
+    try:
+        for _, row in df.iterrows():
+            warehouse = to_string_or_none(row["Warehouse Code"])
+            area_id = to_string_or_none(row["Area Id"])
+            area_name = to_string_or_none(row["Area Name"])
+            pos_x = to_string_or_none(row["Position X"])
+            pos_y = to_string_or_none(row["Position Y"])
+            layer = to_string_or_none(row["Layer"])
+            area_w = to_string_or_none(row["Area Width"])
+            area_l = to_string_or_none(row["Area Length"])
+
+            wh_object = Warehouse.objects.filter(wh_code=warehouse).first()
+
+            created = Area.objects.get_or_create(
+                warehouse=wh_object,
+                area_id=area_id,
+                defaults={
+                    'area_name': area_name,
+                    'pos_x': pos_x,
+                    'pos_y': pos_y,
+                    'layer': layer,
+                    'area_w': area_w,
+                    'area_l': area_l,
+                    'create_at': timezone.now(),
+                    'create_by_id': request.user.id,
+                    'update_at': timezone.now(),
+                    'update_by': request.user
+                }
+            )
+            if not created[1]:
+                Area.objects.filter(warehouse=wh_object, area_id=area_id).update(
+                    area_name=area_name,
+                    pos_x=pos_x,
+                    pos_y=pos_y,
+                    layer=layer,
+                    area_w=area_w,
+                    area_l=area_l,
+                    update_at=timezone.now(),
+                    update_by=request.user
+                )
+    except Exception as e:
+        print(e)
+
+
+def bin_sheet(df, request):
+    try:
+        for _, row in df.iterrows():
+            wh_code = to_string_or_none(row["Warehouse Code"])  # Sửa lại cột
+            area_id = to_string_or_none(row["Area Code"])  # Sửa lại cột
+            bin_id = to_string_or_none(row["Bin Id"])
+            bin_name = to_string_or_none(row["Bin Name"])
+
+            # 1. Tìm Warehouse theo mã wh_code
+            warehouse = Warehouse.objects.filter(wh_code=wh_code).first()
+            if warehouse is None:
+                print(f"LỖI: Không tìm thấy Warehouse {wh_code}")
+                continue  # Bỏ qua nếu không tìm thấy
+
+            # 2. Tìm hoặc tạo Area theo warehouse
+            area, _ = Area.objects.get_or_create(
+                area_id=area_id,
+                warehouse=warehouse,  # Gán Warehouse
+                defaults={
+                    'area_name': area_id,  # Không có "Area Name" nên gán tạm bằng ID
+                    'create_at': timezone.now(),
+                    'create_by_id': request.user.id,
+                    'update_at': timezone.now(),
+                    'update_by': request.user
+                }
+            )
+
+            # 3. Kiểm tra Bin đã tồn tại chưa
+            existing_bin = Bin.objects.filter(bin_id=bin_id, area=area).first()
+            if existing_bin:
+                print(f"Bin {bin_id} already exists, ignore!")
+                continue  # Không tạo lại nếu đã tồn tại
+
+            # 4. Tạo Bin
+            created = Bin.objects.create(
+                bin_id=existing_bin,
+                bin_name=bin_name,
+                area=area,  # Gán Area vào Bin
+                create_at=timezone.now(),
+                create_by=request.user,
+                update_at=timezone.now(),
+                update_by=request.user
+            )
+            if not created[1]:
+                Warehouse.objects.filter(bin_id=bin_id, area=area).update(
+                    bin_name=bin_name,
+                    update_at=timezone.now(),
+                    update_by=request.user
+                )
+    except Exception as e:
+        print(e)
+
+
+WAB_PROCESSORS = {
+    "Warehouse": warehouse_sheet,
+    "Area": area_sheet,
+    "Location": bin_sheet,
+
+}
+
+
+def import_excel_data(request):
+    if request.method == "POST":
+        form = ExcelUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES["file"]
+            df_dict = pd.read_excel(excel_file, sheet_name=None)  # Đọc tất cả các sheet
+
+            for sheet_name, df in df_dict.items():
+                process_function = WAB_PROCESSORS.get(sheet_name)
+                if process_function:
+                    process_function(df, request)  # Gọi function tương ứng
+
+            return render(request, "warehouse/upload.html",
+                          {"form": form, "message": "Upload successfully!"})
+
+    else:
+        form = ExcelUploadForm()
+
+    return render(request, "warehouse/upload.html", locals())
 
 
 def open_data_import(request):
@@ -1347,6 +1329,7 @@ def open_data_import_api(request):
             })
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
 
 def open_data_import_confirm_api(request):
     if request.method == "POST":
@@ -1421,6 +1404,7 @@ def open_data_import_confirm_api(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "請使用 POST 方法"}, status=400)
+
 
 def open_data_import1(request):
     form = ExcelUploadForm()
