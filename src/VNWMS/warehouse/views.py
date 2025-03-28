@@ -1195,7 +1195,7 @@ def bin_sheet(df, request):
             # 1. Tìm Warehouse theo mã wh_code
             warehouse = Warehouse.objects.filter(wh_code=wh_code).first()
             if warehouse is None:
-                print(f"LỖI: ERROR: Warehouse not found {wh_code}")
+                print(f"ERROR: Warehouse not found {wh_code}")
                 continue  # Bỏ qua nếu không tìm thấy
 
             # 2. Tìm hoặc tạo Area theo warehouse
@@ -1205,7 +1205,7 @@ def bin_sheet(df, request):
                 defaults={
                     'area_name': area_id,  # Không có "Area Name" nên gán tạm bằng ID
                     'create_at': timezone.now(),
-                    'create_by_id': request.user.id,
+                    'create_by': request.user,
                     'update_at': timezone.now(),
                     'update_by': request.user
                 }
