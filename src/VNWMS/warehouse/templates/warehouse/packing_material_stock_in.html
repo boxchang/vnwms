@@ -406,6 +406,7 @@
                         type: "text",
                         width: 170,
                         title: "{% trans "Location" %}",
+                        css: "text-center",
                         itemTemplate: function (value) {
                             return value; // Hiển thị nội dung
                         },
@@ -452,20 +453,20 @@
                         }
                     },
 
-                    { name: "desc", type: "text", width: 225, title: translations.comment,editing: true },
-                    { name: "customer_no", type: "text", width: 120, title: translations.customerNo, editing: true },
-                    { name: "supplier", type: "text", width: 130, title: translations.supplier, editing: true },
-                    { name: "product_order", type: "text", width: 135, title: translations.productOrder, validate: "required", editing: false },
-                    { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, validate: "required", editing: false },
-                    { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", editing: false },
-                    { name: "version_seq", type: "text", width: 120, title: translations.versionSeq, validate: "required", editing: false },
-                    { name: "size", type: "text", width: 50, title: translations.size, validate: "required", editing: false },
-                    { name: "lot_no", type: "text", width: 130, title: translations.lotNo, editing: false },
+                    { name: "desc", type: "text", width: 225, title: translations.comment,editing: true, css: "text-center" },
+                    { name: "customer_no", type: "text", width: 120, title: translations.customerNo, editing: true, css: "text-center" },
+                    { name: "supplier", type: "text", width: 130, title: translations.supplier, editing: true, css: "text-center" },
+                    { name: "product_order", type: "text", width: 135, title: translations.productOrder, validate: "required", editing: false, css: "text-center" },
+                    { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, validate: "required", editing: false, css: "text-center" },
+                    { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", editing: false, css: "text-center" },
+                    { name: "version_seq", type: "text", width: 120, title: translations.versionSeq, validate: "required", editing: false, css: "text-center" },
+                    { name: "size", type: "text", width: 50, title: translations.size, validate: "required", editing: false, css: "text-center" },
+                    { name: "lot_no", type: "text", width: 130, title: translations.lotNo, editing: false, css: "text-center" },
                     { name: "purchase_qty", type: "number", width: 120, title: translations.purchaseQty, editing: false },
-                    { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, editing: false },
-                    { name: "item_type", type: "text", width: 200, title: translations.itemType, editing: false },
-                    { name: "post_date", type: "date", width: 150, title: translations.postDate, editing: false },
-                    { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, editing: false }
+                    { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, editing: false, css: "text-center" },
+                    { name: "item_type", type: "text", width: 200, title: translations.itemType, editing: false, css: "text-center" },
+                    { name: "post_date", type: "date", width: 150, title: translations.postDate, editing: false, css: "text-center" },
+                    { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, editing: false, css: "text-center" }
                 ]
             });
 
