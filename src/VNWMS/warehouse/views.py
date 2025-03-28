@@ -1534,7 +1534,7 @@ def delete_inventory(request):
             if not ids_to_delete:
                 return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
 
-            return JsonResponse({"success": True, "deleted_count": deleted_count})
+            # return JsonResponse({"success": True, "deleted_count": deleted_count})
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
