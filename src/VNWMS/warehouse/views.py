@@ -1195,7 +1195,7 @@ def bin_sheet(df, request):
             # 1. Tìm Warehouse theo mã wh_code
             warehouse = Warehouse.objects.filter(wh_code=wh_code).first()
             if warehouse is None:
-                print(f"LỖI: Không tìm thấy Warehouse {wh_code}")
+                print(f"LỖI: ERROR: Warehouse not found {wh_code}")
                 continue  # Bỏ qua nếu không tìm thấy
 
             # 2. Tìm hoặc tạo Area theo warehouse
