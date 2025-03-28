@@ -109,6 +109,10 @@
 
         };
 
+        $("#myForm").on("submit", function (e) {
+            e.preventDefault();
+        });
+
         get_no_info = function() {
 
             let product_order = $("#id_product_order").val().trim();
@@ -151,7 +155,7 @@
             editing: true,    // 啟用編輯功能
             sorting: true,    // 啟用排序功能
             paging: false,     // 啟用分頁功能
-            confirmDeleting: false,
+            {#confirmDeleting: false,#}
 
             rowClick: function (args) {
                 this.editItem(args.item);
@@ -179,7 +183,7 @@
                 { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", readOnly: true, visible: false },
                 { name: "qty", type: "number", width: 120, title: "{% trans "Qty" %}"},
                 { name: "bin_id", type: "text", width: 90, title: "{% trans "Location" %}", editing: false },
-                { name: "desc", type: "text", width: 120, title: "{% trans "Comment" %}", editing: true },
+                { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", editing: true },
                 { name: "product_order", type: "text", width: 140, title: "{% trans "Product Order" %}", validate: "required", editing: false },
                 { name: "purchase_no", type: "text", width: 140, title: "{% trans "Purchase Order" %}", editing: false},
                 { name: "version_no", type: "text", width: 140, title: "{% trans "Version No" %}", editing: false },
@@ -200,25 +204,19 @@
         {# Shortcut Keyboard #}
         $(document).on('keydown', function(e) {
 
-            if ($(e.target).is('input')) {
-                e.stopPropagation();
-                return;
-            }
-
-            if (e.key === 'Enter') {  // Kiểm tra nếu phím Enter (key code 13) được nhấn
+            if (e.key === 'Enter') {
                 const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
 
-                // Nếu nút "Cập nhật" tồn tại, mô phỏng sự kiện click
                 if (updateButton.length) {
                     e.preventDefault();
-                    updateButton.click();  // Mô phỏng click vào nút cập nhật
+                    updateButton.click();
                 }
-            } else if (e.key === 'Escape') {  // Kiểm tra phím ESC
+            } else if (e.key === 'Escape') {
                 const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
 
                 if (cancelButton.length) {
                     e.preventDefault();
-                    cancelButton.click();  // Mô phỏng click vào nút cập nhật
+                    cancelButton.click();
                 }
             }
             e.stopPropagation();
