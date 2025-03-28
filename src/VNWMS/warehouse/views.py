@@ -1534,9 +1534,6 @@ def delete_inventory(request):
             if not ids_to_delete:
                 return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
 
-            # Xóa các bản ghi có ID trong danh sách
-            deleted_count, _ = Bin_Value.objects.filter(id__in=ids_to_delete).delete()
-
             return JsonResponse({"success": True, "deleted_count": deleted_count})
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
