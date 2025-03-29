@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-29 13:27+0700\n"
-"PO-Revision-Date: 2025-03-29 13:29+0700\n"
+"PO-Revision-Date: 2025-03-29 16:44+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -2100,10 +2100,8 @@ msgid "Open Data Importing"
 msgstr "Nhập dữ liệu mở"
 
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:126
-#, fuzzy
-#| msgid "Bulk Import - Open Data"
 msgid "Excel Import Tool (Open Data)"
-msgstr "Nhập hàng loạt - Dữ liệu mở"
+msgstr "Công cụ nhập Excel (Dữ liệu mở)"
 
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:138
 #: .\warehouse\templates\warehouse\upload.html:95
@@ -2317,7 +2315,7 @@ msgstr "Lịch sử bản ghi"
 
 #: .\warehouse\templates\warehouse\search_bin_history.html:213
 msgid "Remain Qty"
-msgstr "Số lượng tồn"
+msgstr "Số lượng còn lại"
 
 #: .\warehouse\templates\warehouse\search_bin_history.html:249
 msgid "Searching"

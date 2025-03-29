@@ -16,6 +16,23 @@
             width: auto;
         }
 
+        .jsgrid-cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px; /* Điều chỉnh theo nhu cầu */
+            cursor: pointer; /* Biểu tượng tay khi rê chuột */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .jsgrid-cell.expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-wrap: break-word;
+            max-width: none; /* Hiển thị toàn bộ nội dung */
+        }
+
     </style>
 {% endblock %}
 
@@ -68,6 +85,10 @@
 {% block javascript %}
     <script>
         $(document).ready(function() {
+
+            $("#jsGrid").on("click", ".jsgrid-cell", function() {
+                $(this).toggleClass("expanded");
+            });
 
             var translations = {
                 notFound: "{% trans 'Not found' %}",

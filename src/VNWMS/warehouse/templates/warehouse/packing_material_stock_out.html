@@ -24,6 +24,13 @@
         text-align: center;
     }
 
+    .jsgrid-cell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
 </style>
 
 {% endblock css %}
@@ -54,7 +61,7 @@
 
         {# Search #}
         let debounceTimer;
-        $("#id_product_order").on("keydown", function (event) {
+        $("#id_product_order").on("keyup", function (event) {
             let product_order = $('#id_product_order').val().trim();
             if (event.key === "Enter" && product_order) {
                 event.preventDefault();
@@ -66,7 +73,7 @@
             event.stopPropagation();
         });
 
-        $("#id_purchase_no").on("keydown", function (event) {
+        $("#id_purchase_no").on("keyup", function (event) {
             let purchase_no = $('#id_purchase_no').val().trim();
             if (event.key === 'Enter' && purchase_no) {
                 event.preventDefault();
@@ -109,9 +116,6 @@
 
         };
 
-        $("#myForm").on("submit", function (e) {
-            e.preventDefault();
-        });
 
         get_no_info = function() {
 
@@ -173,8 +177,13 @@
                             .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
                             .text("{% trans "Delete" %}")
                             .on("click", function(e) {
+                                if (e.detail === 0) {
+                                    // Nếu sự kiện click được kích hoạt từ bàn phím (Enter), bỏ qua
+                                    return;
+                                }
+
+                                // Nếu là click chuột, thực hiện xóa item
                                 $("#jsGrid").jsGrid("deleteItem", item);
-                                e.stopPropagation(); // 防止觸發行點擊事件
                             });
 
                         return deleteButton;
@@ -205,6 +214,8 @@
         $(document).on('keydown', function(e) {
 
             if (e.key === 'Enter') {
+                e.preventDefault();
+
                 const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
 
                 if (updateButton.length) {
@@ -212,6 +223,8 @@
                     updateButton.click();
                 }
             } else if (e.key === 'Escape') {
+                e.preventDefault();
+
                 const cancelButton  = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
 
                 if (cancelButton.length) {
