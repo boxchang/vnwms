@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-27 14:00+0700\n"
-"PO-Revision-Date: 2025-03-27 14:01+0700\n"
+"PO-Revision-Date: 2025-03-29 11:41+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -1987,7 +1987,7 @@ msgstr "沒有找到倉庫。"
 #: .\warehouse\templates\warehouse\bin\bin_by_area.html:98
 #: .\warehouse\templates\warehouse\list_warehouse.html:87
 msgid "Alert"
-msgstr ""
+msgstr "警告"
 
 #: .\warehouse\templates\warehouse\area\area_by_warehouse.html:105
 msgid "Are you sure you want to delete the area"
@@ -2245,12 +2245,12 @@ msgstr "開帳資料匯入"
 
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:126
 msgid "Excel Import Tool (Open Data)"
-msgstr ""
+msgstr "Excel 匯入工具（開放數據）"
 
 #: .\warehouse\templates\warehouse\bin\open_data_import.html:138
 #: .\warehouse\templates\warehouse\upload.html:91
 msgid "Upload"
-msgstr ""
+msgstr "上傳"
 
 #: .\warehouse\templates\warehouse\bin\search_bin_value.html:167
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:117
@@ -2348,7 +2348,7 @@ msgstr "必填"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:341
 msgid "Copy"
-msgstr ""
+msgstr "複製"
 
 #: .\warehouse\templates\warehouse\packing_material_stock_in.html:360
 msgid "Copy and insert below this row Success!"
@@ -2461,11 +2461,11 @@ msgstr ""
 
 #: .\warehouse\templates\warehouse\upload.html:78
 msgid "Excel Import Tool (Warehouse, Area, Bin)"
-msgstr ""
+msgstr "倉庫、區域、儲位 Excel 匯入工具"
 
 #: .\warehouse\templates\warehouse\upload.html:98
 msgid "Download Template"
-msgstr ""
+msgstr "下載範本"
 
 #: .\warehouse\templates\warehouse\warehouse_map.html:7
 msgid "Packing Warehouse Map"

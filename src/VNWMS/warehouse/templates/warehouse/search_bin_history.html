@@ -245,6 +245,9 @@
         </div>
     </div>
 </div>
+
+<span id="loading-text" style="display: none;">{% trans "Searching" %}</span>
+
 {% endblock %}
 
 {% block javascript %}
@@ -264,10 +267,14 @@
             $("#form").on("submit", function (e) {
                 e.preventDefault(); // Ngăn chặn hành động gửi form mặc định
 
-                var $btn = $(this).find("button[type='submit']");
-                $btn.prop("disabled", true).text("{% trans 'Searching' %}..."); // Vô hiệu hóa và đổi text nút
+                let $btn = $(this).find("button[type='submit']");
+                let loadingText = $("#loading-text").text();
 
-                var formData = $(this).serialize(); // Thu thập dữ liệu form
+                $btn.html('<i class="fa fa-spinner fa-spin"></i> ' + loadingText + '...');
+
+                $btn.prop("disabled", true);
+
+                let formData = $(this).serialize(); // Thu thập dữ liệu form
 
                 // Gửi dữ liệu qua Ajax
                 $.ajax({

@@ -108,7 +108,21 @@
                 </div>
             </div>
         </div>
+        <span id="loading-text" style="display: none;">{% trans "Loading..." %}</span>
 
+{% endblock %}
 
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $("form").on("submit", function () {
+                let button = $(".upload-btn");
+                let loadingText = $("#loading-text").text();
+
+                button.html('<i class="fa fa-spinner fa-spin"></i> ' + loadingText);
+                button.prop("disabled", true);
+            });
+        });
+    </script>
 {% endblock %}
 
