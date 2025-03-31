@@ -55,7 +55,6 @@
                             </a>
                         </li>
                         <hr />
-                        {% if request.user.user_type.type_name == "Administrator" %}
                         <li>
                             <a class="dropdown-item" href="{% url 'transfer_and_adjust' %}">
                                 <i class="fas fa-people-carry"></i> {% trans "Quantity Transfer & Adjust Form" %}
@@ -64,7 +63,6 @@
                                 <i class="fa fa-trash"></i> {% trans "Inventory Deletion" %}
                             </a>
                         </li>
-                        {% endif %}
                     </ul>
                 </div>
                 <div class="btn-group">
