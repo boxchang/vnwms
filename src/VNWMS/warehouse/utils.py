@@ -25,6 +25,10 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
         qty = float(qty)
         bin = Bin.objects.get(bin_id=bin_code)
         mvt = MovementType.objects.get(mvt_code=mvt)
+
+        if purchase_no == None or purchase_no == '':
+            purchase_no = 'NA'
+
         if bin and product_order and purchase_no:
             # 更新庫存資料
             invs = Bin_Value.objects.filter(product_order=product_order, purchase_no=purchase_no, version_no=version_no,
@@ -109,7 +113,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
             JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
             LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
-            and b.product_order = d.product_order and b.purchase_no = d.purchase_no and b.version_no = d.version_no
+            and b.product_order = d.product_order and b.version_no = d.version_no
                         and b.size = d.size
             JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
             JOIN [VNWMS].[dbo].[warehouse_warehouse] w on w.wh_code = area.warehouse_id
