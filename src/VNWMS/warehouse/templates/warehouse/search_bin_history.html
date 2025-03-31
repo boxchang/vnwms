@@ -30,9 +30,6 @@
         th, td {
             text-align: center;
             align-content: center;
-        }
-
-        th, td {
             min-width: 90px;
             white-space: nowrap;
         }
@@ -254,12 +251,9 @@
     <script>
         $(document).ready(function () {
             $("#search").on("click", function (event) {
-                let bin = $("#id_bin").val().trim();
-                let po_no = $("#id_po_no").val().trim();
-                let size = $("#id_size").val().trim();
-
-                if (!bin && !po_no && !size) {
-                    event.preventDefault(); // Ngăn gửi request lên server
+                let fields = ["#id_bin", "#id_po_no", "#id_size"];
+                if (fields.every(selector => !$(selector).val().trim())) {
+                    event.preventDefault();
                     alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
                 }
             });
@@ -286,8 +280,10 @@
                         $(".bin_value tbody").html($(response).find(".bin_value tbody").html());
                         $(".bin_hist tbody").html($(response).find(".bin_hist tbody").html());
                     },
-                    error: function (xhr, status, error) {
-                        console.error("Error:", error);
+                    error: function (xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
+
                     },
                     complete: function () {
                         setTimeout(function () {

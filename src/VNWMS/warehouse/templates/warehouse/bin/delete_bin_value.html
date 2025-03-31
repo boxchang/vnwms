@@ -323,7 +323,8 @@
                         }
                     },
                     error: function (xhr) {
-                        alert("Error: " + xhr.responseText);
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
                     }
                 });
             });

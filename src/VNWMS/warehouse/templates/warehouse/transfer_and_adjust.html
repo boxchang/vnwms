@@ -38,9 +38,9 @@
             const productOrder = searchParams.get("product_order");
             const size = searchParams.get("size");
 
-            $("#productOrder, #size").on("keydown", function (event) {
-                let product_order = $("#productOrder").val().trim();
-                let _size = $("#size").val().trim();
+            $("#productOrder, #size").on("keyup", function (event) {
+                const product_order = $("#productOrder").val().trim();
+                const _size = $("#size").val().trim();
                 if (event.key === "Enter" && (product_order || _size)) {
 
                     $.ajax({
@@ -50,8 +50,9 @@
                         success: function(response) {
                             $("#jsGrid").jsGrid("option", "data", response);
                         },
-                        error: function(xhr, status, error) {
-                            console.log('Error:', error);
+                        error: function(xhr) {
+                            const errorMsg = JSON.parse(xhr.responseText);
+                            alert(errorMsg.message);
                         }
                     });
                 }
@@ -74,11 +75,11 @@
                         size: searchParams.get('size')
                     },
                     success: function(response) {
-                        // Cập nhật dữ liệu cho jsGrid
                         $("#jsGrid").jsGrid("option", "data", response);
                     },
-                    error: function(xhr, status, error) {
-                        console.error("Error fetching data:", error);
+                    error: function(xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
                     }
                 });
             }
@@ -151,22 +152,29 @@
             });
 
 
-            $("#searchBtn").on("click", function() {
+            $("#searchBtn").on("click", function(event) {
                 const productOrder = $("#productOrder").val();
                 const size = $("#size").val();
 
-                $.ajax({
-                    url: '{% url "product_order_search" %}?product_order=' + productOrder + '&size=' + size,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        $("#jsGrid").jsGrid("option", "data", response);
-                    },
-                    error: function(xhr, status, error) {
-                        console.log('Error: ' + error);
-                    }
-                });
+                const fields = ["#productOrder", "#size"];
+                if(fields.every(selector => !$(selector).val().trim())){
+                    event.preventDefault();
+                    alert("{% trans 'Product Order, Size cannot all be null!' %}");
 
+                } else {
+                    $.ajax({
+                        url: '{% url "product_order_search" %}?product_order=' + productOrder + '&size=' + size,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            $("#jsGrid").jsGrid("option", "data", response);
+                        },
+                        error: function(xhr) {
+                            const errorMsg = JSON.parse(xhr.responseText);
+                            alert(errorMsg.message);
+                        }
+                    });
+                }
             });
 
 

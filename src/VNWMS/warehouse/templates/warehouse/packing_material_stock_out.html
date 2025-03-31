@@ -109,8 +109,9 @@
 
                     }
                 },
-                error: function (xhr, status, error) {
-                    console.error("Error：", error);
+                error: function (xhr) {
+                    const errorMsg = JSON.parse(xhr.responseText);
+                    alert(errorMsg.message);
                 }
             });
 
@@ -139,8 +140,9 @@
                     }
 
                 },
-                error: function (xhr, status, error) {
-                    console.error("Error：", error);
+                error: function (xhr) {
+                    const errorMsg = JSON.parse(xhr.responseText);
+                    alert(errorMsg.message);
                 }
             });
 
@@ -269,9 +271,9 @@
                     alert("{% trans "Form submitted successfully!" %}");
                     console.log(response);
                 },
-                error: function(xhr, status, error) {
-                    alert("{% trans "Form submission failed!" %}");
-                    console.log(error);
+                error: function(xhr) {
+                    const errorMsg = JSON.parse(xhr.responseText);
+                    alert(errorMsg.message);
                 }
             });
 
