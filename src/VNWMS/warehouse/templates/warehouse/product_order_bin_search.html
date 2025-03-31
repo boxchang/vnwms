@@ -25,6 +25,10 @@
             transition: all 0.3s ease-in-out;
         }
 
+         .jsgrid-header-cell {
+             max-width: 150px;
+         }
+
         .jsgrid-cell.expanded {
             white-space: normal;
             overflow: visible;
@@ -32,6 +36,7 @@
             word-wrap: break-word;
             max-width: none; /* Hiển thị toàn bộ nội dung */
         }
+
 
     </style>
 {% endblock %}
@@ -117,19 +122,19 @@
                 paging: true,
                 pageSize: 20,
                 fields: [
-                    { name: "product_order", title: translations.productOrder, type: "text", width: 100, css: "text-center" },
-                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 100, css: "text-center" },
-                    { name: "version_no", title: translations.versionNo, type: "text", width: 100, css: "text-center" },
-                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 80, css: "text-center" },
-                    { name: "size", title: translations.size, type: "text", width: 45, css: "text-center" },
-                    { name: "comment", title: translations.comment, type: "text", width: 200, css: "text-center" },
-                    { name: "bin_id", title: translations.bin, type: "text", width: 80, css: "text-center" },
-                    { name: "mvt_id", title: translations.mvt, type: "text", width: 80, css: "text-center" },
+                    { name: "product_order", title: translations.productOrder, type: "text", width: 100, css: "text-center"},
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 100, css: "text-center"},
+                    { name: "version_no", title: translations.versionNo, type: "text", width: 100, css: "text-center"},
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 80, css: "text-center"},
+                    { name: "size", title: translations.size, type: "text", width: 45, css: "text-center"},
+                    { name: "comment", title: translations.comment, type: "text", width: 200, css: "text-center"},
+                    { name: "bin_id", title: translations.bin, type: "text", width: 80, css: "text-center"},
+                    { name: "mvt_id", title: translations.mvt, type: "text", width: 80, css: "text-center"},
                     { name: "minus_qty", title: "-", type: "number", width: 100 },
                     { name: "plus_qty", title: "+", type: "number", width: 100 },
-                    { name: "remain_qty", title: translations.qty, type: "number", width: 100 },
-                    { name: "create_at", title: translations.createAt, type: "date", width: 150, css: "text-center" },
-                    { name: "create_by__username", title: translations.createBy, type: "text", width: 70, css: "text-center" },
+                    { name: "remain_qty", title: translations.qty, type: "number", width: 100},
+                    { name: "create_at", title: translations.createAt, type: "date", width: 150, css: "text-center"},
+                    { name: "create_by__username", title: translations.createBy, type: "text", width: 70, css: "text-center"},
                 ]
             });
 
