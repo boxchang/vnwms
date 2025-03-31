@@ -282,11 +282,8 @@
                     },
                     error: function (xhr) {
                         const errorMsg = JSON.parse(xhr.responseText);
-                        if (errorMsg.status === "error") {
-                            alert(errorMsg.message);
-                        } else {
-                            alert("An unknown error occurred.");
-                        }
+                        alert(errorMsg.message);
+
                     },
                     complete: function () {
                         setTimeout(function () {

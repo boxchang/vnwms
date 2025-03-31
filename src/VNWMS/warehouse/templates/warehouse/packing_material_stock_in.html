@@ -218,8 +218,9 @@
                             $("#jsGrid").jsGrid("option", "data", data);
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.error("Error：", error);
+                    error: function (xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
                     }
                 });
             };
@@ -242,8 +243,9 @@
                         }
 
                     },
-                    error: function (xhr, status, error) {
-                        console.error("Error：", error);
+                    error: function (xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
                     }
                 });
             };
