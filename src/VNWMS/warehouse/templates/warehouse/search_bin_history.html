@@ -204,6 +204,7 @@
                         <th style="position: sticky">{% trans "Location" %}</th>
                         <th>{% trans "Product Order" %}</th>
                         <th>{% trans "Purchase Order" %}</th>
+                        <th>{% trans "Item Type" %}</th>
                         <th>{% trans "Size" %}</th>
                         <th>-</th>
                         <th>+</th>
@@ -222,6 +223,7 @@
                         <td>{{ record.bin }}</td>
                         <td>{{ record.product_order }}</td>
                         <td>{{ record.purchase_no }}</td>
+                        <td>{{ record.item_type }}</td>
                         <td>{{ record.size }}</td>
                         <td class="qty">{{ record.minus_qty }}</td>
                         <td class="qty">{{ record.plus_qty }}</td>

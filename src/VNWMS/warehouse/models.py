@@ -158,6 +158,7 @@ class Bin_Value_History(models.Model):
     purchase_no = models.CharField(max_length=50, null=True, blank=True)
     version_no = models.CharField(max_length=50, null=True, blank=True)
     version_seq = models.CharField(max_length=50, null=True, blank=True)
+    item_type = models.ForeignKey('ItemType', related_name='bin_value_hist_itemtype', on_delete=models.DO_NOTHING)
     size = models.CharField(max_length=5, null=False, blank=False)  # Size
     mvt = models.ForeignKey('MovementType', related_name='stockin_hist_mvt', on_delete=models.DO_NOTHING)  # Type (STOCKIN / STOCKOUT)
     plus_qty = models.IntegerField()
@@ -230,6 +231,7 @@ class StockOutForm(models.Model):
     version_no = models.CharField(max_length=20, blank=True, null=True)
     version_seq = models.CharField(max_length=20, blank=True, null=True)
     purchase_no = models.CharField(max_length=20, blank=True, null=True)
+    item_type = models.ForeignKey('ItemType', related_name='stockout_itemtype', on_delete=models.DO_NOTHING)
     size = models.CharField(max_length=20, blank=True, null=True)
     purchase_unit = models.CharField(max_length=20, blank=False, null=True)
     order_bin = models.ForeignKey('Bin', related_name='stockout_order_bin', on_delete=models.DO_NOTHING)
@@ -248,6 +250,7 @@ class Bin_Value(models.Model):
     purchase_no = models.CharField(max_length=50, null=True, blank=True)
     version_no = models.CharField(max_length=50, null=True, blank=True)
     version_seq = models.CharField(max_length=50, null=True, blank=True)
+    item_type = models.ForeignKey('ItemType', related_name='bin_value_itemtype', on_delete=models.DO_NOTHING)
     size = models.CharField(max_length=5, null=False, blank=False)
     qty = models.IntegerField(blank=True, null=True)
     purchase_unit = models.CharField(max_length=20, blank=True, null=True)

@@ -3,7 +3,7 @@ import uuid
 from django.utils.translation import get_language
 
 from VNWMS.database import vnedc_database
-from warehouse.models import MovementType, Bin, Bin_Value, Bin_Value_History
+from warehouse.models import MovementType, Bin, Bin_Value, Bin_Value_History, ItemType
 
 
 def get_item_type_name():
@@ -19,12 +19,13 @@ def get_item_type_name():
     return item_type_column
 
 
-def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt, bin_code, qty,
-                   purchase_unit, desc, stockin_form=None, stockout_form=None):
+def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, item_code, size, mvt, bin_code, qty,
+                   purchase_unit, desc, stockin_form=None, stockout_form=None, lot=None):
     try:
         qty = float(qty)
         bin = Bin.objects.get(bin_id=bin_code)
         mvt = MovementType.objects.get(mvt_code=mvt)
+        item_type = ItemType.objects.get(type_code=item_code)
 
         if purchase_no == None or purchase_no == '':
             purchase_no = 'NA'
@@ -32,7 +33,7 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
         if bin and product_order and purchase_no:
             # 更新庫存資料
             invs = Bin_Value.objects.filter(product_order=product_order, purchase_no=purchase_no, version_no=version_no,
-                                            version_seq=version_seq, size=size, bin=bin)
+                                            version_seq=version_seq, item_type=item_type, size=size, bin=bin)
             if invs:
                 remain_qty = int(invs.first().qty) + qty
             else:
@@ -43,6 +44,7 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
                     Bin_Value.objects.filter(product_order=product_order, purchase_no=purchase_no,
                                              version_no=version_no,
                                              version_seq=version_seq,
+                                             item_type=item_type,
                                              size=size, bin=bin).delete()
                 else:
                     tmp1 = {}
@@ -55,13 +57,16 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
                     tmp.update(tmp1)
                     Bin_Value.objects.update_or_create(product_order=product_order, purchase_no=purchase_no,
                                                        version_no=version_no,
-                                                       version_seq=version_seq, size=size, bin=bin,
+                                                       version_seq=version_seq,
+                                                       item_type=item_type,
+                                                       size=size, bin=bin,
                                                        defaults=tmp)
 
                 if qty > 0:
                     Bin_Value_History.objects.create(batch_no=form_no, product_order=product_order,
                                                      purchase_no=purchase_no, version_no=version_no,
-                                                     version_seq=version_seq, size=size, bin=bin, mvt=mvt, plus_qty=qty,
+                                                     version_seq=version_seq, item_type=item_type,
+                                                     size=size, bin=bin, mvt=mvt, plus_qty=qty,
                                                      minus_qty=0, remain_qty=remain_qty, comment=desc,
                                                      purchase_unit=purchase_unit,
                                                      create_by=request.user)
@@ -113,7 +118,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             JOIN [VNWMS].[dbo].[warehouse_bin] bin on b.bin_id = bin.bin_id
             JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
             LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
-            and b.product_order = d.product_order and b.version_no = d.version_no
+            and b.product_order = d.product_order and b.version_no = d.version_no and b.item_type_id = d.item_type_id
                         and b.size = d.size
             JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
             JOIN [VNWMS].[dbo].[warehouse_warehouse] w on w.wh_code = area.warehouse_id

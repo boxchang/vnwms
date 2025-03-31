@@ -458,39 +458,6 @@ def packing_material_stock_in(request):
         )
     )
 
-    warehouses = Warehouse.objects.all()
-
-    if request.method == 'POST':
-        hidItem_list = request.POST.get('hidItem_list')
-        if hidItem_list:
-            items = json.loads(hidItem_list)
-
-        apply_date = request.POST.get('apply_date')
-        pr_no = request.POST.get('pr_no')
-        desc = request.POST.get('desc')
-
-        save_tag = transaction.savepoint()
-        try:
-            stock_in = StockInForm()
-            YYYYMM = datetime.now().strftime("%Y%m")
-            key = "SI"+YYYYMM
-            stock_in.form_no = key + str(get_series_number(key, "入庫單")).zfill(3)
-            stock_in.pr_no = pr_no
-            stock_in.requester = request.user
-            stock_in.apply_date = apply_date
-            stock_in.reason = desc
-            stock_in.create_by = request.user
-            stock_in.save()
-
-            for item in items:
-                Do_Transaction(request, stock_in.form_no, 'STIN', item['item_code'], item['bin_code'], int(item['qty']),
-                               item['purchase_unit'], item['comment'])
-
-        except Exception as e:
-            transaction.savepoint_rollback(save_tag)
-            print(e)
-
-        return redirect(stock_in.get_absolute_url())
     form = StockInPForm()
     return render(request, 'warehouse/packing_material_stock_in.html', locals())
 
@@ -723,7 +690,7 @@ def packing_material_stock_in_post(request):
                         Do_Transaction(request,
                                        form_no,
                                        item['product_order'], item['purchase_no'], item['version_no'],
-                                       item['version_seq'], item['size'], mvt, item['order_bin'], item['order_qty'],
+                                       item['version_seq'], item_type.type_code, item['size'], mvt, item['order_bin'], item['order_qty'],
                                        item['purchase_unit'], item['desc'], stockin_form=form_no)
 
                     except Exception as e:
@@ -765,6 +732,12 @@ def packing_material_stock_out_post(request):
             for item in data:
                 bin = Bin.objects.get(bin_id=item['bin_id'])
                 comment = item['desc'] if 'desc' in item else ""
+                type_name = item['item_type']
+                item_type = ItemType.objects.get(
+                    Q(type_code=type_name) |
+                    Q(type_name=type_name) |
+                    Q(type_vn_name=type_name)
+                )
 
                 try:
                     stockout_form = StockOutForm(
@@ -773,6 +746,7 @@ def packing_material_stock_out_post(request):
                         version_no=item['version_no'],
                         version_seq=item['version_seq'],
                         purchase_no=item['purchase_no'],
+                        item_type=item_type,
                         size=item['size'],
                         purchase_unit=item['purchase_unit'],
                         order_bin=bin,
@@ -785,7 +759,7 @@ def packing_material_stock_out_post(request):
                     qty = int(item['qty']) * -1
 
                     result = Do_Transaction(request, form_no, item['product_order'],
-                                            item['purchase_no'], item['version_no'], item['version_seq'],
+                                            item['purchase_no'], item['version_no'], item['version_seq'], item_type.type_code,
                                             item['size'], mvt,
                                             item['bin_id'], qty, item['purchase_unit'], comment,
                                             stockout_form=form_no)
@@ -823,6 +797,7 @@ def product_order_search(request):
             'purchase_no',
             'version_no',
             'version_seq',
+            'item_type',
             'size',
             'bin',
             'qty'
@@ -853,6 +828,7 @@ def bin_transfer(request):
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
         request.session['version_seq'] = request.GET.get('version_seq', '')
+        request.session['item_type'] = request.GET.get('item_type', '')
         request.session['size'] = request.GET.get('size', '')
         request.session['bin'] = request.GET.get('bin', '')
         request.session['qty'] = request.GET.get('qty', '')
@@ -863,6 +839,7 @@ def bin_transfer(request):
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
     version_seq = request.session.get('version_seq', '')
+    item_type = request.session.get('item_type', '')
     size = request.session.get('size', '')
     bin = request.session.get('bin', '')
     qty = request.session.get('qty', '')
@@ -873,6 +850,7 @@ def bin_transfer(request):
         'purchase_no': purchase_no,
         'version_no': version_no,
         'version_seq': version_seq,
+        'item_type': item_type,
         'size': size,
         'bin': bin,
         'qty': qty
@@ -890,6 +868,7 @@ def bin_transfer_page(request):
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
         request.session['version_seq'] = request.GET.get('version_seq', '')
+        request.session['item_type'] = request.GET.get('item_type', '')
         request.session['size'] = request.GET.get('size', '')
         request.session['bin'] = request.GET.get('bin', '')
         request.session['qty'] = request.GET.get('qty', '')
@@ -901,6 +880,7 @@ def bin_transfer_page(request):
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
     version_seq = request.session.get('version_seq', '')
+    type_code = request.session.get('item_type', '')
     size = request.session.get('size', '')
     bin = request.session.get('bin', '')
     qty = request.session.get('qty', '')
@@ -918,9 +898,9 @@ def bin_transfer_page(request):
             bin_selected = form.cleaned_data['bin']
             qty = form.cleaned_data['qty']
 
-            Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt,
+            Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, type_code, size, mvt,
                            bin_selected, qty, purchase_unit, desc=None)
-            Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt,
+            Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, type_code, size, mvt,
                            bin, -qty, purchase_unit, desc=None)
 
             item_data = {
@@ -929,6 +909,7 @@ def bin_transfer_page(request):
                 'purchase_no': purchase_no,
                 'version_no': version_no,
                 'version_seq': version_seq,
+                'item_type': type_code,
                 'size': size,
                 'bin': bin,
                 'qty': qty
@@ -984,6 +965,7 @@ def bin_adjust_page(request):
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
         request.session['version_seq'] = request.GET.get('version_seq', '')
+        request.session['item_type'] = request.GET.get('item_type', '')
         request.session['size'] = request.GET.get('size', '')
         request.session['bin'] = request.GET.get('bin', '')
         request.session['qty'] = request.GET.get('qty', '')
@@ -995,6 +977,7 @@ def bin_adjust_page(request):
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
     version_seq = request.session.get('version_seq', '')
+    item_type = request.session.get('item_type', '')
     size = request.session.get('size', '')
     bin = request.session.get('bin', '')
     qty = request.session.get('qty', '')
@@ -1011,7 +994,7 @@ def bin_adjust_page(request):
         if form.is_valid():
             qty = int(form.cleaned_data['qty']) - int(qty)
 
-            Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, size, mvt,
+            Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, item_type, size, mvt,
                            bin, qty, purchase_unit, desc=None)
 
             item_data = {
@@ -1391,7 +1374,7 @@ def open_data_import_confirm_api(request):
                     stockin_form.save()
 
                     Do_Transaction(request, form_no, productOrder, purchaseOrder,
-                                   packingVersion, packingSeq, size, mvt, location.bin_id,
+                                   packingVersion, packingSeq, item_type.type_code, size, mvt, location.bin_id,
                                    qty, unit, desc="", stockin_form=form_no)
 
                 # if hasattr(excel_file, 'temporary_file_path'):
@@ -1404,69 +1387,6 @@ def open_data_import_confirm_api(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "請使用 POST 方法"}, status=400)
-
-
-def open_data_import1(request):
-    form = ExcelUploadForm()
-
-    if request.method == "POST":
-        form = ExcelUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-
-            excel_file = request.FILES["file"]
-            df_dict = pd.read_excel(excel_file, sheet_name=None, dtype=str)  # Đọc tất cả các sheet, ép kiểu về str
-
-            sheet_name, df = next(iter(df_dict.items()))
-            # Chuẩn hóa dữ liệu về chuỗi, loại bỏ khoảng trắng
-            df["Product Order"] = df["Product Order"].astype(str).str.strip()
-            df["Purchase Order"] = df["Purchase Order"].astype(str).str.strip()
-            df["Version No"] = df["Version No"].astype(str).str.strip()
-            df["Version Seq"] = df["Version Seq"].astype(str).str.strip()
-            df["Location"] = df["Location"].astype(str).str.strip()
-            df["Unit"] = df["Unit"].astype(str).str.strip()
-            df["Size"] = df["Size"].astype(str).str.strip()
-
-            # Chuyển Qty về số nguyên, giữ 0 nếu không hợp lệ
-            df["Qty"] = pd.to_numeric(df["Qty"], errors="coerce").fillna(0).astype(int)
-
-            locations = list(df["Location"].dropna().unique())
-
-            # Lấy danh sách bin_id hợp lệ từ database
-            bin_map = {b.bin_id: b for b in Bin.objects.filter(bin_id__in=locations)}
-
-            error = ""
-            try:
-                for _, row in df.iterrows():
-                    bin_id = bin_map[row["Location"]]
-            except Exception as e:
-                error = f"<tr><td>{bin_id}</td><td>Not Exist</td></tr>"
-
-            if len(error) > 0:
-                error_msg = "<table>{error}</table>".format(error=error)
-                return render(request, "warehouse/bin/open_data_import.html", locals())
-            else:
-                Bin_Value.objects.all().delete()
-
-                YYYYMM = datetime.now().strftime("%Y%m")
-                key = "OPEN" + YYYYMM
-                form_no = key + str(get_series_number(key, "OPEN")).zfill(3)
-
-                mvt = MovementType.objects.get(mvt_code="OPEN")
-
-                for _, row in df.iterrows():
-                    bin_id = row["Location"]
-
-                    Do_Transaction(request, form_no, row["Product Order"], row['Purchase Order'],
-                                   row["Version No"], row["Version Seq"], row["Size"], mvt, bin_map[bin_id],
-                                   row["Qty"], row["Unit"], desc="")
-
-                if hasattr(excel_file, 'temporary_file_path'):
-                    os.remove(excel_file.temporary_file_path())
-
-                return render(request, "warehouse/bin/open_data_import.html",
-                              {"form": form, "message": "Upload successfully!"})
-
-    return render(request, "warehouse/bin/open_data_import.html", {"form": form})
 
 
 def inventory_sheet(request):
@@ -1508,11 +1428,15 @@ def delete_inventory(request):
             mvt = MovementType.objects.get(mvt_code="DELT")
 
             for row in data["list_data"]:
-                test = row['qty']
+                item_type = ItemType.objects.get(
+                    Q(type_code=row['itemType']) |
+                    Q(type_name=row['itemType']) |
+                    Q(type_vn_name=row['itemType'])
+                )
                 qty = int(row['qty']) * -1
 
                 Do_Transaction(request, form_no, row['productOrder'], row['purchaseNo'],
-                               row['versionNo'], row['versionSeq'], row['size'],
+                               row['versionNo'], row['versionSeq'], item_type.type_code, row['size'],
                                mvt, row['binId'], qty, row['purchaseUnit'], desc="")
 
             if not ids_to_delete:

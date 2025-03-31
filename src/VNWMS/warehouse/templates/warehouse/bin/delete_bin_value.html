@@ -92,6 +92,7 @@
                 purchase_order: "{% trans 'Purchase Order' %}",
                 version_no: "{% trans 'Version No' %}",
                 version_seq: "{% trans 'Version Seq' %}",
+                item_type: "{% trans 'Item Type' %}",
                 size: "{% trans 'Size' %}",
                 location: "{% trans 'Location' %}",
                 qty: "{% trans 'Qty' %}",
@@ -202,6 +203,7 @@
                                 .attr("data-purchase-no", item.purchase_no)
                                 .attr("data-version-no", item.version_no)
                                 .attr("data-version-seq", item.version_seq)
+                                .attr("data-item-type", item.item_type)
                                 .attr("data-size", item.size)
                                 .attr("data-bin-id", item.bin_id)
                                 .attr("data-qty", item.qty)
@@ -232,6 +234,7 @@
                     { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100, css: "text-center"  },
                     { name: "version_no", title: translations.version_no, type: "text", width: 100, css: "text-center"  },
                     { name: "version_seq", title: translations.version_seq, type: "text", width: 150, css: "text-center"  },
+                    { name: "item_type", title: translations.item_type, type: "text", width: 50, css: "text-center"  },
                     { name: "size", title: translations.size, type: "text", width: 50, css: "text-center"  },
                     { name: "bin_id", title: translations.location, type: "text", width: 80, css: "text-center"  },
                     { name: "qty", title: translations.qty, type: "number", width: 100 },
@@ -341,6 +344,7 @@
                     { name: "purchase_no", title: translations.purchase_order, type: "text", width: 100 },
                     { name: "version_no", title: translations.version_no, type: "text", width: 100 },
                     { name: "version_seq", title: translations.version_seq, type: "text", width: 70 },
+                    { name: "item_type", title: translations.item_type, type: "text", width: 50 },
                     { name: "size", title: translations.size, type: "text", width: 50 },
                     { name: "bin_id", title: translations.location, type: "text", width: 80 },
                     { name: "qty", title: translations.qty, type: "number", width: 100 },
