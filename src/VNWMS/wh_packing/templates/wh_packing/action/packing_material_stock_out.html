@@ -1,0 +1,259 @@
+{% extends 'wh_packing/bases/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Stock Out" %} {% endblock %}
+{% block css %}
+{{ block.super }}
+
+<style>
+
+    .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
+        display: none !important;
+    }
+
+    .jsgrid-grid-body::-webkit-scrollbar {
+        height: 16px !important;
+    }
+
+    .input-custom {
+        --bs-gutter-x: 0;
+    }
+
+    th {
+        text-align: center;
+    }
+
+    .jsgrid-cell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+
+</style>
+
+{% endblock css %}
+
+
+{% block content %}
+    <div class="row p-3 d-flex justify-content-center">
+        <div class="col-10">
+
+            <h3 class="p-3 text-center">{% trans "Warehouse Stock Out Form" %}</h3>
+            <form id="myForm">
+                {% crispy form %}
+                <div id="jsGrid"></div>
+
+                <hr />
+                <div style="text-align: center" class="p-3">
+                    <button type="button" id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+    $(document).ready(function() {
+
+        {# Search #}
+        let debounceTimer;
+        $("#id_product_order, #id_purchase_no, #id_size, #id_lot_no, #id_version_no").on("keyup", function (event) {
+            let product_order = $('#id_product_order').val().trim();
+            let purchase_no = $('#id_purchase_no').val().trim();
+            let size = $('#id_size').val().trim();
+            let lot_no = $('#id_lot_no').val().trim();
+            let version_no = $('#id_version_no').val().trim();
+            let item_type = $('#id_item_type').val();
+            let isItemTypeSelected = item_type !== null && item_type !== "";
+
+            {#let fields = ["#id_product_order", "#id_purchase_no", "#id_size", "#id_lot_no", "#id_version_no"];#}
+            if (event.key === "Enter" && (product_order || size || lot_no || version_no || purchase_no || isItemTypeSelected )) {
+                event.preventDefault();
+                clearTimeout(debounceTimer); // Xóa timer cũ
+                debounceTimer = setTimeout(() => {
+                    get_sap_info()
+                }, 300);
+            }
+            event.stopPropagation();
+        });
+
+        const get_sap_info = function() {
+
+            let product_order = $("#id_product_order").val().trim();
+            let purchase_no = $("#id_purchase_no").val().trim();
+
+            let size = $("#id_size").val().trim();
+            let lot_no = $("#id_lot_no").val().trim();
+            let version_no = $("#id_version_no").val().trim();
+            let item_type = $("#id_item_type").val().trim();
+
+
+            $.ajax({
+                url: '{% url 'get_product_order_stout' %}',
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                data: {
+                    "product_order": product_order,
+                    "purchase_no": purchase_no,
+                    "size": size,
+                    "lot_no": lot_no,
+                    "version_no": version_no,
+                    "item_type": item_type
+                },
+                success: function(data) {
+                    if (data.status === 'no_change'){
+                        console.log("Keep the data table");
+                    } else {
+                        $("#jsGrid").jsGrid("option", "data", data.data_list_stout);
+                    }
+
+                },
+                error: function (xhr) {
+                    const errorMsg = JSON.parse(xhr.responseText);
+                    alert(errorMsg.message);
+                }
+            });
+        }
+
+        {# Main JsGrid #}
+        data: [], // 初始為空，將透過 AJAX 加載資料
+
+        // 初始化 jsGrid
+        $("#jsGrid").jsGrid({
+            width: "100%",
+            height: "70vh",
+            noDataContent: "{% trans "Not found" %}",
+            inserting: true,  // 啟用新增功能
+            editing: true,    // 啟用編輯功能
+            sorting: true,    // 啟用排序功能
+            paging: false,     // 啟用分頁功能
+            {#confirmDeleting: false,#}
+
+            rowClick: function (args) {
+                this.editItem(args.item);
+            },
+
+            data: [],   // 將 JSON 資料導入表格
+
+            fields: [
+                {
+                    type: "control",
+                    width: 80,
+                    itemTemplate: function(_, item) {
+                        // 建立刪除按鈕
+                        var deleteButton = $("<button>")
+                            .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
+                            .text("{% trans "Delete" %}")
+                            .on("click", function(e) {
+                                if (e.detail === 0 ) {
+                                    return;
+                                }
+                                e.stopPropagation();
+                                e.preventDefault();
+
+                                // Nếu là click chuột, thực hiện xóa item
+                                $("#jsGrid").jsGrid("deleteItem", item);
+
+                            });
+
+                        return deleteButton;
+                    }
+                },
+                { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", readOnly: true, visible: false },
+                { name: "qty", type: "number", width: 120, title: "{% trans "Qty" %}"},
+                { name: "bin_id", type: "text", width: 90, title: "{% trans "Location" %}", editing: false, css: "text-center"},
+                { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", editing: true, css: "text-center" },
+                { name: "product_order", type: "text", width: 140, title: "{% trans "Product Order" %}", validate: "required", editing: false, css: "text-center" },
+                { name: "purchase_no", type: "text", width: 140, title: "{% trans "Purchase Order" %}", editing: false, css: "text-center"},
+                { name: "version_no", type: "text", width: 140, title: "{% trans "Version No" %}", editing: false, css: "text-center" },
+                { name: "version_seq", type: "text", width: 140, title: "{% trans "Version Seq" %}", editing: false, css: "text-center" },
+                { name: "size", type: "text", width: 90, title: "{% trans "Size" %}", editing: false, css: "text-center"},
+                { name: "purchase_unit", type: "text", width: 200, title: "{% trans "Purchase Unit" %}", editing: false, css: "text-center" },
+                { name: "customer_no", type: "text", width: 120, title: "{% trans "Customer" %}", editing: false, css: "text-center" },
+                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", editing: false, css: "text-center" },
+                { name: "lot_no", type: "text", width: 200, title: "{% trans "Lot Number" %}", editing: false, css: "text-center" },
+                { name: "purchase_qty", type: "number", width: 200, title: "{% trans "Purchase Quantity" %}", editing: false},
+                { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", editing: false, css: "text-center" },
+                { name: "post_date", type: "date", width: 200, title: "{% trans "Post Date" %}", editing: false, css: "text-center" },
+                { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", editing: false, css: "text-center" },
+
+            ]
+        });
+
+        $("form").on("submit", function (e) {
+           e.preventDefault();
+           e.stopPropagation();
+        });
+
+        {# Shortcut Keyboard #}
+        $(document).on('keydown', function(e) {
+
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định
+                const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
+                if (updateButton.length) {
+                    updateButton.click();
+                }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                const cancelButton = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
+                if (cancelButton.length) {
+                    cancelButton.click();
+                }
+            }
+        });
+
+
+        // 當按下過帳按鈕時
+        $('#postDataButton').click(function(event) {
+            event.preventDefault();
+            // 獲取 jsGrid 的所有數據
+            var gridData = $("#jsGrid").data("JSGrid").data;
+
+            if (!gridData || gridData.length === 0) {
+                alert("{% trans "No data in the table! Please enter at least one row." %}");
+                event.stopPropagation();
+                return;
+            }
+
+            // 將數據轉換為 JSON 格式
+            var jsonData = JSON.stringify(gridData);
+
+            // 使用 Ajax 發送數據到後端
+            $.ajax({
+                url: '{% url 'packing_material_stock_out_post' %}',  // 設置後端接收數據的 URL
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData,
+                success: function(response) {
+
+                    //Reset all input
+                    $("#myForm")[0].reset();
+
+                    $("#jsGrid").jsGrid("option", "data", []);
+                    $("#jsGrid").jsGrid("refresh");
+
+                    alert("{% trans "Form submitted successfully!" %}");
+                    console.log(response);
+                },
+                error: function(xhr) {
+                    const errorMsg = JSON.parse(xhr.responseText);
+                    alert(errorMsg.message);
+                }
+            });
+
+            event.stopPropagation();
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}

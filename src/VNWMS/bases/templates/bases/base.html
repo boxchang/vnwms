@@ -78,10 +78,18 @@
             </ul>
         </div>
         <ul>
+            {% if request.user.is_superuser %}
+            <li>
+                <a aria-label="Warehouse Setting" href="{% url 'warehouse_list' %}">
+                    <i class="fas fa-warehouse"></i>
+                    <span>{% trans "Warehouse Setting" %}</span>
+                </a>
+            </li>
+            {% endif %}
             <li>
                 <a aria-label="Warehouse Management System" href="{% url 'warehouse_dashboard' %}">
                     <i class="fa fa-truck"></i>
-                    <span>{% trans "Warehouse Management System" %}</span>
+                    <span>{% trans "GD Packing Warehouse" %}</span>
                 </a>
             </li>
         </ul>

@@ -1,0 +1,187 @@
+{% extends 'wh_packing/bases/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "Quantity Transfer & Adjust Form" %} {% endblock %}
+{% block content %}
+    <div class="row mt-4 d-flex justify-content-center">
+        <div class="col-10">
+            <h3 class="text-center">{% trans "Quantity Transfer & Adjust Form" %}</h3>
+            <div class="mt-4">
+                <div class="row m-0 d-flex align-items-end">
+                    <input type="text" class="form-control col-2 d-flex" id="productOrder" placeholder="{% trans "Product Order" %}" >
+                    <input type="text" class="form-control col-2 ml-2" id="size" placeholder="{% trans "Size" %}" >
+                    <button id="searchBtn" type="button" class="btn btn-primary btn-lg ml-2">
+                        <i class="fas fa-search"></i> {% trans "Search" %}
+                    </button>
+                </div>
+            </div>
+            <div class="mt-3" id="jsGrid"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <style>
+        th {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function() {
+
+            const searchParams = new URLSearchParams(window.location.search);
+            const productOrder = searchParams.get("product_order");
+            const size = searchParams.get("size");
+
+            $("#productOrder, #size").on("keyup", function (event) {
+                const product_order = $("#productOrder").val().trim();
+                const _size = $("#size").val().trim();
+                if (event.key === "Enter" && (product_order || _size)) {
+
+                    $.ajax({
+                        url: `{% url 'product_order_search' %}?product_order=${product_order}&size=${_size}`,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            $("#jsGrid").jsGrid("option", "data", response);
+                        },
+                        error: function(xhr) {
+                            const errorMsg = JSON.parse(xhr.responseText);
+                            alert(errorMsg.message);
+                        }
+                    });
+                }
+            });
+
+            if (productOrder) {
+                $("#productOrder").val(productOrder);
+            }
+            if (size) {
+                $("#size").val(size);
+            }
+
+            if (productOrder || size) {
+                $.ajax({
+                    url: `{% url 'product_order_search' %}`,
+                    method: 'GET',
+                    data: {
+                        search: productOrder,
+                        product_order: searchParams.get('product_order'),
+                        size: searchParams.get('size')
+                    },
+                    success: function(response) {
+                        $("#jsGrid").jsGrid("option", "data", response);
+                    },
+                    error: function(xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
+                    }
+                });
+            }
+
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "70vh",
+                noDataContent: "{% trans "Not found" %}",
+                inserting: false,
+                editing: false,
+                sorting: true,
+                paging: true,
+                pageSize: 20,
+                fields: [
+                    { name: "bin__area__warehouse__wh_name", title: "{% trans "Warehouse" %}", type: "text", width: 40, css: "text-center" },
+                    { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 40, css: "text-center"  },
+                    { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", width: 35, css: "text-center"  },
+                    { name: "version_no", title: "{% trans "Version No" %}", type: "text", width: 40, css: "text-center"  },
+                    { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", width: 40, css: "text-center"  },
+                    { name: "item_type_display", title: "{% trans "Item Type" %}", type: "text", width: 80, css: "text-center"  },
+                    { name: "size", title: "{% trans "Size" %}", type: "text", width: 25, css: "text-center"  },
+                    { name: "bin", title: "{% trans "Bin" %}", type: "text", width: 25, css: "text-center"  },
+                    { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 40 },
+                    {
+                        type: "control",
+                        width: 45,
+                        itemTemplate: function(_, item) {
+                            return $("<button>").text("{% trans "Transfer" %}")
+                                .addClass("btn btn-warning")
+                                .on("click", function() {
+                                    let queryParams = $.param({
+                                        warehouse: item.bin__area__warehouse__wh_name,
+                                        product_order: item.product_order,
+                                        purchase_no: item.purchase_no,
+                                        version_no: item.version_no,
+                                        version_seq: item.version_seq,
+                                        item_type: item.item_type_display,
+                                        size: item.size,
+                                        bin: item.bin,
+                                        qty: item.qty,
+                                        search: $("#productOrder").val()
+                                    });
+
+                                    window.open("/wh_packing/bin_transfer_page?" + queryParams, "");
+                            });
+                        }
+                    },
+                    {
+                        type: "control",
+                        width: 45,
+                        itemTemplate: function(_, item) {
+                            return $("<button>").text("{% trans "Adjust" %}")
+                                .addClass("btn btn-warning")
+                                .on("click", function() {
+                                    let queryParams = $.param({
+                                        warehouse: item.bin__area__warehouse__wh_name,
+                                        product_order: item.product_order,
+                                        purchase_no: item.purchase_no,
+                                        version_no: item.version_no,
+                                        version_seq: item.version_seq,
+                                        item_type: item.item_type_display,
+                                        size: item.size,
+                                        bin: item.bin,
+                                        qty: item.qty,
+                                        search: $("#productOrder").val()
+                                    });
+
+                                    window.open("/wh_packing/bin_adjust_page?" + queryParams, "");
+                            });
+                        }
+                    }
+                ]
+            });
+
+
+            $("#searchBtn").on("click", function(event) {
+                const productOrder = $("#productOrder").val();
+                const size = $("#size").val();
+
+                const fields = ["#productOrder", "#size"];
+                if(fields.every(selector => !$(selector).val().trim())){
+                    event.preventDefault();
+                    alert("{% trans 'Product Order, Size cannot all be null!' %}");
+
+                } else {
+                    $.ajax({
+                        url: '{% url "product_order_search" %}?product_order=' + productOrder + '&size=' + size,
+                        method: 'GET',
+                        dataType: 'json',
+                        success: function(response) {
+                            $("#jsGrid").jsGrid("option", "data", response);
+                        },
+                        error: function(xhr) {
+                            const errorMsg = JSON.parse(xhr.responseText);
+                            alert(errorMsg.message);
+                        }
+                    });
+                }
+            });
+
+
+        });
+
+    </script>
+{% endblock %}

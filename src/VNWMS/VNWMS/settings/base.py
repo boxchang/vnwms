@@ -36,6 +36,10 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'wh_packing',
+    'wh_wip',
+    'wh_product',
+    'wh_former',
     'warehouse',
     'users',
     'bases',

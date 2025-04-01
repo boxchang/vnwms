@@ -90,7 +90,7 @@ class mes_database:
         with connections['MES'].cursor() as cur:
             cur.execute(sql)
 
-class vnedc_database:
+class vnwms_database:
     def select_sql(self, sql):
         with connections['VNWMS'].cursor() as cur:
             cur.execute(sql)

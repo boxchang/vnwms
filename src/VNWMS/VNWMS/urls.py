@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^users/', include('users.urls')),
     url(r'^home', include('bases.urls')),
     url(r'^warehouse/', include('warehouse.urls')),
+    url(r'^wh_packing/', include('wh_packing.urls')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^favicon\.ico$', RedirectView.as_view(url='/static/favicon.ico')),

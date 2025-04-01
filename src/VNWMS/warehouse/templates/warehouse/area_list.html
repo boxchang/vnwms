@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
-{% block title %} Warehouse List {% endblock %}
+{% block title %} Area List By Warehouse {% endblock %}
 {% block base_js %}
 {{ block.super }}
 <!-- Bootstrap CSS -->
@@ -30,26 +30,28 @@
             {% block sidebar %} {{ block.super }} {% endblock %}
             {% block content %}
             <div class="col-sm-9" style="border: 1px #6c757d solid; height: 90vh;">
-                <h2 class="mb-4">Warehouse List</h2>
-                <a class="btn btn-primary mb-3" style="width: 70px" href="{% url 'warehouse_create' %}" role="button">Add</a>
+                <h2 class="mb-4">Area List By Warehouse</h2>
+                <a class="btn btn-primary mb-3" style="width: 70px" href="{% url 'area_create' %}" role="button">Add</a>
     {#            <a class="btn btn-info mb-3 ms-3"  href="{% url 'area_list' %}" role="button">Area List</a>#}
                 <!-- Kiểm tra nếu có dữ liệu -->
-                {% if warehouses %}
+                {% if areas %}
                 <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th></th>
+                            <th>Area Id</th>
+                            <th>Area Name</th>
                             <th>Warehouse Id</th>
-                            <th>Warehouse Name</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Lặp qua danh sách warehouse -->
-                        {% for warehouse in warehouses %}
+                        {% for area in areas %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td onclick="redirectToPage('{% url 'area_by_warehouse' wh_code=warehouse.wh_code %}')">{{ warehouse.wh_code }}</td>
-                            <td onclick="redirectToPage('{% url 'area_by_warehouse' wh_code=warehouse.wh_code %}')">{{ warehouse.wh_name }}</td>
+                            <td onclick="redirectToPage('{% url 'bin_by_area' area_code=area.warehouse_id %}')">{{ area.area_id}}</td>
+                            <td onclick="redirectToPage('{% url 'bin_by_area' area_code=area.warehouse_id %}')">{{ area.area_name }}</td>
+                            <td onclick="redirectToPage('{% url 'bin_by_area' area_code=area.warehouse_id %}')">{{ area.warehouse_id }}</td>
         {#                    <td>{{ warehouse.wh_comment }}</td>#}
         {#                    <td>#}
         {#                        {% if warehouse.wh_bg %}#}
@@ -59,9 +61,9 @@
         {#                        {% endif %}#}
         {#                    </td>#}
                             <td>
-                                {% if warehouse.wh_code %}
-                                    <a class="btn btn-primary" style="width: 70px" href="{% url 'warehouse_edit' warehouse_code=warehouse.wh_code %}" role="button">Edit</a>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-warehouse-id="{{ warehouse.pk }}" data-warehouse-name="{{ warehouse.wh_name }}">Delete</button>
+                                {% if area.area_id %}
+                                    <a class="btn btn-primary" style="width: 70px" href="{% url 'edit_area' area_code=area.area_id %}" role="button">Edit</a>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-area-id="{{ area.pk }}" data-area-name="{{ area.area_name }}">Delete</button>
                                 {% else %}
                                     <a class="btn btn-primary" style="width: 70px" href="#" role="button">Edit</a>
                                     <a class="btn btn-primary" style="width: 70px" href="#" role="button">Delete</a>
@@ -72,7 +74,7 @@
                     </tbody>
                 </table>
                 {% else %}
-                <p>{% trans "No warehouses found." %}</p>
+                <p>No warehouses found.</p>
                 {% endif %}
             </div>
             {% endblock %}
@@ -88,7 +90,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete the warehouse "<strong id="modalWarehouseName"></strong>"?
+                    Are you sure you want to delete the area "<strong id="modalAreaName"></strong>"?
                 </div>
                 <div class="modal-footer">
                     <form method="post" id="deleteForm">
@@ -109,16 +111,16 @@
             const deleteModal = document.getElementById('deleteModal');
             deleteModal.addEventListener('show.bs.modal', function (event) {
                 const button = event.relatedTarget; // Button that triggered the modal
-                const warehouseName = button.getAttribute('data-warehouse-name');
-                const warehouseId = button.getAttribute('data-warehouse-id');
+                const areaName = button.getAttribute('data-area-name');
+                const areaId = button.getAttribute('data-area-id');
 
                 // Update modal content
-                const modalWarehouseName = document.getElementById('modalWarehouseName');
-                modalWarehouseName.textContent = warehouseName;
+                const modalAreaName = document.getElementById('modalAreaName');
+                modalAreaName.textContent = areaName;
 
                 // Update form action dynamically
                 const deleteForm = document.getElementById('deleteForm');
-                deleteForm.action = `/warehouse/delete/${warehouseId}/`;
+                deleteForm.action = `warehouse/area_delete/${areaId}/`;
             });
         </script>
         <script>
@@ -128,32 +130,3 @@
         }
         </script>
 {% endblock %}
-
-
-
-
-
-
-
-{#{% extends 'warehouse/bases/base.html' %}#}
-{#{% load crispy_forms_tags %}#}
-{#{% load static %}#}
-{#{% block css %}#}
-{#{% load i18n %}#}
-{##}
-{#{% endblock css %}#}
-{#{% block js %}#}
-{#<style>#}
-{##}
-{#</style>#}
-{##}
-{#<script>#}
-{##}
-{#</script>#}
-{#{% endblock js %}#}
-{#{% block title %}#}
-{##}
-{#{% endblock title %}#}
-{#{% block content %}#}
-{##}
-{#{% endblock content %}#}
