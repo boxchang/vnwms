@@ -121,7 +121,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
             and b.product_order = d.product_order and b.version_no = d.version_no and b.item_type_id = d.item_type_id
                         and b.size = d.size and b.qty = d.order_qty
-            JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
+            LEFT JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
             JOIN [VNWMS].[dbo].[warehouse_warehouse] w on w.wh_code = area.warehouse_id
             WHERE qty > 0
             """
