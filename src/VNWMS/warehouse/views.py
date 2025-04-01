@@ -22,7 +22,7 @@ from .forms import WarehouseForm, AreaForm, BinForm, BinValueForm, BinSearchForm
     BinTransferForm, QuantityAdjustForm, ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
 from .models import Warehouse, Area, Bin, Bin_Value, Bin_Value_History, StockInForm, Series, \
     MovementType, ItemType, StockOutForm
-from django.db.models import Case, When, Value, BooleanField, Q
+from django.db.models import Case, When, Value, BooleanField, Q, F
 
 
 # Warehouse
@@ -784,20 +784,24 @@ def product_order_search(request):
         return JsonResponse({"status": "blank"}, status=200)
 
     request.session['search_results_url'] = request.get_full_path()
-
     if product_order or size:
+
+        item_type_column = get_item_type_name()
+
         bin_values = Bin_Value.objects.select_related(
             'bin__area__warehouse'  # bin->area->warehouse
         ).filter(
             product_order__icontains=product_order,
             size__icontains=size,
+        ).annotate(
+            item_type_display=F(f'item_type__{item_type_column}')
         ).values(
-            'bin__area__warehouse__wh_code',
+            'bin__area__warehouse__wh_name',
             'product_order',
             'purchase_no',
             'version_no',
             'version_seq',
-            'item_type',
+            'item_type_display',
             'size',
             'bin',
             'qty'
@@ -807,6 +811,7 @@ def product_order_search(request):
 
         if not data:
             return JsonResponse({"status": "blank"}, status=200)
+
 
     return JsonResponse(data, safe=False)
 
@@ -1030,17 +1035,21 @@ def product_order_hist_data(request):
     else:
         _mvt = 'mvt_id'
 
+    item_type_column = get_item_type_name()
+
     bin_values = Bin_Value_History.objects.filter(
         (Q(product_order__icontains=product_order) if product_order else Q()) &
         (Q(bin__bin_id__icontains=bin_id) if bin_id else Q()) &
         (Q(size__icontains=size) if size else Q()) &
         (Q(comment__icontains=comment) if comment else Q())
+    ).annotate(
+        item_type_display=F(f'item_type__{item_type_column}')
     ).values(
         'product_order',
         'purchase_no',
         'version_no',
         'version_seq',
-        'item_type',
+        'item_type_display',
         'size',
         'comment',
         _mvt,
@@ -1058,7 +1067,7 @@ def product_order_hist_data(request):
             "purchase_no": item["purchase_no"],
             "version_no": item["version_no"],
             "version_seq": item["version_seq"],
-            "item_type": item["item_type"],
+            "item_type": item["item_type_display"],
             "size": item["size"],
             "comment": item["comment"],
             "mvt_id": item[_mvt],
