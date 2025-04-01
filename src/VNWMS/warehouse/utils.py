@@ -88,7 +88,8 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
     return result
 
 
-def inventory_search(warehouse=None, area=None, location=None, product_order=None, purchase_order=None, size=None):
+def inventory_search(warehouse=None, area=None, location=None, product_order=None, purchase_order=None, size=None,
+                     lot_no=None, version_no=None, item_type=None):
     db = vnedc_database()
 
     item_type_name = get_item_type_name()
@@ -119,7 +120,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             JOIN [VNWMS].[dbo].[warehouse_area] area on bin.area_id = area.area_id
             LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
             and b.product_order = d.product_order and b.version_no = d.version_no and b.item_type_id = d.item_type_id
-                        and b.size = d.size
+                        and b.size = d.size and b.qty = d.order_qty
             JOIN [VNWMS].[dbo].[warehouse_itemtype] item on d.item_type_id = item.type_code
             JOIN [VNWMS].[dbo].[warehouse_warehouse] w on w.wh_code = area.warehouse_id
             WHERE qty > 0
@@ -130,6 +131,9 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
 
     if purchase_order:
         sql += f" AND b.purchase_no = '{purchase_order}'"
+
+    if lot_no:
+        sql += f" AND b.lot_no = '{lot_no}'"
 
     if warehouse:
         sql += f" AND area.warehouse_id = '{warehouse}'"
