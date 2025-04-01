@@ -104,7 +104,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             FROM [wh_packing_bin_value] b
             JOIN [warehouse_bin] bin on b.bin_id = bin.bin_id
             JOIN [warehouse_area] area on bin.area_id = area.area_id
-            LEFT JOIN [VNWMS].[dbo].[warehouse_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
+            LEFT JOIN [wh_packing_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
             and b.product_order = d.product_order and b.version_no = d.version_no and b.item_type_id = d.item_type_id
                         and b.size = d.size and b.qty = d.order_qty
             JOIN [warehouse_itemtype] item on b.item_type_id = item.type_code
