@@ -6,7 +6,7 @@ from VNWMS.settings.base import DEBUG
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE',
-                          'VNWMS.settings.test')
+                          'VNWMS.settings.production')
 
     # from django.conf import settings
     # if DEBUG:
