@@ -182,7 +182,7 @@ def get_purchase_no_stout(request):
 
 
 def stockin_filter(raws):
-    vnedc_db = vnedc_database()
+    vnwms_db = vnwms_database()
     data_list = []
     for raw in raws:
         product_order = raw['VBELN']
@@ -197,7 +197,7 @@ def stockin_filter(raws):
         WHERE product_order='{product_order}' and purchase_no='{purchase_no}'
         and version_no='{version_no}' and version_seq='{version_seq}' and size='{size}'
         """
-        stocks = vnedc_db.select_sql_dict(sql2)
+        stocks = vnwms_db.select_sql_dict(sql2)
 
         if stocks[0]["order_qty"]:
             qty = int(order_qty) - stocks[0]["order_qty"]
