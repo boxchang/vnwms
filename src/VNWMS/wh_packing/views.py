@@ -193,7 +193,7 @@ def stockin_filter(raws):
         order_qty = raw['MENGE']
 
         sql2 = f"""
-        SELECT sum(order_qty) order_qty FROM [warehouse_stockinform]
+        SELECT sum(order_qty) order_qty FROM [wh_packing_stockinform]
         WHERE product_order='{product_order}' and purchase_no='{purchase_no}'
         and version_no='{version_no}' and version_seq='{version_seq}' and size='{size}'
         """

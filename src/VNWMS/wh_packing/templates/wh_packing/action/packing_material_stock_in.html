@@ -176,7 +176,7 @@
             let product_order = document.getElementById('id_product_order').value.trim();
 
             if (!product_order) {
-                event.preventDefault(); // Ngăn gửi request lên server
+                event.preventDefault();
                 alert("{% trans 'Product Order cannot be null!' %}");
 
             } else {
@@ -190,7 +190,7 @@
             let purchase_no = document.getElementById('id_purchase_no').value.trim();
 
             if (!purchase_no) {
-                event.preventDefault(); // Ngăn gửi request lên server
+                event.preventDefault();
                 alert("{% trans 'Purchase Order cannot be null!' %}");
 
             } else {
@@ -199,15 +199,16 @@
 
         });
 
-        get_order_info = function() {
+        const get_order_info = function() {
 
             var product_order = $("#id_product_order").val();
 
             $.ajax({
-                url: '{% url 'get_product_order_info' %}', type: 'post',
+                url: '{% url 'get_product_order_info' %}',
+                type: 'get',
                 dataType: 'json',
                 async: false,
-                data: {"csrfmiddlewaretoken": "{{ csrf_token }}", "product_order": product_order},
+                data: {"product_order": product_order},
                 success: function(data) {
                     if (data.status === 'no_change'){
                         console.log("Keep the data table");
@@ -216,20 +217,21 @@
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("資料加載失敗：", error);
+                    console.error("Error：", error);
                 }
             });
         };
 
-        get_no_info = function() {
+        const get_no_info = function() {
 
             var purchase_no = $("#id_purchase_no").val();
 
             $.ajax({
-                url: '{% url 'get_purchase_no_info' %}', type: 'post',
+                url: '{% url 'get_purchase_no_info' %}',
+                type: 'get',
                 dataType: 'json',
                 async: false,
-                data: {"csrfmiddlewaretoken": "{{ csrf_token }}", "purchase_no": purchase_no},
+                data: {"purchase_no": purchase_no},
                 success: function(data) {
                     if (data.status === 'no_change'){
                         console.log("Keep the data table");
@@ -239,7 +241,7 @@
 
                 },
                 error: function (xhr, status, error) {
-                    console.error("資料加載失敗：", error);
+                    console.error("Error：", error);
                 }
             });
         };
