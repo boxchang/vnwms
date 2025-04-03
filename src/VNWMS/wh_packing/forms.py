@@ -321,7 +321,7 @@ class StockOutPForm(forms.Form):
                 Div('version_no', css_class='col-md-4'),
                 Div('item_type', css_class='col-md-4'),
                 css_class='row mb-3'
-            )
+            ),
         )
 
 

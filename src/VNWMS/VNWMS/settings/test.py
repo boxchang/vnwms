@@ -12,7 +12,7 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'VNWMS_Test',
+        'NAME': 'VNWMS_Test2',
         'USER': 'vnwms',
         'PASSWORD': 'vnwms#2025',
         'HOST': '10.13.104.181',

@@ -141,11 +141,13 @@ def get_product_order_stout(request):
                                         'post_date': raw['post_date'],
                                         'sap_mtr_no': raw['sap_mtr_no'],
                                         'desc': raw['desc'],
+                                        'id': raw['id']
                                         })
 
     return JsonResponse({
         "data_list_stout": data_list_stout
     }, safe=False)
+
 
 def get_purchase_no_stout(request):
     data_list_stout = []
@@ -366,6 +368,7 @@ def packing_material_stock_out_post(request):
         try:
             # 解析 JSON 資料
             data = json.loads(request.body)
+            ids_to_stou = data.get("ids", [])
 
             # STIN-202412310001
             YYYYMM = datetime.now().strftime("%Y%m")
@@ -374,10 +377,10 @@ def packing_material_stock_out_post(request):
 
             mvt = MovementType.objects.get(mvt_code="STOU")
 
-            for item in data:
-                bin = Bin.objects.get(bin_id=item['bin_id'])
+            for item in data["list_data"]:
+                bin = Bin.objects.get(bin_id=item['binId'])
                 comment = item['desc'] if 'desc' in item else ""
-                type_name = item['item_type']
+                type_name = item['itemType']
                 item_type = ItemType.objects.get(
                     Q(type_code=type_name) |
                     Q(type_name=type_name) |
@@ -387,13 +390,13 @@ def packing_material_stock_out_post(request):
                 try:
                     stockout_form = StockOutForm(
                         form_no=form_no,
-                        product_order=item['product_order'],
-                        version_no=item['version_no'],
-                        version_seq=item['version_seq'],
-                        purchase_no=item['purchase_no'],
+                        product_order=item['productOrder'],
+                        version_no=item['versionNo'],
+                        version_seq=item['versionSeq'],
+                        purchase_no=item['purchaseNo'],
                         item_type=item_type,
                         size=item['size'],
-                        purchase_unit=item['purchase_unit'],
+                        purchase_unit=item['purchaseUnit'],
                         order_bin=bin,
                         desc=comment,
                         create_at=timezone.now(),
@@ -403,16 +406,22 @@ def packing_material_stock_out_post(request):
 
                     qty = int(item['qty']) * -1
 
-                    result = Do_Transaction(request, form_no, item['product_order'],
-                                            item['purchase_no'], item['version_no'], item['version_seq'], item_type.type_code,
+                    result = Do_Transaction(request, form_no, item['productOrder'],
+                                            item['purchaseNo'],
+                                            item['versionNo'],
+                                            item['versionSeq'],
+                                            item_type.type_code,
                                             item['size'], mvt,
-                                            item['bin_id'], qty, item['purchase_unit'], comment,
+                                            item['binId'], qty,
+                                            item['purchaseUnit'],
+                                            comment,
                                             stockout_form=form_no)
 
                 except Exception as e:
                     raise ValueError(f"{e}")
                     print(e)
-
+            if not ids_to_stou:
+                return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
             return JsonResponse({'status': 'success'}, status=200)
 
         except Exception as e:
@@ -456,7 +465,6 @@ def product_order_search(request):
 
         if not data:
             return JsonResponse({"status": "blank"}, status=200)
-
 
     return JsonResponse(data, safe=False)
 
@@ -1091,7 +1099,6 @@ def inventory_delete(request):
 
         if not ids_to_delete:
             return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
-
 
     return JsonResponse({"success": False, "error": "Phương thức không hợp lệ!"})
 

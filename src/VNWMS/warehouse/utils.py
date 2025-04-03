@@ -16,6 +16,7 @@ def get_item_type_name():
         item_type_column = "type_code"
     return item_type_column
 
+
 def get_item_type_object(type_name):
     item_type = ItemType.objects.get(
         Q(type_code=type_name) |

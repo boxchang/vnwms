@@ -31,10 +31,26 @@
         max-width: 100%;
     }
 
+    /* Hiệu ứng hover: Phóng to nhẹ và thêm bóng đổ */
+    .btn-click-effect {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Hiệu ứng khi click: Thu nhỏ nhẹ rồi trở lại bình thường */
+    .btn-click-effect:active {
+        transform: scale(0.95); /* Thu nhỏ 5% */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Giảm bóng */
+    }
+
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        transform: scale(1.5);
+    }
 
 </style>
 
-{% endblock css %}
+{% endblock %}
 
 
 {% block content %}
@@ -44,6 +60,13 @@
             <h3 class="p-3 text-center">{% trans "Warehouse Stock Out Form" %}</h3>
             <form id="myForm">
                 {% crispy form %}
+                <div class="row mb-3">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" id="btnSearch" class="btn btn-outline-success w-auto btn-click-effect">🔍 {% trans "Search" %}</button>
+                    </div>
+                </div>
+                <hr />
+
                 <div id="jsGrid"></div>
 
                 <hr />
@@ -61,8 +84,7 @@
     $(document).ready(function() {
 
         {# Search #}
-        let debounceTimer;
-        $("#id_product_order, #id_purchase_no, #id_size, #id_lot_no, #id_version_no").on("keyup", function (event) {
+        $("#btnSearch").on("click", function (event) {
             let product_order = $('#id_product_order').val().trim();
             let purchase_no = $('#id_purchase_no').val().trim();
             let size = $('#id_size').val().trim();
@@ -71,13 +93,9 @@
             let item_type = $('#id_item_type').val();
             let isItemTypeSelected = item_type !== null && item_type !== "";
 
-            {#let fields = ["#id_product_order", "#id_purchase_no", "#id_size", "#id_lot_no", "#id_version_no"];#}
-            if (event.key === "Enter" && (product_order || size || lot_no || version_no || purchase_no || isItemTypeSelected )) {
+            if (product_order || size || lot_no || version_no || purchase_no || isItemTypeSelected ) {
                 event.preventDefault();
-                clearTimeout(debounceTimer); // Xóa timer cũ
-                debounceTimer = setTimeout(() => {
-                    get_sap_info()
-                }, 300);
+                get_sap_info()
             }
             event.stopPropagation();
         });
@@ -119,7 +137,57 @@
                     alert(errorMsg.message);
                 }
             });
-        }
+        };
+
+        $("#jsGrid").on("change", "#selectAll", function() {
+            let isChecked = $(this).is(":checked");
+
+             $(".rowCheckbox").prop("checked", isChecked).each(function() {
+                let id = $(this).attr("data-id");
+
+                if (isChecked) {
+                    selectedItems[id] = true;
+                } else {
+                    delete selectedItems[id];
+                }
+             });
+        });
+
+        $("#jsGrid").on("change", ".rowCheckbox", function() {
+            let id = $(this).attr("data-id");
+
+            if ($(this).is(":checked")) {
+                selectedItems[id] = true;
+            } else {
+                delete selectedItems[id];
+            }
+
+            // Kiểm tra nếu tất cả checkbox con đều được chọn thì tick vào #selectAll
+            let allChecked = $(".rowCheckbox").length === $(".rowCheckbox:checked").length;
+            $("#selectAll").prop("checked", allChecked);
+        });
+
+
+         {#Shortcut Keyboard #}
+        $(document).on('keydown', function(e) {
+            e.preventDefault();
+            if (e.key === 'Enter') {
+                const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
+                if (updateButton.length) {
+                    updateButton.click();
+                }
+            } else if (e.key === 'Escape') {
+                const cancelButton = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
+                if (cancelButton.length) {
+                    cancelButton.click();
+                }
+            }
+
+            e.stopPropagation();
+
+        });
+
+        let selectedItems = {};
 
         {# Main JsGrid #}
         data: [], // 初始為空，將透過 AJAX 加載資料
@@ -127,15 +195,19 @@
         // 初始化 jsGrid
         $("#jsGrid").jsGrid({
             width: "100%",
-            height: "50vh",
+            height: "70vh",
             noDataContent: "{% trans "Not found" %}",
-            inserting: true,  // 啟用新增功能
+            autoload: true,
+            selecting: true,
+            inserting: false,  // 啟用新增功能
             editing: true,    // 啟用編輯功能
             sorting: true,    // 啟用排序功能
             paging: false,     // 啟用分頁功能
-            {#confirmDeleting: false,#}
-
             rowClick: function (args) {
+                let $target = $(args.event.target);
+                if ($target.is("input[type='checkbox']")) {
+                    return;
+                }
                 this.editItem(args.item);
             },
 
@@ -143,45 +215,77 @@
 
             fields: [
                 {
+                    name: "select",
+                    title: "<input type='checkbox' id='selectAll'>",
+                    itemTemplate: function(_, item) {
+                        let $checkbox = $("<input>").attr("type", "checkbox")
+                            .addClass("rowCheckbox")
+                            .attr("data-id", item.id)
+                            .attr("data-product-order", item.product_order)
+                            .attr("data-purchase-no", item.purchase_no)
+                            .attr("data-version-no", item.version_no)
+                            .attr("data-version-seq", item.version_seq)
+                            .attr("data-item-type", item.item_type)
+                            .attr("data-size", item.size)
+                            .attr("data-bin-id", item.bin_id)
+                            .attr("data-qty", item.qty)
+                            .attr("data-desc", item.desc)
+                            .attr("data-purchase-unit", item.purchase_unit);
+
+                        if (selectedItems[item.id]) {
+                            $checkbox.prop("checked", true);  // Dùng prop thay vì attr
+                        }
+
+                        $checkbox.on("change", function() {
+                            if ($(this).is(":checked")) {
+                                selectedItems[item.id] = true;
+                            } else {
+                                delete selectedItems[item.id];
+                            }
+                        });
+
+                        return $checkbox;
+                    },
+                    align: "center",
+                    width: 50,
+                    filtering: false,
+                    sorting: false,
+                },
+                {
                     type: "control",
                     width: 80,
                     itemTemplate: function(_, item) {
-                        // 建立刪除按鈕
-                        var deleteButton = $("<button>")
-                            .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
-                            .text("{% trans "Delete" %}")
+                        // Tạo nút Edit
+                        var editButton = $("<button>")
+                            .addClass("btn btn-primary btn-sm") // Bootstrap style
+                            .text("{% trans 'Edit' %}")
                             .on("click", function(e) {
-                                if (e.detail === 0 ) {
-                                    return;
-                                }
                                 e.stopPropagation();
                                 e.preventDefault();
-
-                                // Nếu là click chuột, thực hiện xóa item
-                                $("#jsGrid").jsGrid("deleteItem", item);
-
+                                // Logic để chỉnh sửa item
+                                $("#jsGrid").jsGrid("editItem", item);
                             });
 
-                        return deleteButton;
+                        // Chỉ trả về nút Edit mà không có nút Delete
+                        return editButton;
                     }
                 },
-                { name: "id", type: "number", width: 50, title: "{% trans "ID" %}", readOnly: true, visible: false },
+                { name: "customer_no", type: "text", width: 140, title: "{% trans "Customer" %}", editing: false, css: "text-center" },
+                { name: "product_order", type: "text", width: 140, title: "{% trans "Product Order" %}", validate: "required", editing: false, css: "text-center" },
+                { name: "version_no", type: "text", width: 140, title: "{% trans "Version No" %}", editing: false, css: "text-center" },
+                { name: "lot_no", type: "text", width: 200, title: "{% trans "Lot Number" %}", editing: false, css: "text-center" },
+                { name: "size", type: "text", width: 90, title: "{% trans "Size" %}", editing: false, css: "text-center"},
                 { name: "qty", type: "number", width: 120, title: "{% trans "Qty" %}"},
+                { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", editing: false, css: "text-center" },
                 { name: "bin_id", type: "text", width: 90, title: "{% trans "Location" %}", editing: false, css: "text-center"},
                 { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", editing: true, css: "text-center" },
-                { name: "product_order", type: "text", width: 140, title: "{% trans "Product Order" %}", validate: "required", editing: false, css: "text-center" },
-                { name: "purchase_no", type: "text", width: 140, title: "{% trans "Purchase Order" %}", editing: false, css: "text-center"},
-                { name: "version_no", type: "text", width: 140, title: "{% trans "Version No" %}", editing: false, css: "text-center" },
-                { name: "version_seq", type: "text", width: 140, title: "{% trans "Version Seq" %}", editing: false, css: "text-center" },
-                { name: "size", type: "text", width: 90, title: "{% trans "Size" %}", editing: false, css: "text-center"},
-                { name: "purchase_unit", type: "text", width: 200, title: "{% trans "Purchase Unit" %}", editing: false, css: "text-center" },
-                { name: "customer_no", type: "text", width: 120, title: "{% trans "Customer" %}", editing: false, css: "text-center" },
-                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", editing: false, css: "text-center" },
-                { name: "lot_no", type: "text", width: 200, title: "{% trans "Lot Number" %}", editing: false, css: "text-center" },
-                { name: "purchase_qty", type: "number", width: 200, title: "{% trans "Purchase Quantity" %}", editing: false},
-                { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", editing: false, css: "text-center" },
                 { name: "post_date", type: "date", width: 200, title: "{% trans "Post Date" %}", editing: false, css: "text-center" },
+                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", editing: false, css: "text-center" },
+                { name: "purchase_qty", type: "number", width: 120, title: "{% trans "Purchase Quantity" %}", editing: false},
+                { name: "purchase_unit", type: "text", width: 120, title: "{% trans "Purchase Unit" %}", editing: false, css: "text-center" },
+                { name: "purchase_no", type: "text", width: 140, title: "{% trans "Purchase Order" %}", editing: false, css: "text-center"},
                 { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", editing: false, css: "text-center" },
+                { name: "version_seq", type: "text", width: 90, title: "{% trans "Version Seq" %}", editing: false, css: "text-center" },
 
             ]
         });
@@ -191,30 +295,11 @@
            e.stopPropagation();
         });
 
-        {# Shortcut Keyboard #}
-        $(document).on('keydown', function(e) {
 
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Ngăn chặn hành vi mặc định
-                const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
-                if (updateButton.length) {
-                    updateButton.click();
-                }
-            } else if (e.key === 'Escape') {
-                e.preventDefault();
-                const cancelButton = $(".jsgrid-button.jsgrid-cancel-edit-button:visible");
-                if (cancelButton.length) {
-                    cancelButton.click();
-                }
-            }
-        });
-
-
-        // 當按下過帳按鈕時
         $('#postDataButton').click(function(event) {
             event.preventDefault();
             // 獲取 jsGrid 的所有數據
-            var gridData = $("#jsGrid").data("JSGrid").data;
+            let gridData = $("#jsGrid").data("JSGrid").data;
 
             if (!gridData || gridData.length === 0) {
                 alert("{% trans "No data in the table! Please enter at least one row." %}");
@@ -222,33 +307,68 @@
                 return;
             }
 
-            // 將數據轉換為 JSON 格式
-            var jsonData = JSON.stringify(gridData);
+            let selectedIds = Object.keys(selectedItems); // Lấy danh sách ID đã chọn
+            let selectedData = [];
 
-            // 使用 Ajax 發送數據到後端
+            $(".rowCheckbox:checked").each(function() {
+                let rowData = $(this).data(); // Lấy toàn bộ data-* attributes
+                selectedData.push(rowData);
+            });
+
+            if (selectedData.length === 0) {
+                alert("Please select at least one row to delete!");
+                return;
+            }
+
+            if (!confirm("Are you sure you want to stock out?")) return;
+
             $.ajax({
-                url: '{% url 'packing_material_stock_out_post' %}',  // 設置後端接收數據的 URL
-                type: 'POST',
-                contentType: 'application/json',
-                data: jsonData,
-                success: function(response) {
+                type: "POST",
+                url: "{% url 'packing_material_stock_out_post' %}",
+                data: JSON.stringify({
+                    ids: selectedIds ,
+                    list_data: selectedData,
+                }),
+                contentType: "application/json",
+                success: function (response) {
+                    alert("Deleted successfully!");
+                    console.log("Data API:", response);
 
-                    //Reset all input
-                    $("#myForm")[0].reset();
 
-                    $("#jsGrid").jsGrid("option", "data", []);
-                    $("#jsGrid").jsGrid("refresh");
+                    // Reset danh sách đã chọn
+                    selectedItems = {};
+                    $(".rowCheckbox").prop("checked", false); // Bỏ chọn tất cả checkbox
+                    $("#selectAll").prop("checked", false); // Bỏ chọn "Chọn tất cả"
 
-                    alert("{% trans "Form submitted successfully!" %}");
-                    console.log(response);
+
+                    const product_order = $("#id_product_order").val();
+                    const purchase_no = $("#id_purchase_no").val();
+                    const size = $("#id_size").val();
+                    const lot_no = $("#id_lot_no").val().trim();
+                    const version_no = $("#id_version_no").val().trim();
+                    const item_type = $("#id_item_type").val().trim();
+
+                    if (product_order || purchase_no || size || lot_no || version_no || item_type) {
+
+                        $.getJSON("{% url 'get_product_order_stout' %}", {
+                            product_order: product_order,
+                            purchase_no: purchase_no,
+                            size: size,
+                            lot_no: lot_no,
+                            version_no: version_no,
+                            item_type: item_type
+                            }, function (data) {
+                                console.log("Data received:", data); // Debug xem dữ liệu đúng chưa
+                                $("#btnSearch").trigger("click");
+                                {#$("#jsGrid").jsGrid("option", "data", data);#}
+                        });
+                    }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     const errorMsg = JSON.parse(xhr.responseText);
                     alert(errorMsg.message);
                 }
             });
-
-            event.stopPropagation();
 
         });
 
