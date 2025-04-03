@@ -154,21 +154,21 @@ class QuantityAdjustForm(forms.Form):
 
 
 class StockInPForm(forms.Form):
-    SIZE_CHOICES = [
-        (0, '---------'),
-        ('XXS', 'XXS'),
-        ('XS', 'XS'),
-        ('S', 'S'),
-        ('M', 'M'),
-        ('L', 'L'),
-        ('XL', 'XL'),
-        ('XXL', 'XXL'),
-    ]
+    # SIZE_CHOICES = [
+    #     (0, '---------'),
+    #     ('XXS', 'XXS'),
+    #     ('XS', 'XS'),
+    #     ('S', 'S'),
+    #     ('M', 'M'),
+    #     ('L', 'L'),
+    #     ('XL', 'XL'),
+    #     ('XXL', 'XXL'),
+    # ]
 
     product_order = forms.CharField(max_length=20, label=_("Product Order"), required=True, )  # VBELN 收貨單號
     customer_no = forms.CharField(max_length=20, label=_("Customer"), required=False,)  # 無
     version_no = forms.CharField(max_length=20, label=_("Version No"), required=True,)  # ZZVERSION
-    version_seq = forms.CharField(max_length=20, label=_("Version Sequence"), required=True, )  # ZZVERSION_SEQ
+    version_seq = forms.CharField(max_length=20, label=_("Version Sequence"), required=False, )  # ZZVERSION_SEQ
     lot_no = forms.CharField(max_length=20, label=_("Lot Number"), required=False, )  # LOTNO
     item_type = forms.ModelChoiceField(queryset=ItemType.objects.all(), label=_("Item Type"), required=True)
     purchase_no = forms.CharField(max_length=20, label=_("Purchase Order"), required=True, )  # EBELN 採購單號
@@ -180,7 +180,7 @@ class StockInPForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'text-right'})
 
     )  # MENGE_PO 採購數量
-    size = forms.ChoiceField(choices=SIZE_CHOICES, label=_("Size"), required=True)
+    size = forms.CharField(max_length=20, label=_("Size"), required=False, )
     purchase_unit = forms.ModelChoiceField(queryset=UnitType.objects.all(), label=_("Unit"), required=False)
     post_date = forms.DateField(label=_("Post Date"), required=False)  # BUDAT收貨日期
     order_qty = forms.CharField(

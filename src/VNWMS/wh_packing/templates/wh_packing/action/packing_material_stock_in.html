@@ -271,8 +271,8 @@
             const customer_no =$("#id_customer_no").val();
             const version_seq = $("#id_version_seq").val();
 
-            if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "" || item_type_val == "") {
-                alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %})git {% trans "are required" %}");
+            if(product_order == "" || purchase_no == "" || version_no == "" || item_type_val == "") {
+                alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Item Type" %}) {% trans "are required" %}");
                 return false;
             } else {
                 $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
@@ -281,7 +281,7 @@
                 $("#id_purchase_qty").val(0);
                 $("#id_item_type").val(0);
                 $("#id_purchase_unit").val(0);
-                $("#id_size").val(0);
+                {#$("#id_size").val(0);#}
 
             }
 
@@ -393,6 +393,11 @@
                     }
                 },
                 { name: "id", type: "number", width: 50, title: "ID", align: "center", readOnly: true, visible: false },
+                { name: "customer_no", type: "text", width: 120, title: translations.customerNo, align: "center", editing: true },
+                { name: "product_order", type: "text", width: 135, title: translations.productOrder, align: "center", validate: "required", editing: false },
+                { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", align: "center", editing: false },
+                { name: "lot_no", type: "text", width: 130, title: translations.lotNo, align: "center", editing: false },
+                { name: "size", type: "text", width: 70, title: translations.size, align: "center", validate: "required", editing: false },
                 {
                     name: "order_qty",
                     type: "text",
@@ -406,6 +411,7 @@
                         }
                     }
                 },
+                { name: "item_type", type: "text", width: 200, title: translations.itemType, align: "center", editing: false },
                 {
                     name: "order_bin",
                     type: "text",
@@ -462,19 +468,16 @@
                 },
 
                 { name: "desc", type: "text", width: 225, title: translations.comment, align: "center", editing: true },
-                { name: "customer_no", type: "text", width: 120, title: translations.customerNo, align: "center", editing: true },
-                { name: "supplier", type: "text", width: 130, title: translations.supplier, align: "center", editing: true },
-                { name: "product_order", type: "text", width: 135, title: translations.productOrder, align: "center", validate: "required", editing: false },
-                { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, align: "center", validate: "required", editing: false },
-                { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", align: "center", editing: false },
-                { name: "version_seq", type: "number", width: 120, title: translations.versionSeq, align: "center", validate: "required", editing: false },
-                { name: "size", type: "text", width: 50, title: translations.size, align: "center", validate: "required", editing: false },
-                { name: "lot_no", type: "text", width: 130, title: translations.lotNo, align: "center", editing: false },
                 { name: "purchase_qty", type: "text", width: 120, title: translations.purchaseQty, align: "center", editing: false },
-                { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, align: "center", editing: false },
-                { name: "item_type", type: "text", width: 200, title: translations.itemType, align: "center", editing: false },
+                { name: "supplier", type: "text", width: 150, title: translations.supplier, align: "center", editing: true },
                 { name: "post_date", type: "text", width: 150, title: translations.postDate, align: "center", editing: false },
-                { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, align: "center", editing: false }
+                { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, align: "center", editing: false },
+                { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, align: "center", validate: "required", editing: false },
+                { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, align: "center", editing: false },
+                { name: "version_seq", type: "number", width: 120, title: translations.versionSeq, align: "center", validate: "required", editing: false },
+
+
+
             ]
         });
 
