@@ -18,548 +18,549 @@
         --bs-gutter-x: 0;
     }
 
-    h3 {
+    h3, th {
         text-align: center;
     }
 
+    .jsgrid-cell {
+        white-space: nowrap;      /* Không cho xuống dòng */
+        overflow: hidden;         /* Ẩn phần nội dung vượt quá */
+        text-overflow: ellipsis;  /* Hiển thị dấu "..." nếu bị cắt */
+        max-width: 100%;          /* Đảm bảo nội dung không vượt quá ô */
+    }
 
 </style>
 
-{% endblock base_js %}
-
+{% endblock %}
 
 {% block content %}
-<div class="row p-3">
-    <div class="col-1"></div>
-    <div class="col-10">
-        <h3 class="col p-3">{% trans "Warehouse Stock In Form" %}</h3>
-
-        <form id="myForm">
-            {% crispy form %}
-            <div id="jsGrid"></div>
-                <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-                <h3>{% trans "Choose Location" %}</h3>
-                {% for bin in bins %}
-                <button class="number-btn" data-value="{{ bin.bin_id }}" style="
-                        {% if bin.has_stock %}
-                            background-color: #d2e8b9
-                        {% else %};
-                            background-color: #fff
-                        {% endif %}">
-                    {{ bin.bin_id }}
-                </button>
-                {% endfor %}
-                <br><br>
-                <button id="closePicker">{% trans "Close" %}</button>
-            </div>
-
-            <hr />
-            <div style="text-align: center" class="p-3">
-                <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
-            </div>
-        </form>
-
+    <div class="row p-3">
         <div class="col-1"></div>
+        <div class="col-10">
+            <h3 class="col p-3">{% trans "Warehouse Stock In Form" %}</h3>
+
+            <form id="myForm">
+                {% crispy form %}
+                <div id="jsGrid"></div>
+                    <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+                    <h3>{% trans "Choose Location" %}</h3>
+                    {% for bin in bins %}
+                    <button class="number-btn" data-value="{{ bin.bin_id }}" style="
+                            {% if bin.has_stock %}
+                                background-color: #d2e8b9
+                            {% else %};
+                                background-color: #fff
+                            {% endif %}">
+                        {{ bin.bin_id }}
+                    </button>
+                    {% endfor %}
+                    <br><br>
+                    <button id="closePicker">{% trans "Close" %}</button>
+                </div>
+
+                <hr />
+                <div style="text-align: center" class="p-3">
+                    <button id="postDataButton" class="btn btn-info btn-lg">{% trans "Post" %}</button>
+                </div>
+            </form>
+
+            <div class="col-1"></div>
+        </div>
     </div>
-</div>
 {% endblock %}
 
 {% block script %}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
 {% endblock %}
 
 {% block javascript %}
 
     <script>
+        $(document).ready(function() {
 
-    $(document).ready(function() {
+            function openMapPage(warehouse_id, obj) {
 
-        function openMapPage(warehouse_id, obj) {
+                let childWindow = window.open('{% url 'warehouse_map' warehouse_code %}', "Warehouse Map", "width=1400,height=800");
 
-            let childWindow = window.open('{% url 'warehouse_map' warehouse_code %}', "Warehouse Map", "width=1400,height=800");
-
-            // 監聽來自子頁面的回傳數據
-            window.addEventListener("message", function(event) {
-                if (event.origin !== window.location.origin) {
-                    return;  // 確保安全性，只接受同源的消息
-                }
-
-                obj.val(event.data);
-                obj.focus();
-            }, false);
-
-        }
-
-        $('.select2-bin').select2({
-            tags: true,  // Cho phép nhập giá trị mới
-            allowClear: false,
-            createTag: function(params) {
-                return null;  // Không cho phép nhập giá trị mới
-            }
-         });
-
-        $('.select2-selection.select2-selection--single').css({
-            'height': '38px',
-        });
-
-        $('#select2-id_order_bin-container').css({
-            'margin-top': '4px',
-            'margin-left': '5px'
-        });
-
-        const translations = {
-            comment: "{% trans 'Comment' %}",
-            productOrder: "{% trans 'Product Order' %}",
-            purchaseNo: "{% trans 'Purchase No' %}",
-            versionNo: "{% trans 'Version No' %}",
-            versionSeq: "{% trans 'Version Seq' %}",
-            size: "{% trans 'Size' %}",
-            lotNo: "{% trans 'Lot No' %}",
-            purchaseQty: "{% trans 'Purchase Qty' %}",
-            purchaseUnit: "{% trans 'Purchase Unit' %}",
-            itemType: "{% trans 'Item Type' %}",
-            postDate: "{% trans 'Post Date' %}",
-            supplier: "{% trans 'Supplier' %}",
-            customerNo: "{% trans 'Customer' %}",
-            sapMtrNo: "{% trans 'Mtr No' %}",
-            qty: "{% trans 'Qty' %}"
-        };
-
-        {# Keydown #}
-
-        $("#id_product_order").on("keydown", function (event) {
-            if (event.which === 13) {
-                event.preventDefault();
-                get_order_info();
-            }
-        });
-
-        $("#id_purchase_no").on("keydown", function (event) {
-            if (event.which === 13) {
-                event.preventDefault();
-                get_no_info();
-            }
-        });
-
-        $(document).on("keydown", "input", function (e) {
-            if (e.which === 13 && !$(this).is("#id_purchase_no, #id_product_order, #jsGrid input")) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        });
-
-        $(document).on("keydown", function (e) {
-            if (e.which !== 27 && e.which !== 13) {
-                return;
-            }
-
-            if (e.which === 13) {  // Phím Escape
-                const cancelButton = $(".jsgrid-button.jsgrid-update-button");
-                if (cancelButton.length) {
-                    cancelButton.click();
-
-                }
-            } else if (e.which === 27) {  // Phím Enter
-                const updateButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
-                if (updateButton.length) {
-                    updateButton.click();
-                    e.stopPropagation();
-                    e.preventDefault();
-                }
-            }
-        });
-
-        {# Search by Product Order, Purchase No #}
-        $("#_product_order").on("click", function() {
-
-            let product_order = document.getElementById('id_product_order').value.trim();
-
-            if (!product_order) {
-                event.preventDefault();
-                alert("{% trans 'Product Order cannot be null!' %}");
-
-            } else {
-                get_order_info();
-            }
-
-        });
-
-        $("#_purchase_no").on("click", function() {
-
-            let purchase_no = document.getElementById('id_purchase_no').value.trim();
-
-            if (!purchase_no) {
-                event.preventDefault();
-                alert("{% trans 'Purchase Order cannot be null!' %}");
-
-            } else {
-                get_no_info();
-            }
-
-        });
-
-        const get_order_info = function() {
-
-            const product_order = $("#id_product_order").val();
-
-            $.ajax({
-                url: '{% url 'get_product_order_info' %}',
-                type: 'get',
-                dataType: 'json',
-                async: false,
-                data: {"product_order": product_order},
-                success: function(data) {
-                    if (data.status === 'no_change'){
-                        console.log("Keep the data table");
-                    } else {
-                        $("#jsGrid").jsGrid("option", "data", data);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error：", error);
-                }
-            });
-        };
-
-        const get_no_info = function() {
-
-            const purchase_no = $("#id_purchase_no").val();
-
-            $.ajax({
-                url: '{% url 'get_purchase_no_info' %}',
-                type: 'get',
-                dataType: 'json',
-                async: false,
-                data: {"purchase_no": purchase_no},
-                success: function(data) {
-                    if (data.status === 'no_change'){
-                        console.log("Keep the data table");
-                    } else {
-                        $("#jsGrid").jsGrid("option", "data", data);
+                // 監聽來自子頁面的回傳數據
+                window.addEventListener("message", function(event) {
+                    if (event.origin !== window.location.origin) {
+                        return;  // 確保安全性，只接受同源的消息
                     }
 
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error：", error);
-                }
-            });
-        };
-
-
-        {# Create new fields #}
-        $("#create").on("click", function() {
-            add_item();
-        });
-
-        function add_item() {
-            const order_qty =$("#id_order_qty").val();
-            const order_bin =$("#id_order_bin").val();
-            const desc =$("#id_desc").val();
-            const product_order =$("#id_product_order").val();
-            const version_no =$("#id_version_no").val();
-            const lot_no =$("#id_lot_no").val();
-            const item_type =$("#id_item_type option:selected").text();
-            const item_type_val =$("#id_item_type").val();
-            const purchase_no =$("#id_purchase_no").val();
-            const purchase_qty =$("#id_purchase_qty").val();
-            const size =$("#id_size").val();
-            const purchase_unit =$("#id_purchase_unit").val();
-            const post_date =$("#id_post_date").val();
-            const supplier =$("#id_supplier").val();
-            const sap_mtr_no =$("#id_sap_mtr_no").val();
-            const customer_no =$("#id_customer_no").val();
-            const version_seq = $("#id_version_seq").val();
-
-            if(product_order == "" || purchase_no == "" || version_no == "" || item_type_val == "") {
-                alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Item Type" %}) {% trans "are required" %}");
-                return false;
-            } else {
-                $("#myForm input").not("#id_purchase_qty, #id_order_qty").val(""); // Clear tất cả trừ 2 input này
-                $("#id_purchase_qty").val(0);
-                $("#id_order_qty").val(0);
-                $("#id_purchase_qty").val(0);
-                $("#id_item_type").val(0);
-                $("#id_purchase_unit").val(0);
-                {#$("#id_size").val(0);#}
+                    obj.val(event.data);
+                    obj.focus();
+                }, false);
 
             }
 
-            const newItem = {
-                order_qty: order_qty,
-                order_bin: order_bin,
-                desc: desc,
-                customer_no: customer_no,
-                product_order: product_order,
-                version_no: version_no,
-                version_seq: version_seq,
-                lot_no: lot_no,
-                item_type: item_type,
-                purchase_no: purchase_no,
-                purchase_qty: purchase_qty,
-                size: size,
-                purchase_unit: purchase_unit,
-                post_date: post_date,
-                supplier: supplier,
-                sap_mtr_no: sap_mtr_no
+
+            $(".select2-bin").select2({
+                width: "100%"
+            });
+
+            $('.select2-selection.select2-selection--single').css({
+                'height': '38px',
+            });
+
+            $('#select2-id_order_bin-container').css({
+                'margin-top': '4px',
+                'margin-left': '5px'
+            });
+
+            const translations = {
+                comment: "{% trans 'Comment' %}",
+                productOrder: "{% trans 'Product Order' %}",
+                purchaseNo: "{% trans 'Purchase No' %}",
+                versionNo: "{% trans 'Version No' %}",
+                versionSeq: "{% trans 'Version Seq' %}",
+                size: "{% trans 'Size' %}",
+                lotNo: "{% trans 'Lot No' %}",
+                purchaseQty: "{% trans 'Purchase Qty' %}",
+                purchaseUnit: "{% trans 'Purchase Unit' %}",
+                itemType: "{% trans 'Item Type' %}",
+                postDate: "{% trans 'Post Date' %}",
+                supplier: "{% trans 'Supplier' %}",
+                customerNo: "{% trans 'Customer' %}",
+                sapMtrNo: "{% trans 'Mtr No' %}",
+                qty: "{% trans 'Qty' %}"
             };
 
-            // Lấy dữ liệu hiện tại của jsGrid
-            var gridData = $("#jsGrid").jsGrid("option", "data");
 
-            // Thêm mục mới vào dữ liệu grid
-            gridData.push(newItem);
+            $("#id_product_order").on("keyup", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (event.key === 'Enter') {
 
-            // Cập nhật lại dữ liệu cho jsGrid
-            $("#jsGrid").jsGrid("option", "data", gridData);
-            $("#jsGrid").jsGrid("refresh");
-            $('html, body').animate({
-                scrollTop: $(document).height()
-            }, 1000);
+                    get_order_info();
+                    event.stopPropagation();
 
-        }
-
-        {# Main JsGrid #}
-        data: []; // 初始為空，將透過 AJAX 加載資料
-        var currentLang = "{{ request.LANGUAGE_CODE }}";
-
-        // 初始化 jsGrid
-        $("#jsGrid").jsGrid({
-            width: "100%",
-            height: "400px",
-
-            inserting: true,  // 啟用新增功能
-            editing: true,    // 啟用編輯功能
-            sorting: true,    // 啟用排序功能
-            paging: true,     // 啟用分頁功能
-            noDataContent: "{% trans "Not found" %}",
-            confirmDeleting: false,
-
-            rowClick: function (args) {
-                this.editItem(args.item);
-            },
-
-            data: [],   // 將 JSON 資料導入表格
-
-            fields: [
-                {
-                    name: "copy", // 自定義控制欄欄位名稱
-                    title: "", // 欄位標題
-                    align: "center", // 置中對齊
-                    itemTemplate: function (_, item) {
-                        // 自定義「複製」按鈕
-                        const $copyButton = $("<button>")
-                            .text("{% trans "Copy" %}")
-                            .addClass("btn btn-info btn-sm")
-                            .on("click", (e) => {
-
-                                const gridData = $("#jsGrid").jsGrid("option", "data");
-                                const index = gridData.indexOf(item);
-
-                                // 複製行並修改內容
-                                const newItem = { ...item };
-                                newItem.id = Date.now(); // 新的唯一 ID
-                                newItem.order_bin = "";
-                                newItem.order_qty = "";
-
-                                // 插入到當前行的下方
-                                gridData.splice(index + 1, 0, newItem);
-
-                                // 重新載入數據
-                                $("#jsGrid").jsGrid("option", "data", gridData);
-
-                                alert("{% trans "Copy and insert below this row Success!" %}");
-                            });
-
-
-                        return $copyButton;
-                    }
-                },
-                {
-                    type: "control",
-                    width: 80,
-                    itemTemplate: function(_, item) {
-                        // 建立刪除按鈕
-                        var deleteButton = $("<button>")
-                            .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
-                            .text("{% trans "Delete" %}")
-                            .on("click", function(e) {
-                                e.stopPropagation(); // 防止觸發行點擊事件
-                                $("#jsGrid").jsGrid("deleteItem", item);
-
-                            });
-
-                        return deleteButton;
-                    }
-                },
-                { name: "id", type: "number", width: 50, title: "ID", align: "center", readOnly: true, visible: false },
-                { name: "customer_no", type: "text", width: 120, title: translations.customerNo, align: "center", editing: true },
-                { name: "product_order", type: "text", width: 135, title: translations.productOrder, align: "center", validate: "required", editing: false },
-                { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", align: "center", editing: false },
-                { name: "lot_no", type: "text", width: 130, title: translations.lotNo, align: "center", editing: false },
-                { name: "size", type: "text", width: 70, title: translations.size, align: "center", validate: "required", editing: false },
-                {
-                    name: "order_qty",
-                    type: "text",
-                    width: 125,
-                    title: translations.qty,
-                    align: "center",
-                    validate: {
-                        message: "Số lượng không thể là 0",
-                        validator: function(value) {
-                            return value !== "0" && value !== 0;
-                        }
-                    }
-                },
-                { name: "item_type", type: "text", width: 200, title: translations.itemType, align: "center", editing: false },
-                {
-                    name: "order_bin",
-                    type: "text",
-                    width: 170,
-                    align: "center",
-                    title: "{% trans "Location" %}",
-                    itemTemplate: function (value) {
-                        return value; // Hiển thị nội dung
-                    },
-                    editTemplate: function (value, item) {
-
-
-
-                        const $input = $("<input>").val(value).addClass("form-control input-custom").css({
-                                            "padding-right": "1px"
-                                       });
-
-                        var $button = $("<button>", {type: "button"})
-                                       .addClass("btn btn-primary")
-                                       .css({
-                                           width: "auto",
-                                           height: "40px",
-                                           marginLeft: "20px"
-                                       });
-
-
-                        var $container = $("<div>").css({
-                                            "--bs-gutter-x": "0", "display": "flex", "flex-wrap": "wrap"
-                                        })
-                                       .append($("<div>")
-                                       .css({
-                                           "width": "100px"
-                                       })
-                                       .append($input))
-                                       .append($button); // Button chiếm col-2
-
-                        // pass this data to jsgrid
-                        this._input = $input;
-
-                        $button.on("click", function () {
-                            obj = $input;
-                            openMapPage('PKG', obj);
-
-                        });
-
-                        return $container;
-                    },
-                    insertValue: function () {
-                        return this._input.val(); // Trả về giá trị khi chèn
-                    },
-                    editValue: function () {
-                        return this._input.val(); // Trả về giá trị khi chỉnh sửa
-                    }
-                },
-
-                { name: "desc", type: "text", width: 225, title: translations.comment, align: "center", editing: true },
-                { name: "purchase_qty", type: "text", width: 120, title: translations.purchaseQty, align: "center", editing: false },
-                { name: "supplier", type: "text", width: 150, title: translations.supplier, align: "center", editing: true },
-                { name: "post_date", type: "text", width: 150, title: translations.postDate, align: "center", editing: false },
-                { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, align: "center", editing: false },
-                { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, align: "center", validate: "required", editing: false },
-                { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, align: "center", editing: false },
-                { name: "version_seq", type: "number", width: 120, title: translations.versionSeq, align: "center", validate: "required", editing: false },
-            ]
-        });
-
-
-        // Khi click vào một zone (div chứa bin_id)
-        $(".zone").on("click", function() {
-            // Lấy giá trị của bin_id từ data-value của div
-            var bin_id = $(this).data("value");
-            const updateInput = $("#zonePopup").data("updateInput"); // 取得回調函數
-            if (updateInput) {
-                updateInput(bin_id); // 更新輸入框的值
-            }
-            // Đóng popup
-            $("#zonePopup").fadeOut();
-        });
-
-
-        // 關閉彈窗
-        $("#closePopup").on("click", function () {
-            $("#zonePopup").fadeOut();
-        });
-
-        // Reset data input
-        $("#button-id-bin_clear").on("click", function() {
-            // Reset form
-            $("#myForm")[0].reset();
-
-        });
-
-
-        // 當按下過帳按鈕時
-        $('#postDataButton').click(function(event) {
-            event.preventDefault();
-            // 獲取 jsGrid 的所有數據
-            var gridData = $("#jsGrid").data("JSGrid").data;
-
-            if (!gridData || gridData.length === 0) {
-                alert("{% trans "No data in the table! Please enter at least one row." %}");
-                return; // Dừng xử lý nếu không có dữ liệu
-            }
-
-            // 檢查 order_qty 是否都有值
-            for (var i = 0; i < gridData.length; i++) {
-                if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
-                    {#alert({% blocktrans %}"第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！"{% endblocktrans %});#}
-                    alert({% blocktrans %}"(Location) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
-                    return;
-                }
-
-                if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
-                    alert({% blocktrans %}"(Order Quantity) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
-                    return;
-                }
-            }
-
-            // 將數據轉換為 JSON 格式
-            var jsonData = JSON.stringify(gridData);
-
-            // 使用 Ajax 發送數據到後端
-            $.ajax({
-                url: '{% url 'packing_material_stock_in_post' %}',  // 設置後端接收數據的 URL
-                type: 'POST',
-                contentType: 'application/json',
-                data: jsonData,
-                success: function(response) {
-
-                    //Reset all input
-                    $("#myForm")[0].reset();
-
-                    $("#jsGrid").jsGrid("option", "data", []);
-                    $("#jsGrid").jsGrid("refresh");
-
-
-                    alert("{% trans "Form submitted successfully!" %}");
-                    console.log(response);
-                },
-                error: function(xhr, status, error) {
-                    alert("{% trans "Form submission failed!" %}");
-                    console.log(error);
                 }
             });
+
+            $("#id_purchase_no").on("keyup", function (event) {
+                if (event.key === 'Enter') {
+                    get_no_info();
+                    event.stopPropagation();
+                }
+            });
+
+
+            $(document).on("keydown", function (e) {
+                if (e.which !== 27 && e.which !== 13) {
+                    return;
+                }
+
+                if (e.which === 13) {
+                    const cancelButton = $(".jsgrid-button.jsgrid-update-button");
+                    if (cancelButton.length) {
+                        cancelButton.click();
+
+                    }
+                } else if (e.which === 27) {
+                    const updateButton = $(".jsgrid-button.jsgrid-cancel-edit-button");
+                    if (updateButton.length) {
+                        updateButton.click();
+
+                    }
+                }
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
+            {# Search by Product Order, Purchase No #}
+            $("#_product_order").on("click", function(event) {
+
+                let product_order = $("#id_product_order").val().trim();
+
+                if (!product_order) {
+                    alert("{% trans 'Product Order cannot be null!' %}");
+
+                } else {
+                    get_order_info();
+                }
+                event.stopPropagation();
+
+
+            });
+
+            $("#_purchase_no").on("click", function(event) {
+
+                let purchase_no = $("#id_purchase_no").val().trim();
+
+
+                if (!purchase_no) {
+                    alert("{% trans 'Purchase Order cannot be null!' %}");
+
+                } else {
+                    get_no_info();
+
+                }
+                event.stopPropagation();
+
+
+            });
+
+            const get_order_info = function() {
+
+                let product_order = $("#id_product_order").val();
+
+                $.ajax({
+                    url: '{% url 'get_product_order_info' %}',
+                    type: 'get',
+                    dataType: 'json',
+                    async: false,
+                    data: {"product_order": product_order},
+                    success: function(data) {
+                        if (data.status === 'no_change'){
+                            console.log("Keep the data table");
+                        } else {
+                            $("#jsGrid").jsGrid("option", "data", data);
+                        }
+                    },
+                    error: function (xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
+                    }
+                });
+            };
+
+            const get_no_info = function() {
+
+                let purchase_no = $("#id_purchase_no").val();
+
+                $.ajax({
+                    url: '{% url 'get_purchase_no_info' %}',
+                    type: 'get',
+                    dataType: 'json',
+                    async: false,
+                    data: {"purchase_no": purchase_no},
+                    success: function(data) {
+                        if (data.status === 'no_change'){
+                            console.log("Keep the data table");
+                        } else {
+                            $("#jsGrid").jsGrid("option", "data", data);
+                        }
+
+                    },
+                    error: function (xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        alert(errorMsg.message);
+                    }
+                });
+            };
+
+            $("#id_order_qty, #id_purchase_qty").on("input", function () {
+                let value = $(this).val();
+
+                value = value.replace(/[^0-9]/g, '');
+
+                $(this).val(value);
+            });
+
+
+            {# Create new fields #}
+            $("#create").on("click", function(event) {
+                add_item();
+                event.stopPropagation();
+            });
+
+            function add_item() {
+                const order_qty =$("#id_order_qty").val();
+                const order_bin =$("#id_order_bin").val();
+                const desc =$("#id_desc").val();
+                const product_order =$("#id_product_order").val();
+                const version_no =$("#id_version_no").val();
+                const lot_no =$("#id_lot_no").val();
+                const item_type =$("#id_item_type option:selected").text();
+                const item_type_val =$("#id_item_type").val();
+                const purchase_no =$("#id_purchase_no").val();
+                const purchase_qty =$("#id_purchase_qty").val();
+                const size =$("#id_size").val();
+                const purchase_unit =$("#id_purchase_unit").val();
+                const post_date =$("#id_post_date").val();
+                const supplier =$("#id_supplier").val();
+                const sap_mtr_no =$("#id_sap_mtr_no").val();
+                const customer_no =$("#id_customer_no").val();
+                const version_seq = $("#id_version_seq").val();
+
+                if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "" || item_type_val == "") {
+                    alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %}) {% trans "are required" %}");
+                    return false;
+                } else {
+                    $("#myForm input, #id_item_type, #id_desc, #id_purchase_unit").not("#id_post_date").val("");
+                    $("#id_order_bin").val(null).trigger("change");
+                    $("#id_purchase_qty, #id_order_qty, #id_size").val(0);
+                }
+
+                const newItem = {
+                    order_qty: order_qty,
+                    order_bin: order_bin,
+                    desc: desc,
+                    customer_no: customer_no,
+                    product_order: product_order,
+                    version_no: version_no,
+                    version_seq: version_seq,
+                    lot_no: lot_no,
+                    item_type: item_type,
+                    purchase_no: purchase_no,
+                    purchase_qty: purchase_qty,
+                    size: size,
+                    purchase_unit: purchase_unit,
+                    post_date: post_date,
+                    supplier: supplier,
+                    sap_mtr_no: sap_mtr_no
+                };
+
+                // Lấy dữ liệu hiện tại của jsGrid
+                let gridData = $("#jsGrid").jsGrid("option", "data");
+
+                // Thêm mục mới vào dữ liệu grid
+                gridData.push(newItem);
+
+                // Cập nhật lại dữ liệu cho jsGrid
+                $("#jsGrid").jsGrid("option", "data", gridData);
+                $("#jsGrid").jsGrid("refresh");
+                $('html, body').animate({
+                    scrollTop: $(document).height()
+                }, 1000);
+
+            }
+
+            {# Main JsGrid #}
+            data: []; // 初始為空，將透過 AJAX 加載資料
+
+            // 初始化 jsGrid
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "400px",
+                autowidth: true,
+                inserting: true,  // 啟用新增功能
+                editing: true,    // 啟用編輯功能
+                sorting: true,    // 啟用排序功能
+                paging: true,     // 啟用分頁功能
+                noDataContent: "{% trans "Not found" %}",
+                confirmDeleting: false,
+
+                rowClick: function (args) {
+                    this.editItem(args.item);
+                },
+
+                data: [],   // 將 JSON 資料導入表格
+
+                fields: [
+                    {
+                        name: "copy", // 自定義控制欄欄位名稱
+                        title: "", // 欄位標題
+                        align: "center", // 置中對齊
+                        itemTemplate: function (_, item) {
+                            // 自定義「複製」按鈕
+                            const $copyButton = $("<button>")
+                                .text("{% trans "Copy" %}")
+                                .addClass("btn btn-info btn-sm")
+                                .on("click", (e) => {
+
+                                    const gridData = $("#jsGrid").jsGrid("option", "data");
+                                    const index = gridData.indexOf(item);
+
+                                    // 複製行並修改內容
+                                    const newItem = { ...item };
+                                    newItem.id = Date.now(); // 新的唯一 ID
+                                    newItem.order_bin = "";
+                                    newItem.order_qty = "";
+
+                                    // 插入到當前行的下方
+                                    gridData.splice(index + 1, 0, newItem);
+
+                                    // 重新載入數據
+                                    $("#jsGrid").jsGrid("option", "data", gridData);
+
+                                    alert("{% trans "Copy and insert below this row Success!" %}");
+                                });
+
+
+                            return $copyButton;
+                        }
+                    },
+                    {
+                        type: "control",
+                        width: 80,
+                        itemTemplate: function(_, item) {
+                            // 建立刪除按鈕
+                            const deleteButton = $("<button>")
+                                .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
+                                .text("{% trans "Delete" %}")
+                                .on("click", function(e) {
+                                    $("#jsGrid").jsGrid("deleteItem", item);
+                                    e.stopPropagation(); // 防止觸發行點擊事件
+                                });
+
+                            return deleteButton;
+                        }
+                    },
+                    { name: "id", type: "number", width: 50, title: "ID", readOnly: true, visible: false },
+                    { name: "customer_no", type: "text", width: 150, title: translations.customerNo, editing: true, css: "text-center" },
+                    { name: "product_order", type: "text", width: 135, title: translations.productOrder, validate: "required", editing: false, css: "text-center" },
+                    { name: "version_no", type: "text", width: 120, title: translations.versionNo, validate: "required", editing: false, css: "text-center" },
+                    { name: "lot_no", type: "text", width: 130, title: translations.lotNo, editing: false, css: "text-center" },
+                    { name: "size", type: "text", width: 70, title: translations.size, validate: "required", editing: false, css: "text-center" },
+                    {
+                        name: "order_qty",
+                        type: "number",
+                        width: 125,
+                        title: translations.qty,
+                        validate: {
+                            message: "Số lượng phải lớn hơn 0!",
+                            validator: function(value) {
+                                return Number(value) > 0;
+                            }
+                        }
+                    },
+                    { name: "item_type", type: "text", width: 200, title: translations.itemType, editing: false, css: "text-center" },
+                    {
+                        name: "order_bin",
+                        type: "text",
+                        width: 170,
+                        title: "{% trans "Location" %}",
+                        css: "text-center",
+                        itemTemplate: function (value) {
+                            return value; // Hiển thị nội dung
+                        },
+                        editTemplate: function (value, item) {
+
+                            const $input = $("<input>").val(value).addClass("form-control input-custom").css({
+                                                "padding-right": "1px"
+                                           });
+
+                            const $button = $("<button>", {type: "button"})
+                                           .addClass("btn btn-primary")
+                                           .css({
+                                               width: "auto",
+                                               height: "40px",
+                                               marginLeft: "20px"
+                                           });
+
+                            const $container = $("<div>").css({
+                                                "--bs-gutter-x": "0", "display": "flex", "flex-wrap": "wrap"
+                                            })
+                                           .append($("<div>")
+                                           .css({
+                                               "width": "100px"
+                                           })
+                                           .append($input))
+                                           .append($button); // Button chiếm col-2
+
+                            // pass this data to jsgrid
+                            this._input = $input;
+
+                            $button.on("click", function () {
+                                obj = $input;
+                                openMapPage('PKG', obj);
+
+                            });
+
+                            return $container;
+                        },
+                        insertValue: function () {
+                            return this._input.val(); // Trả về giá trị khi chèn
+                        },
+                        editValue: function () {
+                            return this._input.val(); // Trả về giá trị khi chỉnh sửa
+                        }
+                    },
+                    { name: "desc", type: "text", width: 225, title: translations.comment,editing: true, css: "text-center" },
+                    { name: "purchase_qty", type: "number", width: 120, title: translations.purchaseQty, editing: false },
+                    { name: "supplier", type: "text", width: 130, title: translations.supplier, editing: true, css: "text-center" },
+                    { name: "post_date", type: "date", width: 150, title: translations.postDate, editing: false, css: "text-center" },
+                    { name: "purchase_unit", type: "text", width: 130, title: translations.purchaseUnit, editing: false, css: "text-center" },
+                    { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, editing: false, css: "text-center" },
+                    { name: "version_seq", type: "text", width: 120, title: translations.versionSeq, validate: "required", editing: false, css: "text-center" },
+                    { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, validate: "required", editing: false, css: "text-center" },
+                ]
+            });
+
+
+            $(".zone").on("click", function(event) {
+
+                let bin_id = $(this).data("value");
+                const updateInput = $("#zonePopup").data("updateInput"); // 取得回調函數
+
+                if (updateInput) {
+                    updateInput(bin_id); // 更新輸入框的值
+                }
+
+                $("#zonePopup").fadeOut();
+                event.stopPropagation();
+            });
+
+
+            // 關閉彈窗
+            $("#closePopup").on("click", function (event) {
+                $("#zonePopup").fadeOut();
+                event.stopPropagation();
+            });
+
+
+            // 當按下過帳按鈕時
+            $('#postDataButton').click(function(event) {
+                event.preventDefault();
+                // 獲取 jsGrid 的所有數據
+                let gridData = $("#jsGrid").data("JSGrid").data;
+
+                if (!gridData || gridData.length === 0) {
+                    alert("{% trans "No data in the table! Please enter at least one row." %}");
+                    event.stopPropagation();
+                    return;
+                }
+
+                for (let i = 0; i < gridData.length; i++) {
+                    if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
+                        alert({% blocktrans %}"(Location) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
+                        return;
+                    }
+
+                    if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
+                        alert({% blocktrans %}"(Order Quantity) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
+                        return;
+                    }
+                }
+
+                // 將數據轉換為 JSON 格式
+                let jsonData = JSON.stringify(gridData);
+
+                // 使用 Ajax 發送數據到後端
+                $.ajax({
+                    url: '{% url 'packing_material_stock_in_post' %}',  // 設置後端接收數據的 URL
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function(response) {
+
+                        //Reset all input
+                        $("#myForm")[0].reset();
+
+                        $("#jsGrid").jsGrid("option", "data", []);
+                        $("#jsGrid").jsGrid("refresh");
+
+
+                        alert("{% trans "Form submitted successfully!" %}");
+                        console.log(response);
+                    },
+                    error: function(xhr) {
+                        const errorMsg = JSON.parse(xhr.responseText);
+                        if (errorMsg.status === "error") {
+                            alert(errorMsg.message); // Hiển thị thông báo lỗi từ server
+                        } else {
+                            alert("An unknown error occurred.");
+                        }
+                    }
+                });
+
+                event.stopPropagation();
+
+            });
+
         });
 
-    });
-
-</script>
-
-{% endblock javascript %}
+    </script>
+{% endblock %}

@@ -1,7 +1,4 @@
 from datetime import datetime
-
-from django.db.models import Q
-from django.utils.translation import get_language
 from VNWMS.database import vnwms_database
 from warehouse.models import MovementType, Bin, ItemType
 from warehouse.utils import get_item_type_name

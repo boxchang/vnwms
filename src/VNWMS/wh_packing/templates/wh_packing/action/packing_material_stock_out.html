@@ -43,8 +43,10 @@
     }
 
     input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
+        display: flex;
+        align-items: center;
+        width: 35px;
+        height: 25px;
         transform: scale(1.5);
     }
 
@@ -85,6 +87,7 @@
 
         {# Search #}
         $("#btnSearch").on("click", function (event) {
+            event.preventDefault();
             let product_order = $('#id_product_order').val().trim();
             let purchase_no = $('#id_purchase_no').val().trim();
             let size = $('#id_size').val().trim();
@@ -170,7 +173,6 @@
 
          {#Shortcut Keyboard #}
         $(document).on('keydown', function(e) {
-            e.preventDefault();
             if (e.key === 'Enter') {
                 const updateButton = $(".jsgrid-button.jsgrid-update-button:visible");
                 if (updateButton.length) {
@@ -218,6 +220,8 @@
                     name: "select",
                     title: "<input type='checkbox' id='selectAll'>",
                     itemTemplate: function(_, item) {
+                        let $background = $("<div>").addClass("background-blocker");
+
                         let $checkbox = $("<input>").attr("type", "checkbox")
                             .addClass("rowCheckbox")
                             .attr("data-id", item.id)
@@ -270,29 +274,31 @@
                         return editButton;
                     }
                 },
-                { name: "customer_no", type: "text", width: 140, title: "{% trans "Customer" %}", editing: false, css: "text-center" },
-                { name: "product_order", type: "text", width: 140, title: "{% trans "Product Order" %}", validate: "required", editing: false, css: "text-center" },
-                { name: "version_no", type: "text", width: 140, title: "{% trans "Version No" %}", editing: false, css: "text-center" },
-                { name: "lot_no", type: "text", width: 200, title: "{% trans "Lot Number" %}", editing: false, css: "text-center" },
-                { name: "size", type: "text", width: 90, title: "{% trans "Size" %}", editing: false, css: "text-center"},
-                { name: "qty", type: "number", width: 120, title: "{% trans "Qty" %}"},
+                { name: "customer_no", type: "text", width: 150, title: "{% trans "Customer" %}", editing: false, css: "text-center" },
+                { name: "product_order", type: "text", width: 135, title: "{% trans "Product Order" %}", validate: "required", editing: false, css: "text-center" },
+                { name: "version_no", type: "text", width: 120, title: "{% trans "Version No" %}", editing: false, css: "text-center" },
+                { name: "lot_no", type: "text", width: 130, title: "{% trans "Lot Number" %}", editing: false, css: "text-center" },
+                { name: "size", type: "text", width: 70, title: "{% trans "Size" %}", editing: false, css: "text-center"},
+                { name: "qty", type: "number", width: 125, title: "{% trans "Qty" %}"},
                 { name: "item_type", type: "text", width: 200, title: "{% trans "Item Type" %}", editing: false, css: "text-center" },
                 { name: "bin_id", type: "text", width: 90, title: "{% trans "Location" %}", editing: false, css: "text-center"},
-                { name: "desc", type: "text", width: 200, title: "{% trans "Comment" %}", editing: true, css: "text-center" },
-                { name: "post_date", type: "date", width: 200, title: "{% trans "Post Date" %}", editing: false, css: "text-center" },
-                { name: "supplier", type: "text", width: 120, title: "{% trans "Supplier" %}", editing: false, css: "text-center" },
+                { name: "desc", type: "text", width: 225, title: "{% trans "Comment" %}", editing: true, css: "text-center" },
+                { name: "post_date", type: "date", width: 150, title: "{% trans "Post Date" %}", editing: false, css: "text-center" },
+                { name: "supplier", type: "text", width: 150, title: "{% trans "Supplier" %}", editing: false, css: "text-center" },
                 { name: "purchase_qty", type: "number", width: 120, title: "{% trans "Purchase Quantity" %}", editing: false},
-                { name: "purchase_unit", type: "text", width: 120, title: "{% trans "Purchase Unit" %}", editing: false, css: "text-center" },
-                { name: "purchase_no", type: "text", width: 140, title: "{% trans "Purchase Order" %}", editing: false, css: "text-center"},
+                { name: "purchase_unit", type: "text", width: 130, title: "{% trans "Purchase Unit" %}", editing: false, css: "text-center" },
+                { name: "purchase_no", type: "text", width: 125, title: "{% trans "Purchase Order" %}", editing: false, css: "text-center"},
                 { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", editing: false, css: "text-center" },
-                { name: "version_seq", type: "text", width: 90, title: "{% trans "Version Seq" %}", editing: false, css: "text-center" },
+                { name: "version_seq", type: "text", width: 120, title: "{% trans "Version Seq" %}", editing: false, css: "text-center" },
 
             ]
         });
 
-        $("form").on("submit", function (e) {
-           e.preventDefault();
-           e.stopPropagation();
+        $("form input").on("keydown", function (e) {
+           if (e.keyCode === 13) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
         });
 
 
@@ -320,7 +326,9 @@
                 return;
             }
 
-            if (!confirm("Are you sure you want to stock out?")) return;
+            {#if (!confirm("{% trans "Are you sure you want to stock out?" %}")) return;#}
+            const confirmMessage = "{% trans 'Are you sure you want to stock out?' %}";
+            if (!confirm(confirmMessage)) return;
 
             $.ajax({
                 type: "POST",
@@ -331,9 +339,10 @@
                 }),
                 contentType: "application/json",
                 success: function (response) {
-                    alert("Deleted successfully!");
-                    console.log("Data API:", response);
+                    alert("{% trans "Stock out successful!" %}");
 
+                    {#DEBUG#}
+                    {#console.log("Data API:", response);#}
 
                     // Reset danh sách đã chọn
                     selectedItems = {};
@@ -358,9 +367,9 @@
                             version_no: version_no,
                             item_type: item_type
                             }, function (data) {
-                                console.log("Data received:", data); // Debug xem dữ liệu đúng chưa
+                                {#DEBUG#}
+                                {#console.log("Data received:", data);#}
                                 $("#btnSearch").trigger("click");
-                                {#$("#jsGrid").jsGrid("option", "data", data);#}
                         });
                     }
                 },
