@@ -96,7 +96,7 @@
                 fields: [
                     { name: "bin__area__warehouse__wh_name", title: "{% trans "Warehouse" %}", type: "text", width: 40, css: "text-center" },
                     { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 40, css: "text-center"  },
-                    { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", width: 35, css: "text-center"  },
+                    { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", width: 40, css: "text-center"  },
                     { name: "version_no", title: "{% trans "Version No" %}", type: "text", width: 40, css: "text-center"  },
                     { name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", width: 40, css: "text-center"  },
                     { name: "item_type_display", title: "{% trans "Item Type" %}", type: "text", width: 80, css: "text-center"  },
@@ -105,7 +105,7 @@
                     { name: "qty", title: "{% trans "Qty" %}", type: "number", width: 40 },
                     {
                         type: "control",
-                        width: 45,
+                        width: 55,
                         itemTemplate: function(_, item) {
                             return $("<button>").text("{% trans "Transfer" %}")
                                 .addClass("btn btn-warning")

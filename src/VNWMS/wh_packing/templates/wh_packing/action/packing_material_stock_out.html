@@ -50,6 +50,7 @@
         transform: scale(1.5);
     }
 
+
 </style>
 
 {% endblock %}
@@ -112,7 +113,6 @@
             let lot_no = $("#id_lot_no").val().trim();
             let version_no = $("#id_version_no").val().trim();
             let item_type = $("#id_item_type").val().trim();
-
 
             $.ajax({
                 url: '{% url 'get_product_order_stout' %}',
@@ -205,12 +205,22 @@
             editing: true,    // 啟用編輯功能
             sorting: true,    // 啟用排序功能
             paging: false,     // 啟用分頁功能
+
             rowClick: function (args) {
+
                 let $target = $(args.event.target);
                 if ($target.is("input[type='checkbox']")) {
                     return;
                 }
                 this.editItem(args.item);
+
+                {#BUG??#}
+
+                let $row = $(".jsgrid-edit-row");
+
+                // Ẩn input có class rowCheckbox (nếu nó có mặt trong dòng edit)
+                $row.find("input.rowCheckbox").hide();
+
             },
 
             data: [],   // 將 JSON 資料導入表格
@@ -219,8 +229,7 @@
                 {
                     name: "select",
                     title: "<input type='checkbox' id='selectAll'>",
-                    itemTemplate: function(_, item) {
-                        let $background = $("<div>").addClass("background-blocker");
+                    itemTemplate: function(_, item, args) {
 
                         let $checkbox = $("<input>").attr("type", "checkbox")
                             .addClass("rowCheckbox")
@@ -237,7 +246,7 @@
                             .attr("data-purchase-unit", item.purchase_unit);
 
                         if (selectedItems[item.id]) {
-                            $checkbox.prop("checked", true);  // Dùng prop thay vì attr
+                            $checkbox.prop("checked", true);
                         }
 
                         $checkbox.on("change", function() {
@@ -246,6 +255,7 @@
                             } else {
                                 delete selectedItems[item.id];
                             }
+
                         });
 
                         return $checkbox;
@@ -261,16 +271,14 @@
                     itemTemplate: function(_, item) {
                         // Tạo nút Edit
                         var editButton = $("<button>")
-                            .addClass("btn btn-primary btn-sm") // Bootstrap style
+                            .addClass("btn btn-primary btn-sm")
                             .text("{% trans 'Edit' %}")
                             .on("click", function(e) {
                                 e.stopPropagation();
                                 e.preventDefault();
-                                // Logic để chỉnh sửa item
                                 $("#jsGrid").jsGrid("editItem", item);
                             });
 
-                        // Chỉ trả về nút Edit mà không có nút Delete
                         return editButton;
                     }
                 },
@@ -291,7 +299,7 @@
                 { name: "sap_mtr_no", type: "text", width: 120, title: "{% trans "SAP Material Number" %}", editing: false, css: "text-center" },
                 { name: "version_seq", type: "text", width: 120, title: "{% trans "Version Seq" %}", editing: false, css: "text-center" },
 
-            ]
+            ],
         });
 
         $("form input").on("keydown", function (e) {
