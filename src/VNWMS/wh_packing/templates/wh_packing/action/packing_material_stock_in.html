@@ -73,23 +73,23 @@
 
     <script>
 
-    function openMapPage(warehouse_id, obj) {
-
-        let childWindow = window.open('{% url 'warehouse_map' warehouse_code %}', "Warehouse Map", "width=1400,height=800");
-
-        // 監聽來自子頁面的回傳數據
-        window.addEventListener("message", function(event) {
-            if (event.origin !== window.location.origin) {
-                return;  // 確保安全性，只接受同源的消息
-            }
-
-            obj.val(event.data);
-            obj.focus();
-        }, false);
-
-    }
-
     $(document).ready(function() {
+
+        function openMapPage(warehouse_id, obj) {
+
+            let childWindow = window.open('{% url 'warehouse_map' warehouse_code %}', "Warehouse Map", "width=1400,height=800");
+
+            // 監聽來自子頁面的回傳數據
+            window.addEventListener("message", function(event) {
+                if (event.origin !== window.location.origin) {
+                    return;  // 確保安全性，只接受同源的消息
+                }
+
+                obj.val(event.data);
+                obj.focus();
+            }, false);
+
+        }
 
         $('.select2-bin').select2({
             tags: true,  // Cho phép nhập giá trị mới
@@ -108,7 +108,7 @@
             'margin-left': '5px'
         });
 
-        var translations = {
+        const translations = {
             comment: "{% trans 'Comment' %}",
             productOrder: "{% trans 'Product Order' %}",
             purchaseNo: "{% trans 'Purchase No' %}",
@@ -201,7 +201,7 @@
 
         const get_order_info = function() {
 
-            var product_order = $("#id_product_order").val();
+            const product_order = $("#id_product_order").val();
 
             $.ajax({
                 url: '{% url 'get_product_order_info' %}',
@@ -224,7 +224,7 @@
 
         const get_no_info = function() {
 
-            var purchase_no = $("#id_purchase_no").val();
+            const purchase_no = $("#id_purchase_no").val();
 
             $.ajax({
                 url: '{% url 'get_purchase_no_info' %}',
@@ -369,7 +369,7 @@
                                 $("#jsGrid").jsGrid("option", "data", gridData);
 
                                 alert("{% trans "Copy and insert below this row Success!" %}");
-                            })
+                            });
 
 
                         return $copyButton;
@@ -475,9 +475,6 @@
                 { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, align: "center", validate: "required", editing: false },
                 { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, align: "center", editing: false },
                 { name: "version_seq", type: "number", width: 120, title: translations.versionSeq, align: "center", validate: "required", editing: false },
-
-
-
             ]
         });
 
@@ -523,12 +520,12 @@
             for (var i = 0; i < gridData.length; i++) {
                 if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
                     {#alert({% blocktrans %}"第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！"{% endblocktrans %});#}
-                    alert({% blocktrans %}"The 'location' field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
+                    alert({% blocktrans %}"The 'location' field in row " + (i + 1) + " cannot be empty!{% endblocktrans %}");
                     return; // 阻止繼續執行
                 }
 
                 if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
-                    alert("{% blocktrans %}The 'order quantity' field in row " + (i + 1) + " cannot be empty!{% endblocktrans %}");
+                    alert("The 'order quantity' field in row " + (i + 1) + " cannot be empty!");
                     return;
                 }
             }

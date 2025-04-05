@@ -23,7 +23,6 @@ from django.db.models import Case, When, Value, BooleanField, Q, F
 
 
 def bin_search(request):
-    db = vnwms_database()
     form = BinSearchForm(request.GET or None)
 
     if request.GET and form.is_valid():
@@ -36,18 +35,57 @@ def bin_search(request):
         if query_bin or query_po_no or query_size:
 
             bin_hists = inventory_history(location=query_bin, product_order=query_po_no, size=query_size, from_date=query_from, to_date=query_to)
-            if not bin_hists.exists():
-                message = "No matching records found."
 
             bin_values = inventory_search(location=query_bin, product_order=query_po_no, size=query_size)
 
-            # Lọc kết quả cuối cùng
-            result_history = bin_hists
             result_value = bin_values
+            result_history = bin_hists
 
-        else:
-            result_history = None
-            result_value = None
+            total_qty = sum(record['qty'] for record in result_value)
+
+            bin_hists_data = []
+            for record in bin_hists:
+
+                item_type = None
+                if record.item_type_id:  # Kiểm tra nếu item_type_id có giá trị
+                    # item_type = ItemType.objects.get_item_type_name(record.item_type_id)
+                    # item_type = ItemType.objects.get_item_type_name(record.item_type_id)
+                    try:
+                        # Lấy đối tượng ItemType dựa trên item_type_id
+                        item_type = ItemType.objects.get(type_code=record.item_type_id)
+                        item_type_name = item_type.get_item_type_name()  # Gọi phương thức get_item_type_name từ đối tượng ItemType
+                    except ItemType.DoesNotExist:
+                        item_type_name = None  # Nếu không tìm thấy ItemType, gán None
+
+                bin_hists_data.append({
+                    "id": record.id,
+                    "batch_no": record.batch_no,
+                    "bin_id": record.bin_id,
+                    "product_order": record.product_order,
+                    "purchase_no": record.purchase_no,
+                    "version_no": record.version_no,
+                    "version_seq": record.version_seq,
+                    "item_type_id": record.item_type_id,
+                    # "item_type": item_type.type_name if item_type else None,
+                    "item_type": item_type_name,
+                    "size": record.size,
+                    "mvt_id": record.mvt.mvt_code,
+                    "mvt_name": record.mvt.get_translated_name(),
+                    "plus_qty": record.plus_qty,
+                    "minus_qty": record.minus_qty,
+                    "remain_qty": record.remain_qty,
+                    "purchase_unit": record.purchase_unit,
+                    "comment": record.comment,
+                    "create_at": record.create_at,
+                    "create_by_username": record.create_by.username,
+                })
+
+            return JsonResponse({
+                "bin_hists": bin_hists_data,
+                "bin_values": list(bin_values),
+                "total_qty": total_qty,
+            })
+        return JsonResponse({"message": "Invalid request."}, status=400)
 
     return render(request, 'wh_packing/search/bin_history_search.html', locals())
 

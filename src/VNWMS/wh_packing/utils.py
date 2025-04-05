@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from django.db.models import Q
 from django.utils.translation import get_language
 from VNWMS.database import vnwms_database
 from warehouse.models import MovementType, Bin, ItemType
@@ -148,7 +150,7 @@ def inventory_history(location=None, product_order=None, purchase_order=None, si
     bin_hists = Bin_Value_History.objects.filter()
 
     if location:
-        bin_hists = bin_hists.filter(bin__bin_id=location)  # Lọc chính xác mã `bin`
+        bin_hists = bin_hists.filter(bin__bin_id=location)
     if product_order:
         bin_hists = bin_hists.filter(product_order=product_order)
     if purchase_order:
@@ -156,7 +158,7 @@ def inventory_history(location=None, product_order=None, purchase_order=None, si
     if size:
         bin_hists = bin_hists.filter(size=size)
     if from_date:
-        start_datetime = datetime.combine(from_date, datetime.min.time())  # Đầu ngày (00:00:00)
+        start_datetime = datetime.combine(from_date, datetime.min.time())
         bin_hists = bin_hists.filter(create_at__gte=start_datetime)
     if to_date:
         end_datetime = datetime.combine(to_date, datetime.max.time())

@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-from django.urls import reverse
 from django.utils.translation import get_language
 
 
@@ -122,7 +121,6 @@ class Bin(models.Model):
         return self.bin_id
 
 
-
 class MovementType(models.Model):
     mvt_code = models.CharField(max_length=20, primary_key=True)
     mvt_name = models.CharField(max_length=20, blank=False, null=False)
@@ -152,6 +150,14 @@ class ItemType(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, editable=True)  # 建立日期
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
                                   related_name='itemtype_create_by')  # 建立者
+
+    def get_item_type_name(self):
+        lang = get_language()
+        if lang == 'vi' and self.type_vn_name:
+            return self.type_vn_name
+        elif lang == 'zh-hant' and self.type_name:
+            return self.type_name
+        return self.type_code
 
     def __str__(self):
         return self.desc

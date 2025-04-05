@@ -61,7 +61,7 @@
 
     <!-- Form for search -->
     <div class="table-container mt-4">
-        <form method="get" action="{% url 'bin_search' %}" id="form">
+        <form id="form">
 
             {% if form.non_field_errors %}
                 <div class="alert alert-danger">
@@ -134,7 +134,6 @@
             </div>
         </form>
     </div>
-
     <!-- Table for displaying results -->
     <div class="table-container justify-content-center mt-5">
         <h2 style="font-size: 1.5em;">{% trans "Current Inventory" %}</h2>
@@ -159,38 +158,14 @@
                         <th>{% trans 'Item Type' %}</th>
                         <th>{% trans "Purchase Order" %}</th>
                         <th>{% trans 'Mtr No' %}</th>
-
-
                     </tr>
                 </thead>
-                <tbody>
-                {% if result_value %}
-                    {% for record in result_value %}
-                    <tr>
-                        <td style="width: auto">{{ page_obj.start_index|add:forloop.counter0 }}</td>
-                        <td>{{ record.bin_id }}</td>
-                        <td>{{ record.customer_no}}</td>
-                        <td>{{ record.product_order }}</td>
-                        <td style="width: auto">{{ record.version_no }}</td>
-                        <td>{{ record.version_seq }}</td>
-                        <td>{{ record.lot_no}}</td>
-                        <td>{{ record.size }}</td>
-                        <td class="qty">{{ record.qty}}</td>
-                        <td class="qty">{{ record.purchase_qty}}</td>
-                        <td>{{ record.purchase_unit}}</td>
-                        <td>{{ record.supplier}}</td>
-                        <td>{{ record.post_date }}</td>
-                        <td>{{ record.item_type}}</td>
-                        <td>{{ record.purchase_no }}</td>
-                        <td>{{ record.sap_mtr_no}}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="8" class="text-center">{% trans "Not found" %}</td>
-                    </tr>
-                    {% endfor %}
-                {% endif %}
+                <tbody class="bin_value">
+
                 </tbody>
+                <tfoot class="total_qty">
+
+                </tfoot>
             </table>
         </div>
 
@@ -215,30 +190,8 @@
                         <th>{% trans "Create by" %}</th>
                     </tr>
                 </thead>
-                <tbody>
-                {% if result_history %}
-                    {% for record in result_history %}
-                    <tr>
-                        <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
-                        <td>{{ record.bin }}</td>
-                        <td>{{ record.product_order }}</td>
-                        <td>{{ record.purchase_no }}</td>
-                        <td>{{ record.item_type }}</td>
-                        <td>{{ record.size }}</td>
-                        <td class="qty">{{ record.minus_qty }}</td>
-                        <td class="qty">{{ record.plus_qty }}</td>
-                        <td class="qty">{{ record.remain_qty }}</td>
-                        <td>{{ record.mvt.get_translated_name }}</td>
-                        <td>{{ record.purchase_unit }}</td>
-                        <td>{{ record.create_at|date:"d/m/Y H:i" }}</td>
-                        <td>{{ record.create_by.username }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="8" class="text-center">{% trans "Not found" %}</td>
-                    </tr>
-                    {% endfor %}
-                {% endif %}
+                <tbody class="bin_hist">
+
                 </tbody>
             </table>
         </div>
@@ -252,47 +205,106 @@
 {% block javascript %}
     <script>
         $(document).ready(function () {
+
             $("#search").on("click", function (event) {
+                event.preventDefault();
+
                 let fields = ["#id_bin", "#id_po_no", "#id_size"];
                 if (fields.every(selector => !$(selector).val().trim())) {
-                    event.preventDefault();
                     alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
+                    event.stopPropagation();
+
+                } else {
+                    let $btn = $("#search");
+                    let loadingText = $("#loading-text").text();
+
+                    $btn.html('<i class="fa fa-spinner fa-spin"></i> ' + loadingText + '...');
+
+                    $btn.prop("disabled", true);
+
+                    let formData = $("#form").serialize();
+
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: formData,
+                        success: function (response) {
+                            console.log(response); // Kiểm tra dữ liệu trả về
+
+                            function formatDate(dateString) {
+                                let date = new Date(dateString);
+                                let day = ('0' + date.getDate()).slice(-2); // Lấy ngày, nếu ngày nhỏ hơn 10 thì thêm số 0
+                                let month = ('0' + (date.getMonth() + 1)).slice(-2); // Lấy tháng, nếu tháng nhỏ hơn 10 thì thêm số 0
+                                let year = date.getFullYear(); // Lấy năm
+                                let hours = ('0' + date.getHours()).slice(-2); // Lấy giờ, nếu nhỏ hơn 10 thì thêm số 0
+                                let minutes = ('0' + date.getMinutes()).slice(-2); // Lấy phút, nếu nhỏ hơn 10 thì thêm số 0
+
+                                return `${day}/${month}/${year} ${hours}:${minutes}`;
+                            }
+
+                            // Cập nhật bảng bin_values
+                            let binValueHtml = '';
+                            response.bin_values.forEach(function(item, index) {
+                                binValueHtml += `<tr>
+                                                    <td>${index + 1}</td>
+                                                    <td>${item.bin_id}</td>
+                                                    <td>${item.customer_no}</td>
+                                                    <td>${item.product_order}</td>
+                                                    <td>${item.version_no}</td>
+                                                    <td>${item.version_seq}</td>
+                                                    <td>${item.lot_no}</td>
+                                                    <td>${item.size}</td>
+                                                    <td class="qty">${item.qty}</td>
+                                                    <td class="qty">${item.purchase_qty}</td>
+                                                    <td>${item.purchase_unit}</td>
+                                                    <td>${item.supplier}</td>
+                                                    <td>${item.post_date}</td>
+                                                    <td>${item.item_type}</td>
+                                                    <td>${item.purchase_no}</td>
+                                                    <td>${item.sap_mtr_no}</td>
+                                                </tr>`;
+                            });
+                            $(".bin_value tbody").html(binValueHtml);
+
+
+                            // Cập nhật bảng bin_hists
+                            let binHistHtml = '';
+                            response.bin_hists.forEach(function(item, index) {
+                                let formattedDate = formatDate(item.create_at);
+                                binHistHtml += `<tr>
+                                                    <td>${index + 1}</td>
+                                                    <td>${item.bin_id}</td>
+                                                    <td>${item.product_order}</td>
+                                                    <td>${item.purchase_no}</td>
+                                                    <td>${item.item_type}</td>
+                                                    <td>${item.size}</td>
+                                                    <td class="qty">${item.minus_qty}</td>
+                                                    <td class="qty">${item.plus_qty}</td>
+                                                    <td class="qty">${item.remain_qty}</td>
+                                                    <td>${item.mvt_name}</td>
+                                                    <td>${item.purchase_unit}</td>
+                                                    <td>${formattedDate}</td>
+                                                    <td>${item.create_by_username}</td>
+                                                </tr>`;
+                            });
+                            $(".bin_hist tbody").html(binHistHtml);
+
+                            // Cập nhật tổng số lượng
+                            $(".bin_value tfoot").html(`<tr><td colspan="16">{% trans "Total Quantity: " %} ${response.total_qty}</td></tr>`);
+                        },
+
+                        error: function (xhr) {
+                            const errorMsg = JSON.parse(xhr.responseText);
+                            alert(errorMsg.message);
+
+                        },
+                        complete: function () {
+                            setTimeout(function () {
+                                $btn.prop("disabled", false).text("{% trans 'Search' %}");
+                            }, 2000);
+                        }
+                    });
                 }
-            });
-
-            $("#form").on("submit", function (e) {
-                e.preventDefault(); // Ngăn chặn hành động gửi form mặc định
-
-                let $btn = $(this).find("button[type='submit']");
-                let loadingText = $("#loading-text").text();
-
-                $btn.html('<i class="fa fa-spinner fa-spin"></i> ' + loadingText + '...');
-
-                $btn.prop("disabled", true);
-
-                let formData = $(this).serialize(); // Thu thập dữ liệu form
-
-                // Gửi dữ liệu qua Ajax
-                $.ajax({
-                    url: this.action,
-                    type: this.method,
-                    data: formData,
-                    success: function (response) {
-                        // Cập nhật dữ liệu bảng mà không cần tải lại trang
-                        $(".bin_value tbody").html($(response).find(".bin_value tbody").html());
-                        $(".bin_hist tbody").html($(response).find(".bin_hist tbody").html());
-                    },
-                    error: function (xhr) {
-                        const errorMsg = JSON.parse(xhr.responseText);
-                        alert(errorMsg.message);
-
-                    },
-                    complete: function () {
-                        setTimeout(function () {
-                            $btn.prop("disabled", false).text("{% trans 'Search' %}");
-                        }, 2000);
-                    }
-                });
             });
 
         });
