@@ -520,12 +520,12 @@
             for (var i = 0; i < gridData.length; i++) {
                 if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
                     {#alert({% blocktrans %}"第 " + (i + 1) + " 行的 'order_bin' 欄位不可為空！"{% endblocktrans %});#}
-                    alert({% blocktrans %}"The 'location' field in row " + (i + 1) + " cannot be empty!{% endblocktrans %}");
-                    return; // 阻止繼續執行
+                    alert({% blocktrans %}"(Location) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
+                    return;
                 }
 
                 if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
-                    alert("The 'order quantity' field in row " + (i + 1) + " cannot be empty!");
+                    alert({% blocktrans %}"(Order Quantity) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
                     return;
                 }
             }

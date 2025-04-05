@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-04 15:47+0700\n"
-"PO-Revision-Date: 2025-04-04 15:57+0700\n"
+"POT-Creation-Date: 2025-04-05 09:05+0700\n"
+"PO-Revision-Date: 2025-04-05 09:07+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -44,10 +44,8 @@ msgid "Warehouse Setting"
 msgstr "Mã Kho"
 
 #: .\bases\templates\bases\base.html:92
-#, fuzzy
-#| msgid "Warehouse Name"
 msgid "GD Packing Warehouse"
-msgstr "Tên Kho"
+msgstr "Kho đóng gói GĐ"
 
 #: .\bases\templates\bases\base.html:109
 msgid "Personal Setting"
@@ -2143,28 +2141,24 @@ msgstr "Sao chép"
 msgid "Copy and insert below this row Success!"
 msgstr "Sao chép và chèn bên dưới hàng này Thành công!"
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:518
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:515
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:305
 msgid "No data in the table! Please enter at least one row."
 msgstr "Không có dữ liệu trong bảng! Vui lòng nhập ít nhất một hàng."
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:526
-#, fuzzy
-#| msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
-msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
-msgstr "\"Trường 'vị trí' ở dòng thứ \" + (i + 1) + \" không được để trống!\""
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:523
+msgid "\"(Location) field in row \" + (i + 1) + \" cannot be empty!\""
+msgstr "\"(Vị trí) dòng thứ \" + (i + 1) + \" không được để trống!\""
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:531
-#, fuzzy
-#| msgid "\"The 'location' field in row \" + (i + 1) + \" cannot be empty!\""
-msgid "The 'order quantity' field in row \" + (i + 1) + \" cannot be empty!"
-msgstr "\"Trường 'vị trí' ở dòng thứ \" + (i + 1) + \" không được để trống!\""
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:528
+msgid "\"(Order Quantity) field in row \" + (i + 1) + \" cannot be empty!\""
+msgstr "\"(Số lượng) dòng thứ \" + (i + 1) + \" không được để trống!\""
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:554
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:551
 msgid "Form submitted successfully!"
 msgstr "Đã gửi biểu mẫu thành công!"
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:558
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:555
 msgid "Form submission failed!"
 msgstr "Không thể gửi biểu mẫu!"
 
