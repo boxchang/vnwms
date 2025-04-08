@@ -514,12 +514,15 @@
                 }
 
                 for (let i = 0; i < gridData.length; i++) {
-                    if (!gridData[i].order_bin || gridData[i].order_bin.trim() === "") {
+                    let orderBin = gridData[i].order_bin;
+                    let orderQty = gridData[i].order_qty;
+
+                    if (!orderBin || String(orderBin).trim() === "") {
                         alert({% blocktrans %}"(Location) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
                         return;
                     }
 
-                    if (!gridData[i].order_qty || gridData[i].order_qty.trim() === "") {
+                    if (orderQty === null || orderQty === undefined || String(orderQty).trim() === "") {
                         alert({% blocktrans %}"(Order Quantity) field in row " + (i + 1) + " cannot be empty!"{% endblocktrans %});
                         return;
                     }
