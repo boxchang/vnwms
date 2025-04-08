@@ -5,7 +5,7 @@
 {% block title %} {% trans "Location Transfer" %} {% endblock %}
 {% block css %}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-
+    {{ block.super }}
     <style>
 
         form {
@@ -18,7 +18,7 @@
         }
 
     </style>
-{% endblock css %}
+{% endblock %}
 
 {% block content %}
 
@@ -30,13 +30,15 @@
         </form>
     </div>
 
-{% endblock content %}
+{% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+{% endblock %}
 
 
 {% block javascript %}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
     <script>
         $(document).ready(function() {
 
@@ -52,7 +54,7 @@
              $('#select2-id_bin-container').css('margin-top', '5px');
 
 
-            var translations = {
+            const translations = {
                 warehouse: "{% trans "Warehouse" %}",
                 productOrder: "{% trans "Product Order" %}",
                 purchaseNo: "{% trans "Purchase No" %}",
@@ -113,4 +115,4 @@
 
     </script>
 
-{% endblock javascript %}
+{% endblock %}

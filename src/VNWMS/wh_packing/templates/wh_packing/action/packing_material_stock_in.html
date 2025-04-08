@@ -284,13 +284,13 @@
                 const customer_no =$("#id_customer_no").val();
                 const version_seq = $("#id_version_seq").val();
 
-                if(product_order == "" || purchase_no == "" || version_no == "" || version_seq == "" || size == "" || item_type_val == "") {
-                    alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Version Sequence" %}/{% trans "Size" %}/{% trans "Item Type" %}) {% trans "are required" %}");
+                if(product_order == "" || purchase_no == "" || version_no == ""|| item_type_val == "") {
+                    alert("({% trans "Product Order" %}/{% trans "Purchase Order" %}/{% trans "Version No" %}/{% trans "Item Type" %}) {% trans "are required" %}");
                     return false;
                 } else {
                     $("#myForm input, #id_item_type, #id_desc, #id_purchase_unit").not("#id_post_date").val("");
                     $("#id_order_bin").val(null).trigger("change");
-                    $("#id_purchase_qty, #id_order_qty, #id_size").val(0);
+                    $("#id_purchase_qty, #id_order_qty").val(0);
                 }
 
                 const newItem = {
