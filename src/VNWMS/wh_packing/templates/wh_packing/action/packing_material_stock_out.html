@@ -288,6 +288,19 @@
                                 e.stopPropagation();
                                 e.preventDefault();
                                 $("#jsGrid").jsGrid("editItem", item);
+
+                                let $row = $(".jsgrid-edit-row");
+
+                                // Tìm checkbox trong dòng edit
+                                let $checkbox = $row.find("input.rowCheckbox");
+
+                                // Bỏ check nếu đang được chọn
+                                if ($checkbox.prop("checked")) {
+                                    $checkbox.prop("checked", false);
+                                }
+
+                                // Ẩn checkbox
+                                $checkbox.hide();
                             });
 
                         return editButton;
