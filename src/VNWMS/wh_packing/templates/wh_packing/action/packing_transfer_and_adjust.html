@@ -107,9 +107,14 @@
                         type: "control",
                         width: 55,
                         itemTemplate: function(_, item) {
-                            return $("<button>").text("{% trans "Transfer" %}")
-                                .addClass("btn btn-warning")
-                                .on("click", function() {
+                            return $("<button>")
+                                .html('<i class="fas fa-random me-1"></i> {% trans "Transfer" %}')  // Icon chuyển kho + text
+                                .addClass("btn btn-warning btn-sm rounded-pill shadow")
+                                .css({
+                                    padding: "4px 10px",
+                                    fontWeight: "500"
+                                })
+                                .on("click", function () {
                                     let queryParams = $.param({
                                         warehouse: item.bin__area__warehouse__wh_name,
                                         product_order: item.product_order,
@@ -124,15 +129,20 @@
                                     });
 
                                     window.open("/wh_packing/bin_transfer_page?" + queryParams, "");
-                            });
+                                });
                         }
                     },
                     {
                         type: "control",
-                        width: 45,
+                        width: 55,
                         itemTemplate: function(_, item) {
                             return $("<button>").text("{% trans "Adjust" %}")
-                                .addClass("btn btn-warning")
+                                .html('<i class="fas fa-sliders-h me-1"></i> {% trans "Adjust" %}')
+                                .addClass("btn btn-warning btn-sm rounded-pill shadow")
+                                .css({
+                                    padding: "4px 10px",
+                                    fontWeight: "500"
+                                })
                                 .on("click", function() {
                                     let queryParams = $.param({
                                         warehouse: item.bin__area__warehouse__wh_name,
