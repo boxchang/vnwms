@@ -85,6 +85,8 @@
 
     <script>
     $(document).ready(function() {
+        let selectedItems = {};
+
 
         {# Search #}
         $("#btnSearch").on("click", function (event) {
@@ -105,6 +107,7 @@
         });
 
         const get_sap_info = function() {
+            selectedItems = {};
 
             let product_order = $("#id_product_order").val().trim();
             let purchase_no = $("#id_purchase_no").val().trim();
@@ -189,7 +192,6 @@
 
         });
 
-        let selectedItems = {};
 
         {# Main JsGrid #}
         data: [], // 初始為空，將透過 AJAX 加載資料
@@ -199,7 +201,7 @@
             width: "100%",
             height: "70vh",
             noDataContent: "{% trans "Not found" %}",
-            autoload: true,
+            {#autoload: true,#}
             selecting: true,
             inserting: false,  // 啟用新增功能
             editing: true,    // 啟用編輯功能
@@ -214,16 +216,25 @@
                 }
                 this.editItem(args.item);
 
-                {#BUG??#}
-
                 let $row = $(".jsgrid-edit-row");
 
                 // Ẩn input có class rowCheckbox (nếu nó có mặt trong dòng edit)
-                $row.find("input.rowCheckbox").hide();
+                {#$row.find("input.rowCheckbox").hide();#}
+
+                // Tìm checkbox trong dòng edit
+                let $checkbox = $row.find("input.rowCheckbox");
+
+                // Bỏ check nếu đang được chọn
+                if ($checkbox.prop("checked")) {
+                    $checkbox.prop("checked", false);
+                }
+
+                // Ẩn checkbox
+                $checkbox.hide();
 
             },
 
-            data: [],   // 將 JSON 資料導入表格
+            {#data: [],   // 將 JSON 資料導入表格#}
 
             fields: [
                 {

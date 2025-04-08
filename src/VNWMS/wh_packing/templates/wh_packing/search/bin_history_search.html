@@ -290,7 +290,7 @@
                             $(".bin_hist tbody").html(binHistHtml);
 
                             // Cập nhật tổng số lượng
-                            $(".bin_value tfoot").html(`<tr><td colspan="16">{% trans "Total Quantity: " %} ${response.total_qty}</td></tr>`);
+                            $(".bin_value tfoot").html(`<tr><td colspan="15">{% trans "Total Quantity: " %} ${response.total_qty}</td></tr>`);
                         },
 
                         error: function (xhr) {
