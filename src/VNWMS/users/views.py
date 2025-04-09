@@ -194,6 +194,7 @@ def user_info(request):
         form = UserInfoForm(request.POST, instance=member, user=request.user)
 
         if form.is_valid():
+
             user = form.save(commit=False)
             user.update_by = request.user
             if password1 and password2:

@@ -116,7 +116,8 @@ class UserInfoForm(forms.ModelForm):
                                 widget=forms.PasswordInput(attrs={'placeholder': _('Please type the new password')}))
     password2 = forms.CharField(label=_('confirm_password'), required=False,
                                 widget=forms.PasswordInput(attrs={'placeholder': _('Please type the confirm password')}))
-    default_homepage = forms.ModelChoiceField(queryset=HomePageOption.objects.all(), label=_('Default Homepage'))
+    default_homepage = forms.ModelChoiceField(queryset=HomePageOption.objects.all(), label=_('Default Homepage'),
+                                              required=False)
 
     class Meta:
         model = CustomUser
@@ -129,8 +130,6 @@ class UserInfoForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_show_errors = True
-
-
         self.helper.layout = Layout(
             Fieldset(_('base_information'),
                  Div(
@@ -159,6 +158,7 @@ class UserInfoForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(UserInfoForm, self).clean()
+
         emp_no = cleaned_data.get("emp_no")
         current_password = cleaned_data.get("password0")
         password = cleaned_data.get("password1")
@@ -173,3 +173,5 @@ class UserInfoForm(forms.ModelForm):
             raise forms.ValidationError(
                 _('The password is not correct')
             )
+
+        return cleaned_data
