@@ -96,7 +96,7 @@
     <script>
         $(document).ready(function () {
 
-            var translations = {
+            const translations = {
                 notFound: "{% trans 'Not found' %}",
                 plant: "{% trans 'Plant' %}",
                 warehouse: "{% trans 'Warehouse' %}",
@@ -114,7 +114,7 @@
 
             // Load động danh sách Area khi chọn Warehouse
             $("#warehouse").change(function () {
-                var warehouseId = $(this).val();
+                const warehouseId = $(this).val();
                 $("#id_area").prop("disabled", true).html('<option value="">{% trans "Choose Area" %}</option>');
                 $("#id_bin").prop("disabled", true).html('<option value="">{% trans "Choose Location" %}</option>');
                 if (warehouseId) {
@@ -129,7 +129,7 @@
 
             // Load động danh sách Bin khi chọn Area
             $("#id_area").change(function () {
-                var areaId = $(this).val();
+                const areaId = $(this).val();
                 $("#id_bin").prop("disabled", true).html('<option value="">{% trans "Choose Location" %}</option>');
                 if (areaId) {
                     $.getJSON("{% url 'get_bins' %}", { area: areaId }, function (data) {
