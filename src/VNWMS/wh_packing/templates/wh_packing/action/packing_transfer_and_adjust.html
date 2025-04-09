@@ -92,6 +92,8 @@
                 editing: false,
                 sorting: true,
                 paging: true,
+                {#rowClass: "table-primary",   // dòng màu xanh nhạt#}
+                {#headerRowClass: "table-primary table-bordered", // header tối#}
                 pageSize: 20,
                 fields: [
                     { name: "bin__area__warehouse__wh_name", title: "{% trans "Warehouse" %}", type: "text", width: 40, css: "text-center" },

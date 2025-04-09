@@ -761,9 +761,9 @@ def product_order_hist_data(request):
             "comment": item["comment"],
             "mvt_id": item[_mvt],
             "bin_id": item["bin_id"],
-            "plus_qty": intcomma(item["plus_qty"]),
-            "minus_qty": intcomma(item["minus_qty"]),
-            "remain_qty": intcomma(item["remain_qty"]),
+            "plus_qty": item["plus_qty"],
+            "minus_qty": item["minus_qty"],
+            "remain_qty": item["remain_qty"],
             "create_at": item["create_at"].strftime("%d/%m/%Y %H:%M") if isinstance(item["create_at"], datetime) else
             item["create_at"],
             "create_by__username": item["create_by__username"]

@@ -37,7 +37,16 @@
             max-width: none; /* Hiển thị toàn bộ nội dung */
         }
 
+        body {
+            background-color: #eaf4f4;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 16px;
+        }
 
+        .jsgrid-cell, .jsgrid-header-cell {
+            padding: 12px 14px;
+            border-color: #eaebef;
+        }
     </style>
 {% endblock %}
 
@@ -95,7 +104,7 @@
                 $(this).toggleClass("expanded");
             });
 
-            var translations = {
+            const translations = {
                 notFound: "{% trans 'Not found' %}",
                 productOrder: "{% trans 'Product Order' %}",
                 purchaseOrder: "{% trans 'Purchase Order' %}",
@@ -122,11 +131,12 @@
                 sorting: true,
                 paging: true,
                 pageSize: 20,
+                headerRowClass: "table-bordered",
                 fields: [
-                    { name: "product_order", title: translations.productOrder, type: "text", width: 105, css: "text-center"},
-                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 105, css: "text-center"},
+                    { name: "product_order", title: translations.productOrder, type: "text", width: 120, css: "text-center"},
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 120, css: "text-center"},
                     { name: "version_no", title: translations.versionNo, type: "text", width: 90, css: "text-center"},
-                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 80, css: "text-center"},
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 70, css: "text-center"},
                     { name: "item_type", title: translations.item_type, type: "text", width: 100, css: "text-center"},
                     { name: "size", title: translations.size, type: "text", width: 50, css: "text-center"},
                     { name: "comment", title: translations.comment, type: "text", width: 200, css: "text-center"},
@@ -191,15 +201,15 @@
 
             $("#exportExcel").click(function () {
                 // Lấy dữ liệu từ jsGrid
-                var gridData = $("#jsGrid").jsGrid("option", "data");
+                let gridData = $("#jsGrid").jsGrid("option", "data");
 
                 // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
-                var fields = [
+                const fields = [
                     { name: "product_order", title: translations.productOrder, type: "text", width: 100 },
                     { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 100 },
                     { name: "version_no", title: translations.versionNo, type: "text", width: 100 },
                     { name: "version_seq", title: translations.versionSeq, type: "text", width: 80 },
-                    { name: "item_type_display", title: translations.item_type, type: "text", width: 100 },
+                    { name: "item_type", title: translations.item_type, type: "text", width: 100 },
                     { name: "size", title: translations.size, type: "text", width: 45 },
                     { name: "comment", title: translations.comment, type: "text", width: 200 },
                     { name: "bin_id", title: translations.bin, type: "text", width: 55 },
@@ -212,8 +222,8 @@
                 ];
 
                 // Tạo dữ liệu chuyển đổi
-                var transformedData = gridData.map(function (item) {
-                    var transformedItem = {};
+                const transformedData = gridData.map(function (item) {
+                    let transformedItem = {};
                     fields.forEach(function (field) {
                         let value = item[field.name] || "";
                         if (field.type === "number") {
@@ -225,13 +235,13 @@
                 });
 
                 // Chuyển đổi dữ liệu thành định dạng SheetJS với `raw: true`
-                var ws = XLSX.utils.json_to_sheet(transformedData, { raw: true });
+                let ws = XLSX.utils.json_to_sheet(transformedData, { raw: true });
 
                 // Đặt độ rộng cho các cột
                 ws["!cols"] = fields.map(field => ({ wpx: field.width }));
 
                 // Tạo workbook và thêm sheet vào
-                var wb = XLSX.utils.book_new();
+                let wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel
