@@ -5,7 +5,6 @@ from datetime import datetime
 from django.utils.translation import get_language
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.humanize.templatetags.humanize import intcomma
 from django.db import transaction
 from django.http import JsonResponse, FileResponse, Http404
 from django.shortcuts import render
@@ -47,13 +46,10 @@ def bin_search(request):
             for record in bin_hists:
 
                 item_type = None
-                if record.item_type_id:  # Kiểm tra nếu item_type_id có giá trị
-                    # item_type = ItemType.objects.get_item_type_name(record.item_type_id)
-                    # item_type = ItemType.objects.get_item_type_name(record.item_type_id)
+                if record.item_type_id:
                     try:
-                        # Lấy đối tượng ItemType dựa trên item_type_id
                         item_type = ItemType.objects.get(type_code=record.item_type_id)
-                        item_type_name = item_type.get_item_type_name()  # Gọi phương thức get_item_type_name từ đối tượng ItemType
+                        item_type_name = item_type.get_item_type_name()
                     except ItemType.DoesNotExist:
                         item_type_name = None  # Nếu không tìm thấy ItemType, gán None
 
@@ -94,7 +90,6 @@ def check_po_exists(request):
     po_no = request.POST.get('po_no')
     bin_id = request.POST.get('bin_id')
 
-    # Kiểm tra xem PO có tồn tại trong cơ sở dữ liệu không
     if Bin_Value.objects.filter(bin=bin_id, po_no=po_no).exists():
         return JsonResponse({'exists': True})
     else:
@@ -113,7 +108,6 @@ def dashboard(request):
 
 def warehouse_map(request, pk):
     warehouse = Warehouse.objects.get(wh_code__contains='PKG', wh_plant=request.user.plant)
-    # bg = warehouse.wh_bg.url
 
     bg = warehouse.wh_bg.url if warehouse.wh_bg else None
     print(pk)
