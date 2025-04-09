@@ -17,6 +17,17 @@
             transform: scale(1.5);
         }
 
+        body {
+            background-color: #fce4e4;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 16px;
+        }
+
+        .jsgrid-cell, .jsgrid-header-cell {
+            padding: 12px 14px;
+            border-color: #eaebef;
+        }
+
     </style>
 {% endblock %}
 
@@ -285,11 +296,13 @@
                 });
 
                 if (selectedData.length === 0) {
-                    alert("Please select at least one row to delete!");
+                    const select_trans = "{% trans 'Please select at least one row to delete!' %}";
+                    alert(select_trans);
                     return;
                 }
 
-                if (!confirm("Are you sure you want to delete?")) return;
+                const confirm_trans = "{% trans 'Are you sure you want to delete?' %}";
+                if (!confirm(confirm_trans)) return;
 
                 $.ajax({
                     type: "POST",
@@ -300,7 +313,8 @@
                     }),
                     contentType: "application/json",
                     success: function (response) {
-                        alert("Deleted successfully!");
+                        const success_trans = "{% trans 'Deleted successfully' %}!";
+                        alert(success_trans);
 
                         // Reset danh sách đã chọn
                         selectedItems = {};
@@ -336,10 +350,10 @@
 
             $("#exportExcel").click(function () {
                 // Lấy dữ liệu từ jsGrid
-                var gridData = $("#jsGrid").jsGrid("option", "data");
+                let gridData = $("#jsGrid").jsGrid("option", "data");
 
                 // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
-                var fields = [
+                const fields = [
                     { name: "wh_plant", title: translations.plant, type: "text", width: 100 },
                     { name: "wh_name", title: translations.warehouse, type: "text", width: 100 },
                     { name: "product_order", title: translations.product_order, type: "text", width: 100 },
@@ -354,13 +368,13 @@
                 ];
 
                 // Tạo một đối tượng map để ánh xạ từ name sang title
-                var titleMap = {};
+                let titleMap = {};
                 fields.forEach(function (field) {
                     titleMap[field.name] = field.title;
                 });
 
-                var transformedData = gridData.map(function (item) {
-                    var transformedItem = {};
+                const transformedData = gridData.map(function (item) {
+                    let transformedItem = {};
                     fields.forEach(function (field) {
                         transformedItem[field.title] = item[field.name] || ""; // Giữ đúng thứ tự trong `fields`
                     });
@@ -368,10 +382,10 @@
                 });
 
                 // Chuyển đổi dữ liệu thành định dạng SheetJS
-                var ws = XLSX.utils.json_to_sheet(transformedData);
+                let ws = XLSX.utils.json_to_sheet(transformedData);
 
                 // Đặt độ rộng cho các cột
-                var colWidths = fields.map(function(field) {
+                let colWidths = fields.map(function(field) {
                     return { wpx: field.width }; // Đặt độ rộng cột theo thuộc tính width trong fields
                 });
                 // Áp dụng độ rộng cho sheet
@@ -379,7 +393,7 @@
 
 
                 // Tạo workbook và thêm sheet vào
-                var wb = XLSX.utils.book_new();
+                let wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel

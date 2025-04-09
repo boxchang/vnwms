@@ -15,6 +15,17 @@
         th {
             text-align: center;
         }
+
+        body {
+            background-color: #eaf4f4;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 16px;
+        }
+
+        .jsgrid-cell, .jsgrid-header-cell {
+            padding: 12px 14px;
+            border-color: #eaebef;
+        }
     </style>
 {% endblock %}
 
@@ -202,10 +213,10 @@
 
             $("#exportExcel").click(function () {
                 // Lấy dữ liệu từ jsGrid
-                var gridData = $("#jsGrid").jsGrid("option", "data");
+                let gridData = $("#jsGrid").jsGrid("option", "data");
 
                 // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
-                var fields = [
+                const fields = [
                     { name: "wh_plant", title: translations.plant, type: "text", width: 100, css: "text-center"},
                     { name: "wh_name", title: translations.warehouse, type: "text", width: 120, css: "text-center"},
                     { name: "product_order", title: translations.product_order, type: "text", width: 120, css: "text-center"},
@@ -224,8 +235,8 @@
                 ];
 
                 // Tạo dữ liệu chuyển đổi
-                var transformedData = gridData.map(function (item) {
-                    var transformedItem = {};
+                const transformedData = gridData.map(function (item) {
+                    let transformedItem = {};
                     fields.forEach(function (field) {
                         let value = item[field.name] || "";
                         if (field.type === "number") {
@@ -237,13 +248,13 @@
                 });
 
                 // Chuyển đổi dữ liệu thành định dạng SheetJS với `raw: true`
-                var ws = XLSX.utils.json_to_sheet(transformedData, { raw: true });
+                let ws = XLSX.utils.json_to_sheet(transformedData, { raw: true });
 
                 // Đặt độ rộng cho các cột
                 ws["!cols"] = fields.map(field => ({ wpx: field.width }));
 
                 // Tạo workbook và thêm sheet vào
-                var wb = XLSX.utils.book_new();
+                let wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data");
 
                 // Xuất file Excel
