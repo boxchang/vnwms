@@ -178,7 +178,7 @@
 
                 if (!product_order && !bin && !size && !comment) {
                     event.preventDefault(); // Ngăn gửi request lên server
-                    alert("{% trans '(Product Order/Location/Size/Comment) cannot all be null!' %}");
+                    alert("({% trans 'Product Order' %}/{% trans 'Location' %}/{% trans 'Size' %}/{% trans 'Comment' %}) {% trans 'cannot all be null' %}!");
                     return;
                 }
 
