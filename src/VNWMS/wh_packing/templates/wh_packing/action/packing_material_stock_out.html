@@ -91,8 +91,6 @@
         {# Search #}
         $("#btnSearch").on("click", function (event) {
             event.preventDefault();
-            $("#jsGrid").jsGrid("option", "data", []);
-
             let product_order = $('#id_product_order').val().trim();
             let purchase_no = $('#id_purchase_no').val().trim();
             let size = $('#id_size').val().trim();

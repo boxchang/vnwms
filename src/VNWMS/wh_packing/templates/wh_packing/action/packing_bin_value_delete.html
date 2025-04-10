@@ -93,6 +93,8 @@
 {% block javascript %}
     <script>
         $(document).ready(function () {
+            let selectedItems = {};
+
 
             const translations = {
                 notFound: "{% trans 'Not found' %}",
@@ -168,6 +170,8 @@
             });
 
             $("#Search").click(function () {
+                {#$("#jsGrid").jsGrid("option", "data", []);#}
+
                 let warehouseId = $("#warehouse").val();
                 let areaId = $("#id_area").val();
                 let binId = $("#id_bin").val();
@@ -180,6 +184,11 @@
                             bin: binId,
                             po: poId
                         }, function (data) {
+                            $.each($("#jsGrid").jsGrid("option", "data"), function(index, item) {
+                                delete selectedItems[item.id];
+                            });
+                            $('#selectAll').prop('checked', false);
+
                             console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
 
                             $("#jsGrid").jsGrid("option", "data", data);
@@ -189,13 +198,12 @@
             });
 
 
-            let selectedItems = {};
             $("#jsGrid").jsGrid({
                 width: "100%",
-                height: "60vh",
+                height: "67vh",
                 sorting: true,
-                paging: false,
-                autoload: true,
+                paging: true,
+                pageSize: 50,
                 noDataContent: translations.notFound,
                 pageButtonCount: 5,
                 editing: false,
@@ -226,7 +234,7 @@
 
                             $checkbox.on("change", function() {
                                 if ($(this).is(":checked")) {
-                                    selectedItems[item.id] = true;
+                                    selectedItems[item.id] = item;
                                 } else {
                                     delete selectedItems[item.id];
                                 }
@@ -255,25 +263,32 @@
             });
 
 
-            $("#jsGrid").on("change", "#selectAll", function() {
-                let isChecked = $(this).is(":checked");
+            $("#selectAll").on("change", function () {
+                event.preventDefault();
+                const isChecked = $(this).is(":checked");
 
-                 $(".rowCheckbox").prop("checked", isChecked).each(function() {
-                    let id = $(this).attr("data-id");
-
+                // Lặp toàn bộ dữ liệu (kể cả không hiển thị)
+                $.each($("#jsGrid").jsGrid("option", "data"), function(index, item) {
                     if (isChecked) {
-                        selectedItems[id] = true;
+                        selectedItems[item.id] = item;
                     } else {
-                        delete selectedItems[id];
+                        delete selectedItems[item.id];
                     }
-                 });
+                });
+
+                // Cập nhật checkbox trên trang hiện tại
+                $(".rowCheckbox").prop("checked", isChecked);
             });
 
             $("#jsGrid").on("change", ".rowCheckbox", function() {
-                let id = $(this).attr("data-id");
+                {#let id = $(this).attr("data-id");#}
+                let $checkbox = $(this);
+                let rowData = $checkbox.data(); // Lấy toàn bộ data-* của checkbox
+                let id = rowData.id;
 
                 if ($(this).is(":checked")) {
-                    selectedItems[id] = true;
+                    {#selectedItems[id] = true;#}
+                    selectedItems[id] = rowData;
                 } else {
                     delete selectedItems[id];
                 }
@@ -286,20 +301,15 @@
 
             $("#deleteSelected").click(function () {
                 let selectedIds = Object.keys(selectedItems); // Lấy danh sách ID đã chọn
-                let selectedData = [];
+                let count = selectedIds.length;
 
-                $(".rowCheckbox:checked").each(function() {
-                    let rowData = $(this).data(); // Lấy toàn bộ data-* attributes
-                    selectedData.push(rowData);
-                });
-
-                if (selectedData.length === 0) {
+                if (count === 0) {
                     const select_trans = "{% trans 'Please select at least one row to delete!' %}";
                     alert(select_trans);
                     return;
                 }
 
-                const confirm_trans = "{% trans 'Are you sure you want to delete?' %}";
+                const confirm_trans = "[" + count + "] " + "{% trans 'Are you sure you want to delete?' %}";
                 if (!confirm(confirm_trans)) return;
 
                 $.ajax({
@@ -307,7 +317,7 @@
                     url: "{% url 'delete_inventory' %}",
                     data: JSON.stringify({
                         ids: selectedIds ,
-                        list_data: selectedData,
+                        list_data: selectedItems,
                     }),
                     contentType: "application/json",
                     success: function (response) {
