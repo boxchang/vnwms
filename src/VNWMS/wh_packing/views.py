@@ -515,7 +515,7 @@ def bin_transfer(request):
         request.session['product_order'] = request.GET.get('product_order', '')
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
-        # request.session['version_seq'] = request.GET.get('version_seq', '')
+        request.session['version_seq'] = request.GET.get('version_seq', '')
         request.session['item_type'] = request.GET.get('item_type', '')
         request.session['lot_no'] = request.GET.get('lot_no', '')
         request.session['size'] = request.GET.get('size', '')
@@ -527,7 +527,7 @@ def bin_transfer(request):
     product_order = request.session.get('product_order', '')
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
-    # version_seq = request.session.get('version_seq', '')
+    version_seq = request.session.get('version_seq', '')
     item_type = request.session.get('item_type', '')
     lot_no = request.session.get('lot_no', '')
     size = request.session.get('size', '')
@@ -539,7 +539,7 @@ def bin_transfer(request):
         'product_order': product_order,
         'purchase_no': purchase_no,
         'version_no': version_no,
-        # 'version_seq': version_seq,
+        'version_seq': version_seq,
         'item_type': item_type,
         'lot_no': lot_no,
         'size': size,
@@ -596,14 +596,14 @@ def bin_transfer_page(request):
             Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, type_code, size, mvt,
                            bin_selected, qty, purchase_unit, desc=None)
             Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, type_code, size, mvt,
-                           bin, -qty, purchase_unit, desc=None)
+                           bin_id, -qty, purchase_unit, desc=None)
 
             item_data = {
                 'wh_name': wh_name,
                 'product_order': product_order,
                 'purchase_no': purchase_no,
                 'version_no': version_no,
-                # 'version_seq': version_seq,
+                'version_seq': version_seq,
                 'item_type': type_code,
                 'lot_no': lot_no,
                 'size': size,
