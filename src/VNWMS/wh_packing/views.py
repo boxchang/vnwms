@@ -472,26 +472,28 @@ def product_order_search(request):
     request.session['search_results_url'] = request.get_full_path()
     if product_order or size:
 
-        item_type_column = get_item_type_name()
+        # item_type_column = get_item_type_name()
 
-        bin_values = Bin_Value.objects.select_related(
-            'bin__area__warehouse'  # bin->area->warehouse
-        ).filter(
-            product_order__icontains=product_order,
-            size__icontains=size,
-        ).annotate(
-            item_type_display=F(f'item_type__{item_type_column}')
-        ).values(
-            'bin__area__warehouse__wh_name',
-            'product_order',
-            'purchase_no',
-            'version_no',
-            'version_seq',
-            'item_type_display',
-            'size',
-            'bin',
-            'qty'
-        )
+        bin_values = inventory_search(product_order=product_order, size=size)
+
+        # bin_values = Bin_Value.objects.select_related(
+        #     'bin__area__warehouse'  # bin->area->warehouse
+        # ).filter(
+        #     product_order__icontains=product_order,
+        #     size__icontains=size,
+        # ).annotate(
+        #     item_type_display=F(f'item_type__{item_type_column}')
+        # ).values(
+        #     'bin__area__warehouse__wh_name',
+        #     'product_order',
+        #     'purchase_no',
+        #     'version_no',
+        #     'version_seq',
+        #     'item_type_display',
+        #     'size',
+        #     'bin',
+        #     'qty'
+        # )
 
         data = list(bin_values)
 
