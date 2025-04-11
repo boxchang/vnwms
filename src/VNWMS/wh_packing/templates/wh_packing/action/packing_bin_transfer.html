@@ -61,6 +61,7 @@
                 versionNo: "{% trans "Version No" %}",
                 versionSeq: "{% trans "Version Seq" %}",
                 itemType: "{% trans "Item Type" %}",
+                lot: "{% trans "Lot" %}",
                 size: "{% trans "Size" %}",
                 bin: "{% trans "Bin" %}",
                 qty: "{% trans "Quantity" %}"
@@ -68,19 +69,20 @@
 
             // Parse URL parameters
             let params = new URLSearchParams(window.location.search);
-            let warehouse = params.get("warehouse");
+            let warehouse = params.get("wh_name");
             let productOrder = params.get("product_order");
             let purchaseNo = params.get("purchase_no");
             let versionNo = params.get("version_no");
-            let versionSeq = params.get("version_seq");
+            {#let versionSeq = params.get("version_seq");#}
             let itemType = params.get("item_type");
+            let lot = params.get("lot_no");
             let size = params.get("size");
-            let bin = params.get("bin");
+            let bin = params.get("bin_id");
             let qty = params.get("qty");
 
 
             console.log("Loaded Data:", {
-                warehouse, productOrder, purchaseNo, versionNo, versionSeq, itemType, size, bin, qty
+                warehouse, productOrder, purchaseNo, versionNo, itemType, lot, size, bin, qty
             });
 
             $.ajax({
@@ -93,14 +95,15 @@
                         height: "auto",
                         data: [data],
                         fields: [
-                            { name: "bin__area__warehouse__wh_code", title: translations.warehouse, type: "text", css: "text-center" },
+                            { name: "wh_name", title: translations.warehouse, type: "text", css: "text-center" },
                             { name: "product_order", title: translations.productOrder, type: "text", css: "text-center" },
                             { name: "purchase_no", title: translations.purchaseNo, type: "text", css: "text-center" },
                             { name: "version_no", title: translations.versionNo, type: "text", css: "text-center" },
-                            { name: "version_seq", title: translations.versionSeq, type: "text", css: "text-center" },
+                            {#{ name: "version_seq", title: translations.versionSeq, type: "text", css: "text-center" },#}
                             { name: "item_type", title: translations.itemType, type: "text", css: "text-center" },
+                            { name: "lot_no", title: translations.lot, type: "text", css: "text-center" },
                             { name: "size", title: translations.size, type: "text", css: "text-center" },
-                            { name: "bin", title: translations.bin, type: "text", css: "text-center" },
+                            { name: "bin_id", title: translations.bin, type: "text", css: "text-center" },
                             { name: "qty", title: translations.qty, type: "number" }
                         ],
 

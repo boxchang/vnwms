@@ -496,6 +496,7 @@ def product_order_search(request):
         # )
 
         data = list(bin_values)
+        print(data)
 
         if not data:
             return JsonResponse({"status": "blank"}, status=200)
@@ -510,38 +511,42 @@ def transfer_and_adjust(request):
 # no use this
 def bin_transfer(request):
     if request.GET:
-        request.session['warehouse'] = request.GET.get('warehouse', '')
+        request.session['wh_name'] = request.GET.get('wh_name', '')
         request.session['product_order'] = request.GET.get('product_order', '')
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
-        request.session['version_seq'] = request.GET.get('version_seq', '')
+        # request.session['version_seq'] = request.GET.get('version_seq', '')
         request.session['item_type'] = request.GET.get('item_type', '')
+        request.session['lot_no'] = request.GET.get('lot_no', '')
         request.session['size'] = request.GET.get('size', '')
-        request.session['bin'] = request.GET.get('bin', '')
+        request.session['bin_id'] = request.GET.get('bin_id', '')
         request.session['qty'] = request.GET.get('qty', '')
 
         # Lấy dữ liệu từ session nếu không có GET request
-    warehouse = request.session.get('warehouse', '')
+    wh_name = request.session.get('wh_name', '')
     product_order = request.session.get('product_order', '')
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
-    version_seq = request.session.get('version_seq', '')
+    # version_seq = request.session.get('version_seq', '')
     item_type = request.session.get('item_type', '')
+    lot_no = request.session.get('lot_no', '')
     size = request.session.get('size', '')
-    bin = request.session.get('bin', '')
+    bin_id = request.session.get('bin_id', '')
     qty = request.session.get('qty', '')
 
     item_data = {
-        'bin__area__warehouse__wh_code': warehouse,
+        'wh_name': wh_name,
         'product_order': product_order,
         'purchase_no': purchase_no,
         'version_no': version_no,
-        'version_seq': version_seq,
+        # 'version_seq': version_seq,
         'item_type': item_type,
+        'lot_no': lot_no,
         'size': size,
-        'bin': bin,
+        'bin_id': bin_id,
         'qty': qty
     }
+    print("item_data: ", item_data)
 
     return JsonResponse(item_data, safe=False)
 
@@ -550,26 +555,28 @@ def bin_transfer(request):
 def bin_transfer_page(request):
 
     if request.GET:
-        request.session['warehouse'] = request.GET.get('warehouse', '')
+        request.session['wh_name'] = request.GET.get('wh_name', '')
         request.session['product_order'] = request.GET.get('product_order', '')
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
         request.session['version_seq'] = request.GET.get('version_seq', '')
         request.session['item_type'] = request.GET.get('item_type', '')
+        request.session['lot_no'] = request.GET.get('lot_no', '')
         request.session['size'] = request.GET.get('size', '')
-        request.session['bin'] = request.GET.get('bin', '')
+        request.session['bin_id'] = request.GET.get('bin_id', '')
         request.session['qty'] = request.GET.get('qty', '')
         request.session['purchase_unit'] = request.GET.get('purchase_unit', '')
 
         # Lấy dữ liệu từ session nếu không có GET request
-    warehouse = request.session.get('warehouse', '')
+    wh_name = request.session.get('wh_name', '')
     product_order = request.session.get('product_order', '')
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
     version_seq = request.session.get('version_seq', '')
-    type_name = request.session.get('item_type', '')
+    item_type = request.session.get('item_type', '')
+    lot_no = request.session.get('lot_no', '')
     size = request.session.get('size', '')
-    bin = request.session.get('bin', '')
+    bin_id = request.session.get('bin_id', '')
     qty = request.session.get('qty', '')
     purchase_unit = request.session.get('purchase_unit', '')
 
@@ -584,7 +591,7 @@ def bin_transfer_page(request):
         if form.is_valid():
             bin_selected = form.cleaned_data['bin']
             qty = form.cleaned_data['qty']
-            type_code = get_item_type_object(type_name).type_code
+            type_code = get_item_type_object(item_type).type_code
 
             Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, type_code, size, mvt,
                            bin_selected, qty, purchase_unit, desc=None)
@@ -592,14 +599,15 @@ def bin_transfer_page(request):
                            bin, -qty, purchase_unit, desc=None)
 
             item_data = {
-                'bin__area__warehouse__wh_code': warehouse,
+                'wh_name': wh_name,
                 'product_order': product_order,
                 'purchase_no': purchase_no,
                 'version_no': version_no,
-                'version_seq': version_seq,
+                # 'version_seq': version_seq,
                 'item_type': type_code,
+                'lot_no': lot_no,
                 'size': size,
-                'bin': bin,
+                'bin_id': bin_id,
                 'qty': qty
             }
             return render(request, 'wh_packing/action/packing_transfer_and_adjust.html', locals())

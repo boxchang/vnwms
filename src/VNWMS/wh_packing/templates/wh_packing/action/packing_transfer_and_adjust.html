@@ -122,8 +122,8 @@
                 {#headerRowClass: "table-primary table-bordered", // header tối#}
                 pageSize: 20,
                 fields: [
-                    { name: "wh_name", title: "{% trans "Warehouse" %}", type: "text", width: 40, css: "text-center" },
-                    { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 40, css: "text-center"  },
+                    { name: "wh_name", title: "{% trans "Warehouse" %}", type: "text", width: 30, css: "text-center" },
+                    { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 50, css: "text-center"  },
                     { name: "purchase_no", title: "{% trans "Purchase No" %}", type: "text", width: 40, css: "text-center"  },
                     { name: "version_no", title: "{% trans "Version No" %}", type: "text", width: 40, css: "text-center"  },
                     {#{ name: "version_seq", title: "{% trans "Version Seq" %}", type: "text", width: 40, css: "text-center"  },#}
@@ -137,7 +137,7 @@
                         width: 55,
                         itemTemplate: function(_, item) {
                             return $("<button>")
-                                .html('<i class="fas fa-random me-1"></i> {% trans "Transfer" %}')  // Icon chuyển kho + text
+                                .html('<i class="fas fa-random me-1"></i> {% trans "Transfer" %}')
                                 .addClass("btn btn-warning btn-sm rounded-pill shadow")
                                 .css({
                                     padding: "4px 10px",
@@ -145,14 +145,15 @@
                                 })
                                 .on("click", function () {
                                     let queryParams = $.param({
-                                        warehouse: item.bin__area__warehouse__wh_name,
+                                        wh_name: item.wh_name,
                                         product_order: item.product_order,
                                         purchase_no: item.purchase_no,
                                         version_no: item.version_no,
                                         version_seq: item.version_seq,
-                                        item_type: item.item_type_display,
+                                        item_type: item.item_type,
+                                        lot_no: item.lot_no,
                                         size: item.size,
-                                        bin: item.bin,
+                                        bin_id: item.bin_id,
                                         qty: item.qty,
                                         search: $("#productOrder").val()
                                     });
