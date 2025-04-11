@@ -103,9 +103,87 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
             FROM [wh_packing_bin_value] b
             JOIN [warehouse_bin] bin on b.bin_id = bin.bin_id
             JOIN [warehouse_area] area on bin.area_id = area.area_id
-            LEFT JOIN [wh_packing_stockinform] d on b.stockin_form = d.form_no and b.bin_id = d.order_bin_id
-            and b.product_order = d.product_order and b.version_no = d.version_no and b.item_type_id = d.item_type_id
-                        and b.size = d.size and b.qty = d.order_qty
+            LEFT JOIN [wh_packing_stockinform] d on b.stockin_form = d.form_no 
+                and b.bin_id = d.order_bin_id
+                and b.product_order = d.product_order 
+                and b.version_no = d.version_no 
+                and b.item_type_id = d.item_type_id
+                and b.size = d.size 
+                and b.qty = d.order_qty
+            JOIN [warehouse_itemtype] item on b.item_type_id = item.type_code
+            JOIN [warehouse_warehouse] w on w.wh_code = area.warehouse_id
+            WHERE qty > 0
+            """
+
+    if product_order:
+        sql += f" AND b.product_order LIKE '{product_order}%'"
+
+    if purchase_order:
+        sql += f" AND b.purchase_no = '{purchase_order}'"
+
+    if lot_no:
+        sql += f" AND d.lot_no = '{lot_no}'"
+
+    if version_no:
+        sql += f" AND d.version_no = '{version_no}'"
+
+    if item_type:
+        sql += f" AND d.item_type_id = '{item_type}'"
+
+    if warehouse:
+        sql += f" AND area.warehouse_id = '{warehouse}'"
+
+    if area:
+        sql += f" AND area.area_id = '{area}'"
+
+    if location:
+        sql += f" AND bin.bin_id LIKE '{location}%'"
+
+    if size:
+        sql += f" AND b.size LIKE '{size}%'"
+
+    results = db.select_sql_dict(sql)
+
+    return results
+
+
+def inventory_search_custom(warehouse=None, area=None, location=None, product_order=None, purchase_order=None,
+                            size=None, lot_no=None, version_no=None, item_type=None):
+    db = vnwms_database()
+
+    item_type_name = get_item_type_name()
+
+    sql = f"""
+            SELECT b.id
+                  ,w.wh_name
+                  ,w.wh_plant
+                  ,b.product_order
+                  ,b.size
+                  ,b.qty
+                  ,b.bin_id
+                  ,b.purchase_no
+                  ,b.version_no
+                  ,b.version_seq
+                  ,b.purchase_unit
+                  ,customer_no
+                  ,supplier
+                  ,lot_no
+                  ,purchase_qty
+                  ,b.purchase_unit
+                  ,{item_type_name} item_type
+                  ,post_date
+                  ,sap_mtr_no
+                  ,d.[desc]
+            FROM [wh_packing_bin_value] b
+            JOIN [warehouse_bin] bin on b.bin_id = bin.bin_id
+            JOIN [warehouse_area] area on bin.area_id = area.area_id
+            LEFT JOIN [wh_packing_stockinform] d on b.stockin_form = d.form_no 
+                and b.bin_id = d.order_bin_id
+                and b.product_order = d.product_order 
+                and b.version_no = d.version_no 
+                and b.item_type_id = d.item_type_id
+                and b.size = d.size 
+--                 and b.qty = d.order_qty
             JOIN [warehouse_itemtype] item on b.item_type_id = item.type_code
             JOIN [warehouse_warehouse] w on w.wh_code = area.warehouse_id
             WHERE qty > 0

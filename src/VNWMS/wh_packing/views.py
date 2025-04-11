@@ -16,7 +16,7 @@ from warehouse.models import Warehouse, MovementType, Area, ItemType
 from warehouse.utils import get_item_type_name, get_item_type_object
 from wh_packing.forms import BinSearchForm, StockInPForm, StockOutPForm, BinTransferForm, QuantityAdjustForm, \
     ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
-from wh_packing.utils import inventory_search, inventory_history, Do_Transaction
+from wh_packing.utils import inventory_search, inventory_history, Do_Transaction, inventory_search_custom
 from .models import Bin, Bin_Value, Bin_Value_History, Series, StockInForm, StockOutForm
 from django.db.models import Case, When, Value, BooleanField, Q, F
 
@@ -474,7 +474,7 @@ def product_order_search(request):
 
         # item_type_column = get_item_type_name()
 
-        bin_values = inventory_search(product_order=product_order, size=size)
+        bin_values = inventory_search_custom(product_order=product_order, size=size)
 
         # bin_values = Bin_Value.objects.select_related(
         #     'bin__area__warehouse'  # bin->area->warehouse
@@ -496,7 +496,7 @@ def product_order_search(request):
         # )
 
         data = list(bin_values)
-        print(data)
+        # print(data)
 
         if not data:
             return JsonResponse({"status": "blank"}, status=200)
@@ -619,33 +619,39 @@ def bin_transfer_page(request):
 
 def bin_adjust(request):
     if request.GET:
-        request.session['warehouse'] = request.GET.get('warehouse', '')
+        request.session['wh_name'] = request.GET.get('wh_name', '')
         request.session['product_order'] = request.GET.get('product_order', '')
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
         request.session['version_seq'] = request.GET.get('version_seq', '')
+        request.session['item_type'] = request.GET.get('item_type', '')
+        request.session['lot_no'] = request.GET.get('lot_no', '')
         request.session['size'] = request.GET.get('size', '')
-        request.session['bin'] = request.GET.get('bin', '')
+        request.session['bin_id'] = request.GET.get('bin_id', '')
         request.session['qty'] = request.GET.get('qty', '')
 
         # Lấy dữ liệu từ session nếu không có GET request
-    warehouse = request.session.get('warehouse', '')
+    wh_name = request.session.get('wh_name', '')
     product_order = request.session.get('product_order', '')
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
     version_seq = request.session.get('version_seq', '')
+    item_type = request.session.get('item_type', '')
+    lot_no = request.session.get('lot_no', '')
     size = request.session.get('size', '')
-    bin = request.session.get('bin', '')
+    bin_id = request.session.get('bin_id', '')
     qty = request.session.get('qty', '')
 
     item_data = {
-        'bin__area__warehouse__wh_code': warehouse,
+        'wh_name': wh_name,
         'product_order': product_order,
         'purchase_no': purchase_no,
         'version_no': version_no,
         'version_seq': version_seq,
+        'item_type': item_type,
+        'lot_no': lot_no,
         'size': size,
-        'bin': bin,
+        'bin_id': bin_id,
         'qty': qty
     }
 
@@ -656,26 +662,28 @@ def bin_adjust(request):
 def bin_adjust_page(request):
 
     if request.GET:
-        request.session['warehouse'] = request.GET.get('warehouse', '')
+        request.session['wh_name'] = request.GET.get('wh_name', '')
         request.session['product_order'] = request.GET.get('product_order', '')
         request.session['purchase_no'] = request.GET.get('purchase_no', '')
         request.session['version_no'] = request.GET.get('version_no', '')
         request.session['version_seq'] = request.GET.get('version_seq', '')
         request.session['item_type'] = request.GET.get('item_type', '')
+        request.session['lot_no'] = request.GET.get('lot_no', '')
         request.session['size'] = request.GET.get('size', '')
-        request.session['bin'] = request.GET.get('bin', '')
+        request.session['bin_id'] = request.GET.get('bin_id', '')
         request.session['qty'] = request.GET.get('qty', '')
         request.session['purchase_unit'] = request.GET.get('purchase_unit', '')
 
         # Lấy dữ liệu từ session nếu không có GET request
-    warehouse = request.session.get('warehouse', '')
+    wh_name = request.session.get('wh_name', '')
     product_order = request.session.get('product_order', '')
     purchase_no = request.session.get('purchase_no', '')
     version_no = request.session.get('version_no', '')
     version_seq = request.session.get('version_seq', '')
-    type_name = request.session.get('item_type', '')
+    item_type = request.session.get('item_type', '')
+    lot_no = request.session.get('lot_no', '')
     size = request.session.get('size', '')
-    bin = request.session.get('bin', '')
+    bin_id = request.session.get('bin_id', '')
     qty = request.session.get('qty', '')
     purchase_unit = request.session.get('purchase_unit', '')
 
@@ -690,21 +698,24 @@ def bin_adjust_page(request):
         if form.is_valid():
             qty = int(form.cleaned_data['qty']) - int(qty)
 
-            type_code = get_item_type_object(type_name).type_code
+            type_code = get_item_type_object(item_type).type_code
 
             Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, type_code, size, mvt,
-                           bin, qty, purchase_unit, desc=None)
+                           bin_id, qty, purchase_unit, desc=None)
 
             item_data = {
-                'bin__area__warehouse__wh_code': warehouse,
+                'wh_name': wh_name,
                 'product_order': product_order,
                 'purchase_no': purchase_no,
                 'version_no': version_no,
                 'version_seq': version_seq,
+                'item_type': type_code,
+                'lot_no': lot_no,
                 'size': size,
-                'bin': bin,
+                'bin_id': bin_id,
                 'qty': qty
             }
+            print(item_data)
             return render(request, 'wh_packing/action/packing_transfer_and_adjust.html', locals())
     form = QuantityAdjustForm()
 

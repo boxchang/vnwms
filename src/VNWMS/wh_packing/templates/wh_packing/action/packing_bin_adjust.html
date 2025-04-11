@@ -37,20 +37,21 @@
     <script>
         $(document).ready(function() {
 
-            var translations = {
+            const translations = {
                 warehouse: "{% trans "Warehouse" %}",
                 productOrder: "{% trans "Product Order" %}",
                 purchaseNo: "{% trans "Purchase No" %}",
                 versionNo: "{% trans "Version No" %}",
                 versionSeq: "{% trans "Version Seq" %}",
-                item_type: "{% trans "Item Type" %}",
+                itemType: "{% trans "Item Type" %}",
+                lot: "{% trans "Lot" %}",
                 size: "{% trans "Size" %}",
                 bin: "{% trans "Bin" %}",
                 qty: "{% trans "Quantity" %}"
             };
 
             $.ajax({
-                url: '{% url "bin_transfer" %}',
+                url: '{% url "bin_adjust" %}',
                 method: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -60,14 +61,15 @@
                         height: "auto",
                         data: [data],
                         fields: [
-                            { name: "bin__area__warehouse__wh_code", title: translations.warehouse, type: "text", css: "text-center" },
+                            { name: "wh_name", title: translations.warehouse, type: "text", css: "text-center" },
                             { name: "product_order", title: translations.productOrder, type: "text", css: "text-center" },
                             { name: "purchase_no", title: translations.purchaseNo, type: "text", css: "text-center" },
                             { name: "version_no", title: translations.versionNo, type: "text", css: "text-center" },
-                            { name: "version_seq", title: translations.versionSeq, type: "text", css: "text-center" },
-                            { name: "item_type", title: translations.item_type, type: "text", css: "text-center" },
+                            {#{ name: "version_seq", title: translations.versionSeq, type: "text", css: "text-center" },#}
+                            { name: "item_type", title: translations.itemType, type: "text", css: "text-center" },
+                            { name: "lot_no", title: translations.lot, type: "text", css: "text-center" },
                             { name: "size", title: translations.size, type: "text", css: "text-center" },
-                            { name: "bin", title: translations.bin, type: "text", css: "text-center" },
+                            { name: "bin_id", title: translations.bin, type: "text", css: "text-center" },
                             { name: "qty", title: translations.qty, type: "number" }
                         ]
                     });
