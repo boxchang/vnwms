@@ -29,6 +29,14 @@
         max-width: 100%;          /* Đảm bảo nội dung không vượt quá ô */
     }
 
+    input[type="checkbox"] {
+        display: flex;
+        align-items: center;
+        width: 35px;
+        height: 25px;
+        transform: scale(1.5);
+    }
+
 </style>
 
 {% endblock %}
@@ -41,6 +49,9 @@
 
             <form id="myForm">
                 {% crispy form %}
+                <button id="deleteSelected" class="btn btn-sm btn-danger mb-1" type="button">
+                    🗑️ {% trans "Clear" %}
+                </button>
                 <div id="jsGrid"></div>
                     <div id="numberPicker" style="display:none; position:fixed; top:20%; left:30%; width:300px; padding:20px; background:#fff; border:1px solid #ccc; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
                     <h3>{% trans "Choose Location" %}</h3>
@@ -327,6 +338,21 @@
 
             }
 
+            $("#deleteSelected").click(function (e) {
+                // Lọc các item đã chọn (selected = true)
+                let selectedItems = $("#jsGrid").jsGrid("option", "data").filter(item => item.selected);
+
+                // Xoá các item đã chọn khỏi bảng
+                selectedItems.forEach(item => {
+                    $("#jsGrid").jsGrid("deleteItem", item);
+                });
+
+                $("#selectAll").prop("checked", false);
+
+                e.preventDefault();
+
+            });
+
             {# Main JsGrid #}
             data: []; // 初始為空，將透過 AJAX 加載資料
 
@@ -339,16 +365,64 @@
                 editing: true,    // 啟用編輯功能
                 sorting: true,    // 啟用排序功能
                 paging: true,     // 啟用分頁功能
+                {#data: #}
                 noDataContent: "{% trans "Not found" %}",
                 confirmDeleting: false,
 
                 rowClick: function (args) {
+
+                    if ($(args.event.target).is("input[type=checkbox]")) {
+                        return;
+                    }
                     this.editItem(args.item);
+
+                    let $row = $(".jsgrid-edit-row");
+                    let checkbox = $row.find("input.rowCheckbox");
+
+                    checkbox.hide();
                 },
 
                 data: [],   // 將 JSON 資料導入表格
 
                 fields: [
+                    {
+                        name: "selected",
+                        title: "",
+                        align: "center",
+                        width: 50,
+                        filtering: false,
+                        sorting: false,
+                        editing: false,
+                        headerTemplate: function() {
+                            const checkbox = $("<input>")
+                                .attr("type", "checkbox")
+                                .attr("id", "selectAll");
+
+                            checkbox.on("change", function() {
+                                const checked = $(this).is(":checked");
+                                const data = $("#jsGrid").jsGrid("option", "data");
+
+                                data.forEach(item => {
+                                    item.selected = checked;
+                                });
+
+                                // cập nhật lại jsGrid để hiển thị đúng trạng thái checkbox
+                                $("#jsGrid").jsGrid("refresh");
+                            });
+
+                            return checkbox;
+                        },
+                        itemTemplate: function(value, item) {
+                            return $("<input>")
+                                .attr("type", "checkbox")
+                                .attr("class", "rowCheckbox")
+                                .prop("checked", value)
+                                .on("change", function() {
+                                    item.selected = $(this).is(":checked");
+                                });
+                        },
+
+                    },
                     {
                         name: "copy", // 自定義控制欄欄位名稱
                         title: "", // 欄位標題
@@ -388,7 +462,7 @@
                         itemTemplate: function(_, item) {
                             // 建立刪除按鈕
                             const deleteButton = $("<button>")
-                                .addClass("btn btn-danger btn-sm") // Bootstrap 樣式（可選）
+                                .addClass("btn btn-warning btn-sm") // Bootstrap 樣式（可選）
                                 .text("{% trans "Delete" %}")
                                 .on("click", function(e) {
                                     $("#jsGrid").jsGrid("deleteItem", item);
