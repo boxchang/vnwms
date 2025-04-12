@@ -235,12 +235,12 @@
             },
 
             {#data: [],   // 將 JSON 資料導入表格#}
-
+            {# Main #}
             fields: [
                 {
                     name: "select",
                     title: "<input type='checkbox' id='selectAll'>",
-                    itemTemplate: function(_, item, args) {
+                    itemTemplate: function(_, item) {
 
                         let $checkbox = $("<input>").attr("type", "checkbox")
                             .addClass("rowCheckbox")
