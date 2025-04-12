@@ -71,8 +71,7 @@
                 </div>
             {% endif %}
 
-            <div class="row">
-                {{ form.bin.errors }}
+            <div class="row 1">
                 <div class="col-3">
                     <div class="form-group d-flex align-items-center">
                         {{ form.bin.label_tag }}
@@ -82,7 +81,6 @@
                     </div>
                 </div>
 
-                {{ form.po_no.errors }}
                 <div class="col-3">
                     <div class="form-group d-flex align-items-center">
                         {{ form.po_no.label_tag }}
@@ -92,7 +90,6 @@
                     </div>
                 </div>
 
-                {{ form.size.errors }}
                 <div class="col-3">
                     <div class="form-group d-flex align-items-center">
                         {{ form.size.label_tag }}
@@ -110,8 +107,37 @@
 
             </div>
 
-            <div class="row">
-                {{ form.from_date.errors }}
+            <div class="row 2 mt-3">
+                <div class="col-3">
+                    <div class="form-group d-flex align-items-center">
+                        {{ form.lot.label_tag }}
+                        <div class="w-50">
+                            {{ form.lot }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-group d-flex align-items-center">
+                        {{ form.version_no.label_tag }}
+                        <div class="w-50">
+                            {{ form.version_no }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-group d-flex align-items-center">
+                        {{ form.item_type.label_tag }}
+                        <div class="w-50">
+                            {{ form.item_type }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row 3">
                 <div class="col-3">
                     <div class="form-group d-flex align-items-center mt-3">
                         {{ form.from_date.label_tag }}
@@ -121,7 +147,6 @@
                     </div>
                 </div>
 
-                {{ form.to_date.errors }}
                 <div class="col-3">
                     <div class="form-group d-flex align-items-center mt-3">
                         {{ form.to_date.label_tag }}
@@ -137,7 +162,7 @@
         </form>
     </div>
     <!-- Table for displaying results -->
-    <div class="table-container justify-content-center mt-5">
+    <div class="table-container justify-content-center mt-3">
         <h2 style="font-size: 1.5em;">{% trans "Current Inventory" %}</h2>
         <!-- BIN VALUES TABLE -->
         <div style="overflow-y: auto; height: 425px" class="scroll bin_value">

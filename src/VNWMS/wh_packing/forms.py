@@ -63,6 +63,21 @@ class BinSearchForm(forms.Form):
         label=_("Size"),
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
+    lot = forms.CharField(
+        required=False,
+        label=_("Lot"),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    item_type = forms.CharField(
+        required=False,
+        label=_("Item Type"),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    version_no = forms.CharField(
+        required=False,
+        label=_("Version No"),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
     from_date = forms.DateField(
         required=False,
         label=_("From"),
@@ -87,17 +102,17 @@ class BinSearchForm(forms.Form):
         self.fields['from_date'].initial = day7_ago
         self.fields['to_date'].initial = today
 
-    def clean(self):
-        cleaned_data = super().clean()
-
-        _bin = cleaned_data.get("bin")
-        po_no = cleaned_data.get("po_no")
-        size = cleaned_data.get("size")
-
-        if not(_bin or po_no or size):
-            raise forms.ValidationError(_("Location, Product Order, and Size cannot all be null!"))
-
-        return cleaned_data
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #
+    #     _bin = cleaned_data.get("bin")
+    #     po_no = cleaned_data.get("po_no")
+    #     size = cleaned_data.get("size")
+    #
+    #     if not(_bin or po_no or size):
+    #         raise forms.ValidationError(_("Location, Product Order, and Size cannot all be null!"))
+    #
+    #     return cleaned_data
 
 
 class BinTransferForm(forms.Form):

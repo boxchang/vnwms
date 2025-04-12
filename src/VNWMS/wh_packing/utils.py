@@ -242,6 +242,22 @@ def inventory_history(location=None, product_order=None, purchase_order=None, si
     return bin_hists
 
 
+def inventory_history_custom(location=None, product_order=None, purchase_order=None, size=None, from_date=None, to_date=None):
+    db = vnwms_database()
+
+    item_type_name = get_item_type_name()
+    bin_hists = Bin_Value_History.objects.filter()
+
+    sql = f"""
+
+                """
+
+
+
+    return bin_hists
+
+
+
 
 
 
