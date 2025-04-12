@@ -5,8 +5,8 @@ from warehouse.utils import get_item_type_name
 from wh_packing.models import Bin_Value_History, Bin_Value
 
 
-def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, item_code, size, mvt, bin_code, qty,
-                   purchase_unit, desc, stockin_form=None, stockout_form=None, lot=None):
+def Do_Transaction(request, form_no, product_order, purchase_no, version_no, version_seq, item_code, size, mvt,
+                   bin_code, qty, purchase_unit, desc, stockin_form=None, stockout_form=None, lot=None):
 
     qty = float(qty)
     bin = Bin.objects.get(bin_id=bin_code)
