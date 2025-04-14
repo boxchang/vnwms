@@ -550,7 +550,26 @@
                     { name: "sap_mtr_no", type: "text", width: 120, title: translations.sapMtrNo, editing: false, css: "text-center" },
                     { name: "version_seq", type: "text", width: 120, title: translations.versionSeq, validate: "required", editing: false, css: "text-center" },
                     { name: "purchase_no", type: "text", width: 125, title: translations.purchaseNo, validate: "required", editing: false, css: "text-center" },
-                ]
+                ],
+                onRefreshed: function() {
+                    const selectAll = document.getElementById("selectAll");
+                    const rowCheckboxes = document.querySelectorAll(".rowCheckbox");
+
+                    // Xử lý selectAll
+                    if (selectAll) {
+                        selectAll.addEventListener("change", function () {
+                            rowCheckboxes.forEach(cb => cb.checked = selectAll.checked);
+                        });
+                    }
+
+                    // Xử lý khi bỏ chọn 1 checkbox dòng
+                    rowCheckboxes.forEach(cb => {
+                        cb.addEventListener("change", function () {
+                            const allChecked = Array.from(rowCheckboxes).every(c => c.checked);
+                            if (selectAll) selectAll.checked = allChecked;
+                        });
+                    });
+                }
             });
 
 
