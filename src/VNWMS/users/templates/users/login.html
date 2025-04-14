@@ -138,6 +138,12 @@
         　setTimeout('ShowTime()',1000);
         }
 
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Enter"){
+                document.getElementById("btn_login").click();
+            }
+        })
+
     </script>
 </head>
 <body>
@@ -190,7 +196,7 @@
                         {% include 'bases/lang.html' %}
                     </div>
                     <div class="form-group text-center pt-3">
-                        <input type="button" value="{% trans "Submit" %}" class="btn login_btn" onclick="submit('login_form');">
+                        <input type="button" value="{% trans "Submit" %}" id="btn_login" class="btn login_btn" onclick="submit('login_form');">
                     </div>
 
                 </div>
