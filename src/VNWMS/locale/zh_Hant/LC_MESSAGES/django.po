@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-14 09:38+0700\n"
-"PO-Revision-Date: 2025-04-14 09:53+0700\n"
+"POT-Creation-Date: 2025-04-14 10:55+0700\n"
+"PO-Revision-Date: 2025-04-14 10:56+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -882,7 +882,7 @@ msgstr "Order"
 #: .\warehouse\templates\warehouse\warehouse_list.html:63
 #: .\warehouse\templates\warehouse\warehouse_list.html:66
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:79
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:466
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:475
 msgid "Delete"
 msgstr "刪除"
 
@@ -2201,7 +2201,7 @@ msgstr "區域"
 
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:54
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:109
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:498
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:507
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:316
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:173
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:215
@@ -2225,7 +2225,7 @@ msgid "Search"
 msgstr "查詢"
 
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:100
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:369
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:378
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:203
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:116
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:162
@@ -2302,28 +2302,32 @@ msgstr "採購單為必填欄位"
 msgid "are required"
 msgstr "必填"
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:433
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:356
+msgid "The checkbox needs to be checked"
+msgstr "必須勾選複選框"
+
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:442
 msgid "Copy"
 msgstr "複製"
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:452
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:461
 msgid "Copy and insert below this row Success!"
 msgstr "複製成功"
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:585
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:613
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:343
 msgid "No data in the table! Please enter at least one row."
 msgstr "請至少輸入一筆資料"
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:595
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:623
 msgid "\"(Location) field in row \" + (i + 1) + \" cannot be empty!\""
 msgstr "\"資料 \" + (i + 1) + \" 儲位為必填欄位\""
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:600
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:628
 msgid "\"(Order Quantity) field in row \" + (i + 1) + \" cannot be empty!\""
 msgstr "\"資料 \" + (i + 1) + \" 數量為必填欄位\""
 
-#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:623
+#: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:651
 msgid "Form submitted successfully!"
 msgstr "資料儲存成功"
 
