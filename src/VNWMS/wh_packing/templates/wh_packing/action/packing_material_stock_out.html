@@ -346,6 +346,7 @@
             }
 
             let selectedIds = Object.keys(selectedItems); // Lấy danh sách ID đã chọn
+            let count = selectedIds.length;
             let selectedData = [];
 
             $(".rowCheckbox:checked").each(function() {
@@ -360,7 +361,7 @@
             }
 
             {#if (!confirm("{% trans "Are you sure you want to stock out?" %}")) return;#}
-            const confirmMessage = "{% trans 'Are you sure you want to stock out?' %}";
+            const confirmMessage = "[" + count + "] " + "{% trans 'Are you sure you want to stock out?' %}";
             if (!confirm(confirmMessage)) return;
 
             $.ajax({
