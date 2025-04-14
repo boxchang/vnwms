@@ -339,15 +339,24 @@
             }
 
             $("#deleteSelected").click(function (e) {
-                // Lọc các item đã chọn (selected = true)
-                let selectedItems = $("#jsGrid").jsGrid("option", "data").filter(item => item.selected);
+                const selectAll = $("#selectAll");
+                const rowCheckbox = $(".rowCheckbox");
 
-                // Xoá các item đã chọn khỏi bảng
-                selectedItems.forEach(item => {
-                    $("#jsGrid").jsGrid("deleteItem", item);
-                });
+                if(selectAll.prop('checked') || rowCheckbox.is(':checked')){
 
-                $("#selectAll").prop("checked", false);
+                    let selectedItems = $("#jsGrid").jsGrid("option", "data").filter(item => item.selected);
+
+                    // Xoá các item đã chọn khỏi bảng
+                    selectedItems.forEach(item => {
+                        $("#jsGrid").jsGrid("deleteItem", item);
+                    });
+
+                    $("#selectAll").prop("checked", false);
+                } else {
+                    const check_trans = "{% trans "The checkbox needs to be checked" %}!";
+                    alert(check_trans);
+                    return;
+                }
 
                 e.stopPropagation();
 
