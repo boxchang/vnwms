@@ -142,6 +142,8 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
     if size:
         sql += f" AND b.size LIKE '{size}%'"
 
+    results = None
+
     results = db.select_sql_dict(sql)
 
     return results
