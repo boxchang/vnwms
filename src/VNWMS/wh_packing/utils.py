@@ -12,10 +12,11 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
     bin = Bin.objects.get(bin_id=bin_code)
     mvt = MovementType.objects.get(mvt_code=mvt)
     item_type = ItemType.objects.get(type_code=item_code)
+    purchase_no = str(purchase_no)
 
     result = None
 
-    if purchase_no == None or purchase_no == '':
+    if purchase_no == None or str(purchase_no) == '':
         purchase_no = 'NA'
 
     if bin and product_order and purchase_no:
