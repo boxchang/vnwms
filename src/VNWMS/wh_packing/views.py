@@ -420,6 +420,7 @@ def packing_material_stock_out_post(request):
                 )
 
                 try:
+
                     stockout_form = StockOutForm(
                         form_no=form_no,
                         product_order=item['productOrder'],

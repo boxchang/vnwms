@@ -13,6 +13,8 @@ def Do_Transaction(request, form_no, product_order, purchase_no, version_no, ver
     mvt = MovementType.objects.get(mvt_code=mvt)
     item_type = ItemType.objects.get(type_code=item_code)
 
+    result = None
+
     if purchase_no == None or purchase_no == '':
         purchase_no = 'NA'
 
@@ -141,8 +143,6 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
 
     if size:
         sql += f" AND b.size LIKE '{size}%'"
-
-    results = None
 
     results = db.select_sql_dict(sql)
 
