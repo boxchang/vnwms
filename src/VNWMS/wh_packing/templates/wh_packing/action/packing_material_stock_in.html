@@ -35,7 +35,7 @@
             display: flex;
             align-items: center;
             width: 35px;
-            height: 25px;
+            height: 22px;
             transform: scale(1.5);
         }
 
@@ -383,7 +383,9 @@
 
                 rowClick: function (args) {
 
-                    if ($(args.event.target).is("input[type=checkbox]")) {
+                    {#console.log(args);#}
+
+                    if ($(args.event.target).closest("td").index() <= 2) {
                         return;
                     }
                     this.editItem(args.item);
