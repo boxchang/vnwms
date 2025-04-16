@@ -4,57 +4,55 @@
 {% load i18n %}
 {% block title %} {% trans "Stock Out" %} {% endblock %}
 {% block css %}
-{{ block.super }}
+    {{ block.super }}
+    <style>
+        .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
+            display: none !important;
+        }
 
-<style>
+        .jsgrid-grid-body::-webkit-scrollbar {
+            height: 16px !important;
+        }
 
-    .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
-        display: none !important;
-    }
+        .input-custom {
+            --bs-gutter-x: 0;
+        }
 
-    .jsgrid-grid-body::-webkit-scrollbar {
-        height: 16px !important;
-    }
+        th {
+            text-align: center;
+        }
 
-    .input-custom {
-        --bs-gutter-x: 0;
-    }
+        .jsgrid-cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
 
-    th {
-        text-align: center;
-    }
+        /* Hiệu ứng hover: Phóng to nhẹ và thêm bóng đổ */
+        .btn-click-effect {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    .jsgrid-cell {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-    }
+        /* Hiệu ứng khi click: Thu nhỏ nhẹ rồi trở lại bình thường */
+        .btn-click-effect:active {
+            transform: scale(0.95); /* Thu nhỏ 5% */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Giảm bóng */
+        }
 
-    /* Hiệu ứng hover: Phóng to nhẹ và thêm bóng đổ */
-    .btn-click-effect {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    /* Hiệu ứng khi click: Thu nhỏ nhẹ rồi trở lại bình thường */
-    .btn-click-effect:active {
-        transform: scale(0.95); /* Thu nhỏ 5% */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Giảm bóng */
-    }
-
-    input[type="checkbox"] {
-        display: flex;
-        align-items: center;
-        width: 35px;
-        height: 25px;
-        transform: scale(1.5);
-    }
+        input[type="checkbox"] {
+            display: flex;
+            align-items: center;
+            width: 35px;
+            height: 25px;
+            transform: scale(1.5);
+        }
 
 
-</style>
-
+    </style>
 {% endblock %}
 
+{% block jquery %}{% endblock %}
 
 {% block content %}
     <div class="row p-3 d-flex justify-content-center">
