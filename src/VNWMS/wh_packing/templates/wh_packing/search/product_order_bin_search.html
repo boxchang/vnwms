@@ -163,6 +163,8 @@
                             comment: comment
                         }).done(function (response) {
                             $("#jsGrid").jsGrid("option", "data", response);
+                            $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                            $("#jsGrid").jsGrid("refresh");
                         }).fail(function (jqXHR, textStatus, errorThrown) {
                             console.log('Error: ' + errorThrown);
                     })
@@ -190,6 +192,8 @@
                         comment: comment
                     }).done(function (response) {
                         $("#jsGrid").jsGrid("option", "data", response);
+                        $("#jsGrid").jsGrid("option", "pageIndex", 1);       // Quay về trang đầu
+                        $("#jsGrid").jsGrid("refresh");
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log('Error: ' + errorThrown);
                 })

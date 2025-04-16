@@ -123,6 +123,8 @@
                             po: id_po
                         }).done(function (response) {
                             $("#jsGrid").jsGrid("option", "data", response);
+                            $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                            $("#jsGrid").jsGrid("refresh");
                         }).fail(function (jqXHR, textStatus, errorThrown) {
                             console.log('Error: ' + errorThrown);
                         });
@@ -153,6 +155,8 @@
                             console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
 
                             $("#jsGrid").jsGrid("option", "data", data);
+                            $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                            $("#jsGrid").jsGrid("refresh");
                     });
                 }
 
