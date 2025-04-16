@@ -29,6 +29,8 @@
     </style>
 {% endblock %}
 
+{% block jquery %}{% endblock %}
+
 {% block content %}
     <div class="container-fluid mt-4">
 
@@ -94,7 +96,6 @@
     <script>
         $(document).ready(function () {
             let selectedItems = {};
-
 
             const translations = {
                 notFound: "{% trans 'Not found' %}",
@@ -163,6 +164,8 @@
                                 console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
 
                                 $("#jsGrid").jsGrid("option", "data", data);
+                                $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                                $("#jsGrid").jsGrid("refresh");
                         });
                     }
                 }
@@ -170,8 +173,6 @@
             });
 
             $("#Search").click(function () {
-                {#$("#jsGrid").jsGrid("option", "data", []);#}
-
                 let warehouseId = $("#warehouse").val();
                 let areaId = $("#id_area").val();
                 let binId = $("#id_bin").val();
@@ -192,6 +193,8 @@
                             console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
 
                             $("#jsGrid").jsGrid("option", "data", data);
+                            $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                            $("#jsGrid").jsGrid("refresh");
                     });
                 }
 
@@ -346,6 +349,8 @@
                                     console.log("Dữ liệu nhận về:", data); // Debug xem dữ liệu đúng chưa
 
                                     $("#jsGrid").jsGrid("option", "data", data);
+                                    $("#jsGrid").jsGrid("option", "pageIndex", 1);
+                                    $("#jsGrid").jsGrid("refresh");
                             });
                         }
                     },

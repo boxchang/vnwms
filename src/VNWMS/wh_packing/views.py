@@ -1143,13 +1143,13 @@ def inventory_delete(request):
         mvt = MovementType.objects.get(mvt_code="DELT")
 
         for id, info in data["list_data"].items():
-            item_type = get_item_type_object(info['item_type'])
+            item_type = get_item_type_object(info['itemType'])
 
             qty = int(info['qty']) * -1
 
-            Do_Transaction(request, form_no, info['product_order'], info['purchase_no'],
-                           info['version_no'], info['version_seq'], item_type.type_code, info['size'],
-                           mvt, info['bin_id'], qty, info['purchase_unit'], desc="")
+            Do_Transaction(request, form_no, info['productOrder'], info['purchaseNo'],
+                           info['versionNo'], info['versionSeq'], item_type.type_code, info['size'],
+                           mvt, info['binId'], qty, info['purchaseUnit'], desc="")
 
         if not ids_to_delete:
             return JsonResponse({"success": False, "error": "Không có dữ liệu để xóa!"})
