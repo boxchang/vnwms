@@ -35,6 +35,9 @@
     <link rel="stylesheet" href="{% static 'base/css/base.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsgrid/dist/jsgrid.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsgrid/dist/jsgrid-theme.min.css">
+    {% block link %}
+
+    {% endblock %}
 
     <!-- JavaScript -->
     <script src="{% static 'jquery/jquery-3.3.1.min.js' %}"></script>  <!-- jQuery KHÔNG nên dùng defer -->
@@ -58,12 +61,15 @@
     {% block js %}
 
     {% endblock %}
+
+    {% block jquery %}
     <script>
         $(document).ready(function() {
                {% block ready %}
                {% endblock %}
         });
     </script>
+    {% endblock %}
 </head>
 <body>
     <div class="sidebar collapsed" id="sidebar">

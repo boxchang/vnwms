@@ -3,43 +3,46 @@
 {% load static %}
 {% load i18n %}
 {% block title %} {% trans "Stock In" %} {% endblock %}
-{% block base_js %}
-<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<style>
-    .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
-        display: none !important;
-    }
-
-    .jsgrid-grid-body::-webkit-scrollbar {
-        height: 16px !important;
-    }
-
-    .input-custom {
-        --bs-gutter-x: 0;
-    }
-
-    h3, th {
-        text-align: center;
-    }
-
-    .jsgrid-cell {
-        white-space: nowrap;      /* Không cho xuống dòng */
-        overflow: hidden;         /* Ẩn phần nội dung vượt quá */
-        text-overflow: ellipsis;  /* Hiển thị dấu "..." nếu bị cắt */
-        max-width: 100%;          /* Đảm bảo nội dung không vượt quá ô */
-    }
-
-    input[type="checkbox"] {
-        display: flex;
-        align-items: center;
-        width: 35px;
-        height: 25px;
-        transform: scale(1.5);
-    }
-
-</style>
-
+{% block link %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 {% endblock %}
+{% block base_js %}
+    <style>
+        .jsgrid-button.jsgrid-mode-button.jsgrid-insert-mode-button {
+            display: none !important;
+        }
+
+        .jsgrid-grid-body::-webkit-scrollbar {
+            height: 16px !important;
+        }
+
+        .input-custom {
+            --bs-gutter-x: 0;
+        }
+
+        h3, th {
+            text-align: center;
+        }
+
+        .jsgrid-cell {
+            white-space: nowrap;      /* Không cho xuống dòng */
+            overflow: hidden;         /* Ẩn phần nội dung vượt quá */
+            text-overflow: ellipsis;  /* Hiển thị dấu "..." nếu bị cắt */
+            max-width: 100%;          /* Đảm bảo nội dung không vượt quá ô */
+        }
+
+        input[type="checkbox"] {
+            display: flex;
+            align-items: center;
+            width: 35px;
+            height: 25px;
+            transform: scale(1.5);
+        }
+
+    </style>
+{% endblock %}
+
+{% block jquery %} {% endblock %}
 
 {% block content %}
     <div class="row p-3">
@@ -370,7 +373,7 @@
                 width: "100%",
                 height: "400px",
                 autowidth: true,
-                inserting: true,  // 啟用新增功能
+                inserting: false,  // 啟用新增功能
                 editing: true,    // 啟用編輯功能
                 sorting: true,    // 啟用排序功能
                 paging: true,     // 啟用分頁功能
