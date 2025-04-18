@@ -273,7 +273,7 @@
             $("#search").on("click", function (event) {
                 event.preventDefault();
 
-                let fields = ["#id_bin", "#id_po_no", "#id_size", "#id_version_no", "#id_item_type"];
+                let fields = ["#id_bin", "#id_po_no", "#id_size", "#id_version_no"];
                 if (fields.every(selector => !$(selector).val().trim())) {
                     alert("{% trans 'Location, Product Order, and Size cannot all be null!' %}");
                     event.stopPropagation();

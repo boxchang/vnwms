@@ -224,7 +224,9 @@ def inventory_search_custom(warehouse=None, area=None, location=None, product_or
     return results
 
 
-def inventory_history(location=None, product_order=None, purchase_order=None, size=None, version_no=None, from_date=None, to_date=None):
+def inventory_history(location=None, product_order=None, purchase_order=None, size=None,
+                      version_no=None,
+                      from_date=None, to_date=None):
     bin_hists = Bin_Value_History.objects.filter()
 
     if location:
