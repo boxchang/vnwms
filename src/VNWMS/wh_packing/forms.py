@@ -53,11 +53,13 @@ class BinSearchForm(forms.Form):
     bin = forms.CharField(
         required=False,
         label=_("Location:"),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
     po_no = forms.CharField(
         required=False,
         label=_("Product Order:"),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
     size = forms.CharField(
         required=False,
         label=_("Size"),
@@ -66,17 +68,19 @@ class BinSearchForm(forms.Form):
     lot = forms.CharField(
         required=False,
         label=_("Lot"),
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        disabled=True
     )
     item_type = forms.CharField(
         required=False,
         label=_("Item Type"),
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        disabled=True
     )
     version_no = forms.CharField(
         required=False,
         label=_("Version No"),
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
     )
     from_date = forms.DateField(
         required=False,

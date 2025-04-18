@@ -28,14 +28,19 @@ def bin_search(request):
         query_bin = form.cleaned_data.get('bin')
         query_po_no = form.cleaned_data.get('po_no')
         query_size = form.cleaned_data.get('size')
+        query_ver_no = form.cleaned_data.get('version_no')
+        # query_item_type = form.cleaned_data.get('item_type')
         query_from = form.cleaned_data.get('from_date')
         query_to = form.cleaned_data.get('to_date')
 
-        if query_bin or query_po_no or query_size:
+        if query_bin or query_po_no or query_size or query_ver_no:
 
-            bin_hists = inventory_history(location=query_bin, product_order=query_po_no, size=query_size, from_date=query_from, to_date=query_to)
+            bin_hists = inventory_history(location=query_bin, product_order=query_po_no, size=query_size,
+                                          version_no=query_ver_no,
+                                          from_date=query_from, to_date=query_to)
 
-            bin_values = inventory_search(location=query_bin, product_order=query_po_no, size=query_size)
+            bin_values = inventory_search(location=query_bin, product_order=query_po_no, size=query_size,
+                                          version_no=query_ver_no)
 
             result_value = bin_values
             result_history = bin_hists
