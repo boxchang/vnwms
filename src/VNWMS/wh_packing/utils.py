@@ -128,7 +128,7 @@ def inventory_search(warehouse=None, area=None, location=None, product_order=Non
         sql += f" AND d.lot_no = '{lot_no}'"
 
     if version_no:
-        sql += f" AND d.version_no = '{version_no}'"
+        sql += f" AND d.version_no LIKE '{version_no}%'"
 
     if item_type:
         sql += f" AND d.item_type_id = '{item_type}'"
