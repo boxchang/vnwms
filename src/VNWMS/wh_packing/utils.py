@@ -225,7 +225,7 @@ def inventory_search_custom(warehouse=None, area=None, location=None, product_or
 
 
 def inventory_history(location=None, product_order=None, purchase_order=None, size=None,
-                      version_no=None,
+                      version_no=None, item_type=None,
                       from_date=None, to_date=None):
     bin_hists = Bin_Value_History.objects.filter()
 
@@ -239,6 +239,8 @@ def inventory_history(location=None, product_order=None, purchase_order=None, si
         bin_hists = bin_hists.filter(size__startswith=size)
     if version_no:
         bin_hists = bin_hists.filter(version_no__startswith=version_no)
+    if item_type:
+        bin_hists = bin_hists.filter(item_type=item_type)
     if from_date:
         start_datetime = datetime.combine(from_date, datetime.min.time())
         bin_hists = bin_hists.filter(create_at__gte=start_datetime)

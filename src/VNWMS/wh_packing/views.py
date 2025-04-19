@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
 from VNWMS.database import sap_database, vnwms_database
 from warehouse.models import Warehouse, MovementType, Area, ItemType
-from warehouse.utils import get_item_type_name, get_item_type_object
+from warehouse.utils import get_item_type_name, get_item_type_object, get_type_code_by_desc
 from wh_packing.forms import BinSearchForm, StockInPForm, StockOutPForm, BinTransferForm, QuantityAdjustForm, \
     ExcelUploadForm, BinValueSearchForm, BinValueDeleteForm
 from wh_packing.utils import inventory_search, inventory_history, Do_Transaction, inventory_search_custom
@@ -24,23 +24,23 @@ from django.db.models import Case, When, Value, BooleanField, Q, F
 def bin_search(request):
     form = BinSearchForm(request.GET or None)
 
-    if request.GET and form.is_valid():
+    if form.is_valid():
         query_bin = form.cleaned_data.get('bin')
         query_po_no = form.cleaned_data.get('po_no')
         query_size = form.cleaned_data.get('size')
         query_ver_no = form.cleaned_data.get('version_no')
-        # query_item_type = form.cleaned_data.get('item_type')
+        query_item_type = form.cleaned_data.get('item_type')
         query_from = form.cleaned_data.get('from_date')
         query_to = form.cleaned_data.get('to_date')
 
-        if query_bin or query_po_no or query_size or query_ver_no:
+        if query_bin or query_po_no or query_size or query_ver_no or query_item_type:
 
             bin_hists = inventory_history(location=query_bin, product_order=query_po_no, size=query_size,
-                                          version_no=query_ver_no,
+                                          version_no=query_ver_no, item_type=get_type_code_by_desc(query_item_type),
                                           from_date=query_from, to_date=query_to)
 
             bin_values = inventory_search(location=query_bin, product_order=query_po_no, size=query_size,
-                                          version_no=query_ver_no)
+                                          version_no=query_ver_no, item_type=get_type_code_by_desc(query_item_type))
 
             result_value = bin_values
             result_history = bin_hists
@@ -81,11 +81,12 @@ def bin_search(request):
                     "create_by_username": record.create_by.username,
                 })
 
-            return JsonResponse({
-                "bin_hists": bin_hists_data,
-                "bin_values": list(bin_values),
-                "total_qty": total_qty,
-            })
+            return JsonResponse(
+                {
+                    "bin_hists": bin_hists_data,
+                    "bin_values": list(bin_values),
+                    "total_qty": total_qty,
+                })
         return JsonResponse({"message": "Invalid request."}, status=400)
 
     return render(request, 'wh_packing/search/bin_history_search.html', locals())

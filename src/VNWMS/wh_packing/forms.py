@@ -49,6 +49,12 @@ class BinValueForm(forms.Form):
         )
 
 
+# Tạo lớp ModelChoiceField tùy chỉnh
+class CustomModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.get_item_type_name()  # Sử dụng phương thức get_item_type_name để hiển thị tên
+
+
 class BinSearchForm(forms.Form):
     bin = forms.CharField(
         required=False,
@@ -71,11 +77,12 @@ class BinSearchForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         disabled=True
     )
-    item_type = forms.CharField(
+    item_type = CustomModelChoiceField(
+        queryset=ItemType.objects.all(),
+        # empty_label="-- Choice Items --"
         required=False,
         label=_("Item Type"),
-        widget=forms.TextInput(attrs={'class': 'form-control'}),
-        disabled=True
+        widget=forms.Select(attrs={'class': 'form-control'}),
     )
     version_no = forms.CharField(
         required=False,

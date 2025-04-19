@@ -17,6 +17,15 @@ def get_item_type_name():
     return item_type_column
 
 
+def get_type_code_by_desc(desc_value):
+    try:
+        obj = ItemType.objects.get(desc=desc_value)
+    except ItemType.DoesNotExist:
+        return None
+
+    return obj.type_code
+
+
 def get_item_type_object(type_name):
     item_type = ItemType.objects.get(
         Q(type_code=type_name) |
