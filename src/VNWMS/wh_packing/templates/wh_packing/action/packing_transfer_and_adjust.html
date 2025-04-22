@@ -53,6 +53,13 @@
             max-width: none; /* Hiển thị toàn bộ nội dung */
         }
 
+        .jsgrid-pager {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút phân trang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            width: 100%;
+        }
+
     </style>
 {% endblock %}
 
@@ -121,6 +128,11 @@
                 {#rowClass: "table-primary",   // dòng màu xanh nhạt#}
                 {#headerRowClass: "table-primary table-bordered", // header tối#}
                 pageSize: 20,
+                pagerFormat: "{first} {prev} {pages} {next} {last} \u00A0  |\u00A0\u00A0 {pageIndex} of {pageCount}",
+                pagePrevText: "<i class='fas fa-chevron-left'></i>",
+                pageNextText: "<i class='fas fa-chevron-right'></i>",
+                pageFirstText: "<i class='fas fa-angle-double-left'></i>",
+                pageLastText: "<i class='fas fa-angle-double-right'></i>",
                 fields: [
                     { name: "wh_name", title: "{% trans "Warehouse" %}", type: "text", width: 40, css: "text-center" },
                     { name: "product_order", title: "{% trans "Product Order" %}", type: "text", width: 50, css: "text-center"  },
