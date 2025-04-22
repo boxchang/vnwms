@@ -26,6 +26,13 @@
             padding: 12px 14px;
             border-color: #eaebef;
         }
+
+        .jsgrid-pager {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút phân trang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            width: 100%;
+        }
     </style>
 {% endblock %}
 
@@ -194,6 +201,11 @@
                 pageSize: 20,
                 pageButtonCount: 5,
                 editing: false,
+                pagerFormat: "{first} {prev} {pages} {next} {last}    {pageIndex} of {pageCount}",
+                pagePrevText: "<i class='fas fa-chevron-left'></i>",
+                pageNextText: "<i class='fas fa-chevron-right'></i>",
+                pageFirstText: "<i class='fas fa-angle-double-left'></i>",
+                pageLastText: "<i class='fas fa-angle-double-right'></i>",
                 data: [],
                 fields: [
                     { name: "wh_plant", title: translations.plant, type: "text", width: 100, css: "text-center"},
