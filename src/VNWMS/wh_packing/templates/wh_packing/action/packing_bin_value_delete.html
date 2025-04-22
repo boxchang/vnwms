@@ -27,6 +27,13 @@
             border-color: #eaebef;
         }
 
+        .jsgrid-pager {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút phân trang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            width: 100%;
+        }
+
 
     </style>
 {% endblock %}
@@ -213,6 +220,11 @@
                 pageButtonCount: 5,
                 editing: false,
                 selecting: true,
+                pagerFormat: "{first} {prev} {pages} {next} {last} \u00A0  |\u00A0\u00A0 {pageIndex} of {pageCount}",
+                pagePrevText: "<i class='fas fa-chevron-left'></i>",
+                pageNextText: "<i class='fas fa-chevron-right'></i>",
+                pageFirstText: "<i class='fas fa-angle-double-left'></i>",
+                pageLastText: "<i class='fas fa-angle-double-right'></i>",
                 {#headerRowClass: "table-danger table-bordered",#}
                 data: [],
                 fields: [
