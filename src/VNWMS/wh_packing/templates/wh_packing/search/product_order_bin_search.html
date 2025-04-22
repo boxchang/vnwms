@@ -45,6 +45,14 @@
             padding: 12px 14px;
             border-color: #eaebef;
         }
+
+        .jsgrid-pager {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút phân trang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            width: 100%;
+        }
+
     </style>
 {% endblock %}
 
@@ -129,7 +137,13 @@
                 sorting: true,
                 paging: true,
                 pageSize: 20,
+                {#pageCount: 5,#}
                 headerRowClass: "table-bordered",
+                pagerFormat: "{first} {prev} {pages} {next} {last}    {pageIndex} of {pageCount}",
+                pagePrevText: "<i class='fas fa-chevron-left'></i>",
+                pageNextText: "<i class='fas fa-chevron-right'></i>",
+                pageFirstText: "<i class='fas fa-angle-double-left'></i>",
+                pageLastText: "<i class='fas fa-angle-double-right'></i>",
                 fields: [
                     { name: "product_order", title: translations.productOrder, type: "text", width: 120, css: "text-center"},
                     { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 120, css: "text-center"},
