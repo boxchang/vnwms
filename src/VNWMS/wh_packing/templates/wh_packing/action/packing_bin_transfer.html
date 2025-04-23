@@ -50,6 +50,12 @@
                 }
              });
 
+             $("#id_qty").on("input", function () {
+                 let value = $(this).val();
+                 value = value.replace(/[^0-9]/g, '');
+                 $(this).val(value);
+             });
+
              $('.select2-selection.select2-selection--single').css('height', '38px');
              $('#select2-id_bin-container').css('margin-top', '5px');
 
