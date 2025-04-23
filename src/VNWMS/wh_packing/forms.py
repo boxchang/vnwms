@@ -137,7 +137,7 @@ class BinTransferForm(forms.Form):
     qty = forms.IntegerField(
         label=_("Quantity"),
         required=True,
-        widget=forms.NumberInput(attrs={'class': 'form-control'})  # Đảm bảo có 'form-control'
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
 
     def __init__(self, *args, **kwargs):

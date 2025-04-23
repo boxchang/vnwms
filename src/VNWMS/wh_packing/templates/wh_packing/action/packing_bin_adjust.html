@@ -37,6 +37,14 @@
     <script>
         $(document).ready(function() {
 
+            $("#id_qty").on("input", function () {
+                let value = $(this).val();
+
+                value = value.replace(/[^0-9]/g, '');
+
+                $(this).val(value);
+            });
+
             const translations = {
                 warehouse: "{% trans "Warehouse" %}",
                 productOrder: "{% trans "Product Order" %}",
