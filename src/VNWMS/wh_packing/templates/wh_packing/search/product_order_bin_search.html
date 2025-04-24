@@ -11,11 +11,6 @@
             text-align: center;
         }
 
-        th, td {
-            min-width: 90px;
-            width: auto;
-        }
-
         .jsgrid-cell {
             white-space: nowrap;
             overflow: hidden;
@@ -51,6 +46,25 @@
 
         .jsgrid-grid-body::-webkit-scrollbar {
             height: 16px !important;
+        }
+
+        #jsGrid {
+            font-size: 14px;
+        }
+
+        .jsgrid-header-row > .jsgrid-header-cell {
+            background-color: #f8f9fa;
+            color: #212529;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .jsgrid-row:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .jsgrid-grid-body {
+            border-bottom: 2px solid #dee2e6;
         }
 
     </style>
@@ -139,7 +153,7 @@
                 sorting: true,
                 paging: true,
                 pageSize: 20,
-                {#pageCount: 5,#}
+                pageButtonCount: 5,
                 headerRowClass: "table-bordered",
                 pagerFormat: "{first} {prev} {pages} {next} {last} \u00A0  |\u00A0\u00A0 {pageIndex} of {pageCount}",
                 pagePrevText: "<i class='fas fa-chevron-left'></i>",
