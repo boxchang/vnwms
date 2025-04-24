@@ -49,14 +49,19 @@
             width: 100%;
         }
 
+        .jsgrid-grid-body::-webkit-scrollbar {
+            height: 16px !important;
+        }
+
     </style>
 {% endblock %}
 
 
 {% block content %}
+    <div class="container mt-4">
     <h3 class="mt-4 text-center">{% trans "Transaction History Search" %}</h3>
     <div class="row d-flex justify-content-center p-0 mt-4">
-        <div class="row d-flex justify-content-center p-0 m-0" style="width: 95%">
+        <div class="row d-flex justify-content-center p-0 m-0" style="width: 100%">
             <div class="d-flex justify-content-start flex-grow-1">
                 <div class="col-md-2 pl-1">
                     <label for="productOrder" class="mr-2">{% trans "Product Order" %}</label>
@@ -92,6 +97,7 @@
 
         <div class="mt-2" id="jsGrid"></div>
     </div>
+    </div>
 {% endblock%}
 
 {% block script %}
@@ -125,7 +131,7 @@
             };
 
             $("#jsGrid").jsGrid({
-                width: "95%",
+                width: "100%",
                 height: "70vh",
                 noDataContent: translations.notFound,
                 inserting: false,
