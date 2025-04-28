@@ -35,6 +35,8 @@
         #Search {
             font-family: 'Calibri', Tahoma, Arial, sans-serif;
             font-weight: bold;
+            border-radius: 5px 27px 27px 5px;
+
         }
     </style>
 {% endblock %}
@@ -68,8 +70,8 @@
                 {{ form.po }}
             </div>
             <div class="col-12 col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-primary btn-lg" id="Search">
-                    <i class="fas fa-search"></i> {% trans "Search" %}
+                <button type="button" class="btn btn-primary" id="Search">
+                    &nbsp;<i class="fas fa-search"></i>&nbsp;&nbsp;&nbsp;
                 </button>
             </div>
             <div class="col-12 col-md-2 d-flex align-items-end justify-content-end">
