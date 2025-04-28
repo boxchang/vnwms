@@ -229,3 +229,8 @@ h3:lang(vi) {
     transition: border-radius 0.3s ease;
     border-radius: 0 4px 4px 0;
 }
+
+.btn-primary:hover {
+    background-color: #ff6600;
+    border-color: #ff6600;
+}
