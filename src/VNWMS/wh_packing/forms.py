@@ -148,11 +148,10 @@ class BinTransferForm(forms.Form):
         self.helper.form_show_errors = True
         self.helper.layout = Layout(
             Div(
-                Div('bin', css_class='col-md-6'),
-                Div('qty', css_class='col-md-5'),
-                Submit('submit', _('Confirm'), css_class='btn btn-primary col-md-1', style='margin-top: 29px;'
-                                                                                           ' height: 42px'),
-                css_class='row m-0'
+                Div('bin', css_class='m-1'),
+                Div('qty', css_class='m-1'),
+                Div(Submit('submit', _('Confirm'), css_class='btn btn-primary m-1')),
+                css_class='form-inline d-flex justify-content-end'
             ),
         )
 
