@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^get_bin_data/$', get_bin_data, name='get_bin_data'),
     url(r'^check_bin_exists/$', check_bin_exists, name='check_bin_exists'),
     url(r'^inventory_sheet/$', inventory_sheet, name="inventory_sheet"),
-    url(r'^inventory_delete/$', inventory_delete, name="delete_inventory"),
+    url(r'^inventory_delete/$', inventory_delete, name="inventory_delete"),
     url(r'^inventory_deletion/$', inventory_deletion, name="inventory_deletion"),
 
     url(r'^stockin_form/(?P<pk>\w+)/$', stockin_form, name='stockin_form'),
