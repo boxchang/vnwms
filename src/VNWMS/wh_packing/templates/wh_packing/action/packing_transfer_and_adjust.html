@@ -86,6 +86,7 @@
                         dataType: 'json',
                         success: function(response) {
                             $("#jsGrid").jsGrid("option", "data", response);
+                            $("#jsGrid").jsGrid("option", "pageIndex", 1)
                         },
                         error: function(xhr) {
                             const errorMsg = JSON.parse(xhr.responseText);
@@ -129,9 +130,8 @@
                 editing: false,
                 sorting: true,
                 paging: true,
-                {#rowClass: "table-primary",   // dòng màu xanh nhạt#}
-                {#headerRowClass: "table-primary table-bordered", // header tối#}
                 pageSize: 20,
+                pageButtonCount: 5,
                 pagerFormat: "{first} {prev} {pages} {next} {last} \u00A0  |\u00A0\u00A0 {pageIndex} of {pageCount}",
                 pagePrevText: "<i class='fas fa-chevron-left'></i>",
                 pageNextText: "<i class='fas fa-chevron-right'></i>",
@@ -233,6 +233,7 @@
                         dataType: 'json',
                         success: function(response) {
                             $("#jsGrid").jsGrid("option", "data", response);
+                            $("#jsGrid").jsGrid("option", "pageIndex", 1)
                         },
                         error: function(xhr) {
                             const errorMsg = JSON.parse(xhr.responseText);
