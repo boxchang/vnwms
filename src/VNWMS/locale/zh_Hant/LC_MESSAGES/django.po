@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-14 10:55+0700\n"
-"PO-Revision-Date: 2025-04-14 10:56+0700\n"
+"PO-Revision-Date: 2025-05-03 16:15+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -2059,10 +2059,8 @@ msgid "Confirm"
 msgstr "確認"
 
 #: .\wh_packing\forms.py:151
-#, fuzzy
-#| msgid "Quantity"
 msgid "New Quantity"
-msgstr "數量"
+msgstr "新數量"
 
 #: .\wh_packing\forms.py:184
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:135
@@ -2357,12 +2355,12 @@ msgstr "調撥及調帳"
 
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:140
 msgid "Transfer"
-msgstr ""
+msgstr "運送"
 
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:170
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:171
 msgid "Adjust"
-msgstr ""
+msgstr "調整"
 
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:211
 msgid "Product Order, Size cannot all be null!"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-14 10:56+0700\n"
-"PO-Revision-Date: 2025-04-14 10:57+0700\n"
+"PO-Revision-Date: 2025-05-03 16:19+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -2337,7 +2337,7 @@ msgstr "Tổng SL:"
 
 #: .\wh_packing\templates\wh_packing\search\dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Bảng điều khiển"
 
 #: .\wh_packing\templates\wh_packing\search\dashboard.html:19
 msgid "Welcome to our application!"
