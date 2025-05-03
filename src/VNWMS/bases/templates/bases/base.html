@@ -116,7 +116,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'logout' %}" aria-label="Logout">
+                    <a href="{% url 'logout' %}" onclick="localStorage.setItem('logout', Date.now());" aria-label="Logout">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>{% trans "Logout" %}</span>
                     </a>
@@ -143,6 +143,17 @@
             sidebar.classList.toggle('expanded');
             content.classList.toggle('expanded');
         });
+    </script>
+
+    <script>
+      // Theo dõi sự kiện logout từ tab khác
+      window.addEventListener('storage', function(event) {
+        if (event.key === 'logout') {
+          // Redirect hoặc reload lại để về trang login
+          alert("Bạn đã đăng xuất từ tab khác. Trang sẽ tự động chuyển về màn hình đăng nhập.");
+          window.location.href = "{% url 'login' %}"; // hoặc URL login của bạn
+        }
+      });
     </script>
     {% block javascript %} {% endblock %}
 
