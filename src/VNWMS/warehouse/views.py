@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
@@ -8,6 +9,7 @@ from .models import Warehouse, Area, Bin
 
 
 # Warehouse
+@login_required
 def warehouse_create(request):
     if request.method == 'POST':
         form = WarehouseForm(request.POST, request.FILES)  # Xử lý dữ liệu POST và FILES
@@ -28,6 +30,7 @@ def warehouse_create(request):
     return render(request, 'warehouse/warehouse_create.html', locals())
 
 
+@login_required
 def warehouse_list(request):
     # Lấy toàn bộ danh sách warehouse từ cơ sở dữ liệu
     warehouses = Warehouse.objects.all()
@@ -35,6 +38,7 @@ def warehouse_list(request):
     return render(request, 'warehouse/warehouse_list.html', locals())
 
 
+@login_required
 def warehouse_edit(request, warehouse_code):
     warehouse = get_object_or_404(Warehouse, wh_code=warehouse_code)
 
@@ -96,6 +100,7 @@ def warehouse_show(request, pk):
 
 
 # Area
+@login_required
 def area_create(request, wh_code):
     if request.method == 'POST':
         form = AreaForm(request.POST)  # Xử lý dữ liệu POST và FILES
@@ -120,6 +125,7 @@ def area_list(request):
     return render(request, 'warehouse/area_list.html', locals())
 
 
+@login_required
 def area_by_warehouse(request, wh_code):
     # Lấy đối tượng Warehouse tương ứng với wh_code
     warehouse = Warehouse.objects.get(wh_code=wh_code)
@@ -133,6 +139,7 @@ def area_by_warehouse(request, wh_code):
     return render(request, 'warehouse/area_by_warehouse.html', locals())
 
 
+@login_required
 def area_edit(request, area_code):
     area = get_object_or_404(Area, area_id=area_code)
     wh_code = area.warehouse_id
@@ -168,6 +175,7 @@ def area_delete(request, pk):
     return JsonResponse({'message': 'Invalid request method.'}, status=400)
 
 
+@login_required
 def bin_create(request, area_code):
     # Lấy đối tượng Area từ area_code
     area = get_object_or_404(Area, area_id=area_code)
@@ -197,6 +205,7 @@ def bin_list(request):
     return render(request, 'warehouse/bin_list.html', {'bins': bins})
 
 
+@login_required
 def bin_edit(request, bin_code):
     bin = get_object_or_404(Bin, bin_id=bin_code)
     area_code = bin.area_id
@@ -233,6 +242,7 @@ def bin_delete(request, pk):
     return JsonResponse({'message': 'Invalid request method.'}, status=400)
 
 
+@login_required
 def bin_by_area(request, area_code):
     # Lấy đối tượng Warehouse tương ứng với wh_code
     area = Area.objects.get(area_id=area_code)

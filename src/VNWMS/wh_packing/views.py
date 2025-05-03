@@ -21,6 +21,7 @@ from .models import Bin, Bin_Value, Bin_Value_History, Series, StockInForm, Stoc
 from django.db.models import Case, When, Value, BooleanField, Q, F
 
 
+@login_required
 def bin_search(request):
     form = BinSearchForm(request.GET or None)
 
@@ -391,7 +392,7 @@ def packing_material_stock_in_post(request):
 
 
 # @transaction.atomic
-# @login_required
+@login_required
 def packing_material_stock_out(request):
     if request.method == 'POST':
         form = StockOutPForm(request.POST)
@@ -511,6 +512,7 @@ def product_order_search(request):
     return JsonResponse(data, safe=False)
 
 
+@login_required
 def transfer_and_adjust(request):
     return render(request, 'wh_packing/action/packing_transfer_and_adjust.html')
 
@@ -559,6 +561,7 @@ def bin_transfer(request):
 
 
 # When click 'Transfer' button, execute this one
+@login_required
 def bin_transfer_page(request):
 
     if request.GET:
@@ -666,6 +669,7 @@ def bin_adjust(request):
 
 
 # When click 'Transfer' button, execute this one
+@login_required
 def bin_adjust_page(request):
 
     if request.GET:
@@ -800,6 +804,7 @@ def product_order_hist_data(request):
 
 
 # EXCEL_IMPORT
+@login_required
 def product_order_bin_search(request):
     return render(request, 'wh_packing/search/product_order_bin_search.html')
 
@@ -950,6 +955,7 @@ WAB_PROCESSORS = {
 }
 
 
+@login_required
 def import_excel_data(request):
     if request.method == "POST":
         form = ExcelUploadForm(request.POST, request.FILES)
@@ -971,6 +977,7 @@ def import_excel_data(request):
     return render(request, "wh_packing/admin/bin_upload.html", locals())
 
 
+@login_required
 def open_data_import(request):
     if request.method == "POST":
         form = ExcelUploadForm(request.POST, request.FILES)
@@ -1112,6 +1119,7 @@ def open_data_import_confirm_api(request):
     return JsonResponse({"error": "請使用 POST 方法"}, status=400)
 
 
+@login_required
 def inventory_sheet(request):
     form = BinValueSearchForm(request.GET)
     results = []
@@ -1120,6 +1128,7 @@ def inventory_sheet(request):
                   {'form': form, 'results': results, 'warehouses': warehouses})
 
 
+@login_required
 def inventory_deletion(request):
     form = BinValueDeleteForm(request.GET)
     results = []
