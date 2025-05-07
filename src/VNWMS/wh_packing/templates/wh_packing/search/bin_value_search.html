@@ -111,6 +111,10 @@
     <script>
         $(document).ready(function () {
 
+            $("#jsGrid").on("click", ".jsgrid-cell", function() {
+                $(this).toggleClass("expanded");
+            });
+
             $("#warehouse").change(function () {
                 var warehouseId = $(this).val();
                 $("#id_area").prop("disabled", true).html('<option value="">{% trans "Choose Area" %}</option>');
