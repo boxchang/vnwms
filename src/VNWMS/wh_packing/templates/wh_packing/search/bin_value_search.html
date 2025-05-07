@@ -16,6 +16,27 @@
             text-align: center;
         }
 
+        .jsgrid-cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px; /* Điều chỉnh theo nhu cầu */
+            cursor: pointer; /* Biểu tượng tay khi rê chuột */
+            transition: all 0.3s ease-in-out;
+        }
+
+        .jsgrid-header-cell {
+         max-width: 150px;
+        }
+
+        .jsgrid-cell.expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-wrap: break-word;
+            max-width: none; /* Hiển thị toàn bộ nội dung */
+        }
+
         .jsgrid-cell, .jsgrid-header-cell {
             padding: 12px 14px;
             border-color: #eaebef;
@@ -216,15 +237,15 @@
                     { name: "wh_plant", title: translations.plant, type: "text", width: 100, css: "text-center"},
                     { name: "wh_name", title: translations.warehouse, type: "text", width: 130, css: "text-center"},
                     { name: "product_order", title: translations.product_order, type: "text", width: 120, css: "text-center"},
-                    { name: "customer_no", title: translations.customer_no, type: "text", width: 150, css: "text-center"},
+                    { name: "customer_no", title: translations.customer_no, type: "text", width: 130, css: "text-center"},
                     { name: "version_no", title: translations.version_no, type: "text", width: 120, css: "text-center"},
-                    { name: "lot_no", title: translations.lot_no, type: "text", width: 150, css: "text-center"},
+                    { name: "lot_no", title: translations.lot_no, type: "text", width: 120, css: "text-center"},
                     { name: "size", title: translations.size, type: "text", width: 60, css: "text-center"},
                     { name: "qty", title: translations.qty, type: "number", width: 120},
-                    { name: "item_type", title: translations.item_type, type: "text", width: 200, css: "text-center"},
+                    { name: "item_type", title: translations.item_type, type: "text", width: 150, css: "text-center"},
                     { name: "bin_id", title: translations.location, type: "text", width: 80, css: "text-center"},
                     { name: "supplier", title: translations.supplier, type: "text", width: 130, css: "text-center"},
-                    { name: "post_date", title: translations.post_date, type: "date", width: 200, css: "text-center"},
+                    { name: "post_date", title: translations.post_date, type: "date", width: 120, css: "text-center"},
                     { name: "purchase_no", title: translations.purchase_order, type: "text", width: 120, css: "text-center"},
                     { name: "sap_mtr_no", title: translations.sap_mtr_no, type: "text", width: 120, css: "text-center"},
                     { name: "version_seq", title: translations.version_seq, type: "text", width: 70, css: "text-center"},
