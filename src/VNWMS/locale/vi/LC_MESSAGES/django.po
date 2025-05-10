@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-10 08:33+0700\n"
-"PO-Revision-Date: 2025-05-10 08:35+0700\n"
+"PO-Revision-Date: 2025-05-10 09:16+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: vi_VN\n"
@@ -2286,7 +2286,7 @@ msgstr "Bảng kiểm kê"
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:5
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:67
 msgid "Transaction History"
-msgstr "Lịch sử giao dịch"
+msgstr "Lịch sử tuỳ chỉnh"
 
 #: .\wh_packing\templates\wh_packing\bases\base.html:96
 #: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:4
