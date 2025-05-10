@@ -8,6 +8,8 @@
 
     <style>
 
+
+
         th {
             text-align: center;
         }
@@ -16,14 +18,15 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 150px; /* Điều chỉnh theo nhu cầu */
+            max-width: 160px; /* Điều chỉnh theo nhu cầu */
             cursor: pointer; /* Biểu tượng tay khi rê chuột */
             transition: all 0.3s ease-in-out;
         }
 
-         .jsgrid-header-cell {
-             max-width: 150px;
-         }
+        .jsgrid-header-cell{
+            white-space: nowrap;      /* Không cho xuống hàng */
+            width: auto;
+        }
 
         .jsgrid-cell.expanded {
             white-space: normal;
@@ -49,8 +52,14 @@
             height: 16px !important;
         }
 
+        .container-fluid{
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
         #jsGrid {
             font-size: 0.875rem;
+
         }
 
     </style>
@@ -58,10 +67,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
+<div class="container-fluid">
 
-    <h3 class="text-center">{% trans "New Transaction History" %}</h3>
-    <div id="jsGrid" class="mt-4"></div>
+{#    <h3 class="text-center">{% trans "New Transaction History" %}</h3>#}
+    <div id="jsGrid"></div>
 </div>
 {% endblock %}
 
@@ -92,7 +101,7 @@
 
             $("#jsGrid").jsGrid({
                 width: "100%",
-                height: "79vh",
+                height: "91vh",
                 noDataContent: translations.notFound,
                 inserting: false,
                 editing: false,
@@ -108,8 +117,8 @@
                         });
                     }
                 },
-                {#pageSize: 20,#}
-                {#pageButtonCount: 5,#}
+                pageSize: 50,
+                pageButtonCount: 5,
                 headerRowClass: "table-bordered",
                 pagerFormat: "{first} {prev} {pages} {next} {last} \u00A0  |\u00A0\u00A0 {pageIndex} of {pageCount}",
                 pagePrevText: "<i class='fas fa-chevron-left'></i>",
@@ -118,19 +127,19 @@
                 pageLastText: "<i class='fas fa-angle-double-right'></i>",
                 fields: [
                     { name: "product_order", title: translations.productOrder, type: "text", width: 120, css: "text-center"},
-                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 120, css: "text-center"},
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 160, css: "text-center"},
                     { name: "version_no", title: translations.versionNo, type: "text", width: 130, css: "text-center"},
-                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 70, css: "text-center"},
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 90, css: "text-center"},
                     { name: "item_type", title: translations.item_type, type: "text", width: 100, css: "text-center"},
-                    { name: "size", title: translations.size, type: "text", width: 60, css: "text-center"},
-                    { name: "comment", title: translations.comment, type: "text", width: 100, css: "text-center"},
+                    { name: "size", title: translations.size, type: "text", width: 65, css: "text-center"},
+                    { name: "comment", title: translations.comment, type: "text", width: 80, css: "text-center"},
                     { name: "bin_id", title: translations.bin, type: "text", width: 70, css: "text-center"},
-                    { name: "mvt_id", title: translations.mvt, type: "text", width: 80, css: "text-center"},
+                    { name: "mvt_id", title: translations.mvt, type: "text", width: 95, css: "text-center"},
                     { name: "minus_qty", title: "-", type: "number", width: 100 },
                     { name: "plus_qty", title: "+", type: "number", width: 100 },
                     { name: "remain_qty", title: translations.qty, type: "number", width: 100},
                     { name: "create_at", title: translations.createAt, type: "date", width: 150, css: "text-center"},
-                    { name: "create_by__username", title: translations.createBy, type: "text", width: 150, css: "text-center"},
+                    { name: "create_by__username", title: translations.createBy, type: "text", width: 140, css: "text-center"},
                 ]
             });
 
