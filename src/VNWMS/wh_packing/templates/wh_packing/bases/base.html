@@ -74,6 +74,18 @@
                     {% trans "Search Function" %}
                     </button>
                     <ul class="dropdown-menu">
+
+                        <li>
+                            <a class="dropdown-item" href="{% url 'product_order_bin_search' %}">
+                                <i class="fas fa-search"></i> {% trans "Transaction History" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'trans_hist_top100' %}">
+                                <i class="fas fa-search"></i> {% trans "New Transaction History" %}
+                            </a>
+                        </li>
+                        <hr>
                         <li>
                             <a class="dropdown-item" href="{% url 'bin_search' %}">
                                 <i class="fas fa-search"></i> {% trans "Inventory Log" %}
@@ -83,17 +95,6 @@
                         <li>
                             <a class="dropdown-item" href="{% url 'inventory_sheet' %}">
                                 <i class="fas fa-search"></i> {% trans "Inventory Sheet" %}
-                            </a>
-                        </li>
-                        <hr>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'product_order_bin_search' %}">
-                                <i class="fas fa-search"></i> {% trans "Transaction History" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'trans_hist_top100' %}">
-                                <i class="fas fa-search"></i> {% trans "New Transaction History" %}
                             </a>
                         </li>
 
