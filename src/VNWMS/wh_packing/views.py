@@ -93,6 +93,10 @@ def bin_search(request):
     return render(request, 'wh_packing/search/bin_history_search.html', locals())
 
 
+def trans_hist_top100(request):
+    return render(request, 'wh_packing/search/bin_history_top100_search.html', locals())
+
+
 def check_po_exists(request):
     po_no = request.POST.get('po_no')
     bin_id = request.POST.get('bin_id')
@@ -734,13 +738,14 @@ def bin_adjust_page(request):
 
 
 def product_order_hist_data(request):
+    current_path = request.get_full_path()
     product_order = request.GET.get('product_order')
     bin_id = request.GET.get('bin_id')
     size = request.GET.get('size')
     comment = request.GET.get('comment')
 
-    if not (product_order or bin_id or size or comment):
-        return JsonResponse({"status": "blank"}, status=200)
+    # if not (product_order or bin_id or size or comment):
+    #     return JsonResponse({"status": "blank"}, status=200)
 
     current_language = get_language()
     if current_language == "zh-hant":
@@ -775,6 +780,9 @@ def product_order_hist_data(request):
         'create_at',
         'create_by__username'
     )
+
+    if current_path == '/wh_packing/product_order_hist100_data/':
+        bin_values = bin_values.order_by('-create_at')[:100]
 
     data = [
         {

@@ -1,0 +1,140 @@
+{% extends 'wh_packing/bases/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %} {% trans "New Transaction History" %} {% endblock %}
+
+{% block css %}
+    {{ block.super }}
+
+    <style>
+
+        th {
+            text-align: center;
+        }
+
+        .jsgrid-cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px; /* Điều chỉnh theo nhu cầu */
+            cursor: pointer; /* Biểu tượng tay khi rê chuột */
+            transition: all 0.3s ease-in-out;
+        }
+
+         .jsgrid-header-cell {
+             max-width: 150px;
+         }
+
+        .jsgrid-cell.expanded {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-wrap: break-word;
+            max-width: none; /* Hiển thị toàn bộ nội dung */
+        }
+
+        .jsgrid-cell, .jsgrid-header-cell {
+            padding: 12px 14px;
+            border-color: #eaebef;
+        }
+
+        .jsgrid-pager {
+            display: flex;
+            justify-content: center; /* Căn giữa các nút phân trang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            width: 100%;
+        }
+
+        .jsgrid-grid-body::-webkit-scrollbar {
+            height: 16px !important;
+        }
+
+        #jsGrid {
+            font-size: 0.875rem;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h3 class="text-center">{% trans "New Transaction History" %}</h3>
+    <div id="jsGrid" class="mt-4"></div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $("#jsGrid").on("click", ".jsgrid-cell", function() {
+                $(this).toggleClass("expanded");
+            });
+
+            const translations = {
+                notFound: "{% trans 'Not found' %}",
+                productOrder: "{% trans 'Product Order' %}",
+                purchaseOrder: "{% trans 'Purchase Order' %}",
+                versionNo: "{% trans 'Version No' %}",
+                versionSeq: "{% trans 'Version Seq' %}",
+                item_type: "{% trans 'Item Type' %}",
+                size: "{% trans 'Size' %}",
+                comment: "{% trans 'Comment' %}",
+                bin: "{% trans 'Bin' %}",
+                mvt: "{% trans 'Mvt' %}",
+                minusQty: "-",
+                plusQty: "+",
+                qty: "{% trans 'Qty' %}",
+                createAt: "{% trans 'Create at' %}",
+                createBy: "{% trans 'Create by' %}"
+            };
+
+            $("#jsGrid").jsGrid({
+                width: "100%",
+                height: "79vh",
+                noDataContent: translations.notFound,
+                inserting: false,
+                editing: false,
+                paging:true,
+                sorting: true,
+                autoload:true,
+                controller: {
+                    loadData: function() {
+                        return $.ajax({
+                            type: "GET",
+                            url: "{% url 'product_order_hist100_data' %}",  // URL này map tới view Django
+                            dataType: "json"
+                        });
+                    }
+                },
+                {#pageSize: 20,#}
+                {#pageButtonCount: 5,#}
+                headerRowClass: "table-bordered",
+                pagerFormat: "{first} {prev} {pages} {next} {last} \u00A0  |\u00A0\u00A0 {pageIndex} of {pageCount}",
+                pagePrevText: "<i class='fas fa-chevron-left'></i>",
+                pageNextText: "<i class='fas fa-chevron-right'></i>",
+                pageFirstText: "<i class='fas fa-angle-double-left'></i>",
+                pageLastText: "<i class='fas fa-angle-double-right'></i>",
+                fields: [
+                    { name: "product_order", title: translations.productOrder, type: "text", width: 120, css: "text-center"},
+                    { name: "purchase_no", title: translations.purchaseOrder, type: "text", width: 120, css: "text-center"},
+                    { name: "version_no", title: translations.versionNo, type: "text", width: 130, css: "text-center"},
+                    { name: "version_seq", title: translations.versionSeq, type: "text", width: 70, css: "text-center"},
+                    { name: "item_type", title: translations.item_type, type: "text", width: 100, css: "text-center"},
+                    { name: "size", title: translations.size, type: "text", width: 60, css: "text-center"},
+                    { name: "comment", title: translations.comment, type: "text", width: 100, css: "text-center"},
+                    { name: "bin_id", title: translations.bin, type: "text", width: 70, css: "text-center"},
+                    { name: "mvt_id", title: translations.mvt, type: "text", width: 80, css: "text-center"},
+                    { name: "minus_qty", title: "-", type: "number", width: 100 },
+                    { name: "plus_qty", title: "+", type: "number", width: 100 },
+                    { name: "remain_qty", title: translations.qty, type: "number", width: 100},
+                    { name: "create_at", title: translations.createAt, type: "date", width: 150, css: "text-center"},
+                    { name: "create_by__username", title: translations.createBy, type: "text", width: 150, css: "text-center"},
+                ]
+            });
+
+
+        });
+    </script>
+{% endblock %}

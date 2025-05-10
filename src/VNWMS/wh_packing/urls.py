@@ -5,7 +5,7 @@ from wh_packing.views import check_po_exists, open_data_import, open_data_import
     get_purchase_no_info, packing_material_stock_in, packing_material_stock_out, packing_material_stock_in_post, \
     packing_material_stock_out_post, dashboard, import_excel_data, product_order_hist_data, product_order_search, \
     product_order_bin_search, transfer_and_adjust, bin_transfer_page, bin_transfer, bin_adjust_page, bin_adjust, \
-    warehouse_map, download_excel_template, get_all_areas, get_product_order_stout
+    warehouse_map, download_excel_template, get_all_areas, get_product_order_stout, trans_hist_top100
 
 urlpatterns = [
     url(r'^get_all_areas/$', get_all_areas, name='get_all_areas_api'),
@@ -37,7 +37,9 @@ urlpatterns = [
 
     url(r'^product_order_search/$', product_order_search, name='product_order_search'),
     url(r'^product_order_hist_data/$', product_order_hist_data, name='product_order_hist_data'),
+    url(r'^product_order_hist100_data/$', product_order_hist_data, name='product_order_hist100_data'),
     url(r'^product_order_bin_search/$', product_order_bin_search, name='product_order_bin_search'),
+    url(r'^trans_hist_top100/$', trans_hist_top100, name='trans_hist_top100'),
     url(r'^transfer_and_adjust/$', transfer_and_adjust, name='transfer_and_adjust'),
     url(r'^bin_transfer_page/$', bin_transfer_page, name='bin_transfer_page'),
     url(r'^bin/transfer/$', bin_transfer, name='bin_transfer'),
