@@ -161,9 +161,33 @@
                     { name: "comment", title: translations.comment, type: "text", width: 100, css: "text-center"},
                     { name: "bin_id", title: translations.bin, type: "text", width: 70, css: "text-center"},
                     { name: "mvt_id", title: translations.mvt, type: "text", width: 80, css: "text-center"},
-                    { name: "minus_qty", title: "-", type: "number", width: 100 },
-                    { name: "plus_qty", title: "+", type: "number", width: 100 },
-                    { name: "remain_qty", title: translations.qty, type: "number", width: 100},
+                    {
+                        name: "minus_qty",
+                        title: "-",
+                        type: "number",
+                        width: 100,
+                        itemTemplate: function (value) {
+                            return value.toLocaleString();
+                        },
+                    },
+                    {
+                        name: "plus_qty",
+                        title: "+",
+                        type: "number",
+                        width: 100,
+                        itemTemplate: function (value) {
+                            return value.toLocaleString();
+                        },
+                    },
+                    {
+                        name: "remain_qty",
+                        title: translations.qty,
+                        type: "number",
+                        width: 100,
+                        itemTemplate: function (value) {
+                            return value.toLocaleString();
+                        },
+                    },
                     { name: "create_at", title: translations.createAt, type: "date", width: 150, css: "text-center"},
                     { name: "create_by__username", title: translations.createBy, type: "text", width: 150, css: "text-center"},
                 ]
