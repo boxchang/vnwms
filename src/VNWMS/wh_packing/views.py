@@ -744,9 +744,6 @@ def product_order_hist_data(request):
     size = request.GET.get('size')
     comment = request.GET.get('comment')
 
-    # if not (product_order or bin_id or size or comment):
-    #     return JsonResponse({"status": "blank"}, status=200)
-
     current_language = get_language()
     if current_language == "zh-hant":
         _mvt = 'mvt__desc'
@@ -959,7 +956,6 @@ WAB_PROCESSORS = {
     "Warehouse": warehouse_sheet,
     "Area": area_sheet,
     "Location": bin_sheet,
-
 }
 
 
