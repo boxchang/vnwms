@@ -235,12 +235,14 @@ def stockin_filter(raws):
         version_no = raw['ZZVERSION']
         version_seq = raw['ZZVERSION_SEQ']
         size = raw['ZSIZE']
+        sap_mtr_no = raw['MBLNR']
         order_qty = raw['MENGE']
 
         sql2 = f"""
         SELECT sum(order_qty) order_qty FROM [wh_packing_stockinform]
         WHERE product_order='{product_order}' and purchase_no='{purchase_no}'
         and version_no='{version_no}' and version_seq='{version_seq}' and size='{size}'
+        and sap_mtr_no = '{sap_mtr_no}'
         """
         stocks = vnwms_db.select_sql_dict(sql2)
 
