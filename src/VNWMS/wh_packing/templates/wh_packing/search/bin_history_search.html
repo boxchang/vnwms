@@ -309,24 +309,24 @@
                             // Cập nhật bảng bin_values
                             let binValueHtml = '';
                             response.bin_values.forEach(function(item, index) {
-                                binValueHtml += `<tr>
-                                                    <td>${index + 1}</td>
-                                                    <td>${item.bin_id}</td>
-                                                    <td>${item.customer_no}</td>
-                                                    <td>${item.product_order}</td>
-                                                    <td>${item.version_no}</td>
-                                                    <td>${item.version_seq}</td>
-                                                    <td>${item.lot_no}</td>
-                                                    <td>${item.size}</td>
-                                                    <td class="qty">${item.qty}</td>
-                                                    <td class="qty">${item.purchase_qty}</td>
-                                                    <td>${item.purchase_unit}</td>
-                                                    <td>${item.supplier}</td>
-                                                    <td>${item.post_date}</td>
-                                                    <td>${item.item_type}</td>
-                                                    <td>${item.purchase_no}</td>
-                                                    <td>${item.sap_mtr_no}</td>
-                                                </tr>`;
+                            binValueHtml += `<tr>
+                                                <td>${index + 1}</td>
+                                                <td>${item.bin_id}</td>
+                                                <td>${item.customer_no}</td>
+                                                <td>${item.product_order}</td>
+                                                <td>${item.version_no}</td>
+                                                <td>${item.version_seq}</td>
+                                                <td>${item.lot_no}</td>
+                                                <td>${item.size}</td>
+                                                <td class="qty">${item.qty.toLocaleString()}</td>
+                                                <td class="qty">${Number((item.purchase_qty|| "0")).toLocaleString()}</td>
+                                                <td>${item.purchase_unit}</td>
+                                                <td>${item.supplier}</td>
+                                                <td>${item.post_date}</td>
+                                                <td>${item.item_type}</td>
+                                                <td>${item.purchase_no}</td>
+                                                <td>${item.sap_mtr_no}</td>
+                                            </tr>`;
                             });
                             $(".bin_value tbody").html(binValueHtml);
 
@@ -354,7 +354,7 @@
                             $(".bin_hist tbody").html(binHistHtml);
 
                             // Cập nhật tổng số lượng
-                            $(".bin_value tfoot").html(`<tr><td colspan="15">{% trans "Total Quantity: " %} ${response.total_qty}</td></tr>`);
+                            $(".bin_value tfoot").html(`<tr><td colspan="15">{% trans "Total Quantity: " %} ${response.total_qty.toLocaleString()}</td></tr>`);
                         },
 
                         error: function (xhr) {
