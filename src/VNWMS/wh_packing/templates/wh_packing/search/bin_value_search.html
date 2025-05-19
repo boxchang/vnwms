@@ -267,10 +267,8 @@
 
 
             $("#exportExcel").click(function () {
-                // Lấy dữ liệu từ jsGrid
                 let gridData = $("#jsGrid").jsGrid("option", "data");
 
-                // Lấy các trường từ jsGrid để tạo mảng tiêu đề cho Excel
                 const fields = [
                     { name: "wh_plant", title: translations.plant, type: "text", width: 100, css: "text-center"},
                     { name: "wh_name", title: translations.warehouse, type: "text", width: 120, css: "text-center"},
