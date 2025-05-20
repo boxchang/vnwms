@@ -24,6 +24,10 @@ class Warehouse(models.Model):
     wh_comment = models.CharField(max_length=500, null=True, blank=True)  # Comment, nullable
     wh_plant = models.CharField(max_length=20, null=True, blank=True)
     wh_bg = models.ImageField(upload_to='warehouse_images/', null=True, blank=True)
+    wh_packing_func = models.BooleanField(null=True, blank=True, default=False)
+    wh_former_func = models.BooleanField(null=True, blank=True, default=False)
+    wh_wip_func = models.BooleanField(null=True, blank=True, default=False)
+    wh_product_func = models.BooleanField(null=True, blank=True, default=False)
     create_at = models.DateTimeField(default=timezone.now)  # Creation timestamp
     create_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING,
                                   related_name='warehouse_create_by')
