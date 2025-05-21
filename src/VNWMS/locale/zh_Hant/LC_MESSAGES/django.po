@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-10 08:34+0700\n"
-"PO-Revision-Date: 2025-05-10 08:35+0700\n"
+"POT-Creation-Date: 2025-05-21 09:52+0700\n"
+"PO-Revision-Date: 2025-05-21 10:07+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -37,23 +37,19 @@ msgstr "描述"
 msgid "save"
 msgstr "儲存"
 
-#: .\bases\templates\bases\base.html:91
-#, fuzzy
-#| msgid "Warehouse Code"
+#: .\bases\templates\bases\base.html:73
 msgid "Warehouse Setting"
-msgstr "倉庫代碼"
+msgstr "倉庫管理設定"
 
-#: .\bases\templates\bases\base.html:98
-#, fuzzy
-#| msgid "Packing Warehouse Map"
+#: .\bases\templates\bases\base.html:80
 msgid "GD Packing Warehouse"
-msgstr "包材倉地圖"
+msgstr "GD 包裝倉庫"
 
-#: .\bases\templates\bases\base.html:115
+#: .\bases\templates\bases\base.html:97
 msgid "Personal Setting"
 msgstr "個人資訊"
 
-#: .\bases\templates\bases\base.html:121
+#: .\bases\templates\bases\base.html:103
 msgid "Logout"
 msgstr "登出"
 
@@ -1711,11 +1707,9 @@ msgstr ""
 msgid "%s: error: %s\n"
 msgstr ""
 
-#: .\warehouse\forms.py:48
-#, fuzzy
-#| msgid "Choose Area"
+#: .\warehouse\forms.py:82
 msgid "Choose Plant"
-msgstr "選擇區域"
+msgstr "選擇廠區"
 
 #: .\warehouse\templates\warehouse\area_by_warehouse.html:5
 #: .\warehouse\templates\warehouse\area_by_warehouse.html:35
@@ -1733,7 +1727,7 @@ msgstr "添加"
 #: .\warehouse\templates\warehouse\area_edit.html:66
 #: .\warehouse\templates\warehouse\bin_by_area.html:40
 #: .\warehouse\templates\warehouse\bin_edit.html:36
-#: .\warehouse\templates\warehouse\warehouse_edit.html:47
+#: .\warehouse\templates\warehouse\warehouse_edit.html:91
 msgid "Back to List"
 msgstr "返回列表"
 
@@ -1755,7 +1749,7 @@ msgstr "區域名稱"
 #: .\warehouse\templates\warehouse\area_by_warehouse.html:52
 #: .\warehouse\templates\warehouse\area_create.html:52
 #: .\warehouse\templates\warehouse\area_edit.html:57
-#: .\warehouse\templates\warehouse\warehouse_edit.html:14
+#: .\warehouse\templates\warehouse\warehouse_edit.html:31
 #: .\warehouse\templates\warehouse\warehouse_list.html:47
 msgid "Warehouse Id"
 msgstr "倉庫編號"
@@ -1801,7 +1795,7 @@ msgstr "取消"
 #: .\warehouse\templates\warehouse\area_create.html:5
 #: .\warehouse\templates\warehouse\bin_create.html:5
 #: .\warehouse\templates\warehouse\warehouse_create.html:5
-#: .\warehouse\templates\warehouse\warehouse_create.html:12
+#: .\warehouse\templates\warehouse\warehouse_create.html:29
 msgid "Create Warehouse"
 msgstr "建立倉庫"
 
@@ -1831,7 +1825,7 @@ msgstr "地圖區域長度"
 
 #: .\warehouse\templates\warehouse\area_create.html:58
 #: .\warehouse\templates\warehouse\bin_create.html:30
-#: .\warehouse\templates\warehouse\warehouse_create.html:42
+#: .\warehouse\templates\warehouse\warehouse_create.html:87
 msgid "Save"
 msgstr "儲存"
 
@@ -1846,7 +1840,7 @@ msgstr ""
 
 #: .\warehouse\templates\warehouse\area_edit.html:63
 #: .\warehouse\templates\warehouse\bin_edit.html:33
-#: .\warehouse\templates\warehouse\warehouse_edit.html:44
+#: .\warehouse\templates\warehouse\warehouse_edit.html:88
 msgid "Save Changes"
 msgstr "儲存變更"
 
@@ -1889,44 +1883,64 @@ msgstr "編輯儲位"
 msgid "No warehouses found."
 msgstr "沒有找到倉庫。"
 
-#: .\warehouse\templates\warehouse\warehouse_create.html:14
+#: .\warehouse\templates\warehouse\warehouse_create.html:31
 msgid "Warehouse Code"
 msgstr "倉庫代碼"
 
-#: .\warehouse\templates\warehouse\warehouse_create.html:19
-#: .\warehouse\templates\warehouse\warehouse_edit.html:20
+#: .\warehouse\templates\warehouse\warehouse_create.html:36
+#: .\warehouse\templates\warehouse\warehouse_edit.html:37
 #: .\warehouse\templates\warehouse\warehouse_list.html:48
 msgid "Warehouse Name"
 msgstr "倉庫名稱"
 
-#: .\warehouse\templates\warehouse\warehouse_create.html:24
-#: .\warehouse\templates\warehouse\warehouse_edit.html:26
+#: .\warehouse\templates\warehouse\warehouse_create.html:41
+#: .\warehouse\templates\warehouse\warehouse_edit.html:43
 #: .\warehouse\templates\warehouse\warehouse_list.html:46
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:116
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:204
 msgid "Plant"
 msgstr "廠別"
 
-#: .\warehouse\templates\warehouse\warehouse_create.html:30
-#: .\warehouse\templates\warehouse\warehouse_edit.html:32
+#: .\warehouse\templates\warehouse\warehouse_create.html:47
+#: .\warehouse\templates\warehouse\warehouse_edit.html:49
 #: .\wh_packing\forms.py:223
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:130
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:321
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:83
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:84
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:220
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:84
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:128
-#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:204
+#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:228
 msgid "Comment"
 msgstr "備註"
 
-#: .\warehouse\templates\warehouse\warehouse_create.html:36
-#: .\warehouse\templates\warehouse\warehouse_edit.html:38
+#: .\warehouse\templates\warehouse\warehouse_create.html:56
+#: .\warehouse\templates\warehouse\warehouse_edit.html:57
+msgid "For Packing Warehouse Function"
+msgstr "包裝倉庫專用"
+
+#: .\warehouse\templates\warehouse\warehouse_create.html:62
+#: .\warehouse\templates\warehouse\warehouse_edit.html:63
+msgid "For Former Warehouse Function"
+msgstr "舊倉庫專用"
+
+#: .\warehouse\templates\warehouse\warehouse_create.html:68
+#: .\warehouse\templates\warehouse\warehouse_edit.html:69
+msgid "For WIP Warehouse Function"
+msgstr "在製倉庫專用"
+
+#: .\warehouse\templates\warehouse\warehouse_create.html:74
+#: .\warehouse\templates\warehouse\warehouse_edit.html:75
+msgid "For Product Warehouse Function"
+msgstr "成品倉庫專用"
+
+#: .\warehouse\templates\warehouse\warehouse_create.html:81
+#: .\warehouse\templates\warehouse\warehouse_edit.html:82
 msgid "Background Image"
 msgstr "背景圖片"
 
 #: .\warehouse\templates\warehouse\warehouse_edit.html:5
-#: .\warehouse\templates\warehouse\warehouse_edit.html:12
+#: .\warehouse\templates\warehouse\warehouse_edit.html:29
 msgid "Edit Warehouse"
 msgstr "編輯倉庫"
 
@@ -1943,7 +1957,7 @@ msgstr "您確定要刪除倉庫嗎"
 #: .\wh_packing\templates\wh_packing\action\packing_bin_adjust.html:48
 #: .\wh_packing\templates\wh_packing\action\packing_bin_transfer.html:75
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:149
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:84
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:85
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:129
 msgid "Bin"
 msgstr "儲位"
@@ -1960,12 +1974,12 @@ msgstr "儲位"
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:142
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:177
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:218
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:77
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:78
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:90
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:206
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:72
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:122
-#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:204
+#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:228
 msgid "Product Order"
 msgstr "訂單"
 
@@ -1980,11 +1994,11 @@ msgstr "訂單"
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:148
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:181
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:221
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:82
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:83
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:210
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:80
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:127
-#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:204
+#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:228
 msgid "Size"
 msgstr "尺寸"
 
@@ -1994,7 +2008,7 @@ msgstr "尺寸"
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:318
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:150
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:182
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:88
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:89
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:212
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:133
 msgid "Qty"
@@ -2027,7 +2041,7 @@ msgstr "oct"
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:146
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:187
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:220
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:81
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:82
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:214
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:126
 msgid "Item Type"
@@ -2042,7 +2056,7 @@ msgstr "項目類型"
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:315
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:144
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:178
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:79
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:80
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:208
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:124
 msgid "Version No"
@@ -2094,7 +2108,7 @@ msgstr "Lot批號"
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:326
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:188
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:219
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:78
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:79
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:207
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:123
 msgid "Purchase Order"
@@ -2185,7 +2199,7 @@ msgstr "採購單"
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:121
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:134
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:328
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:80
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:81
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:209
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:125
 msgid "Version Seq"
@@ -2198,7 +2212,7 @@ msgstr "調撥"
 
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:4
 #: .\wh_packing\templates\wh_packing\action\packing_bin_value_delete.html:51
-#: .\wh_packing\templates\wh_packing\bases\base.html:67
+#: .\wh_packing\templates\wh_packing\bases\base.html:65
 msgid "Inventory Deletion"
 msgstr "刪除庫存"
 
@@ -2216,7 +2230,7 @@ msgstr "區域"
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:86
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:211
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:76
-#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:204
+#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:228
 msgid "Location"
 msgstr "儲位"
 
@@ -2224,7 +2238,7 @@ msgstr "儲位"
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_in.html:385
 #: .\wh_packing\templates\wh_packing\action\packing_material_stock_out.html:207
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:128
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:76
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:77
 #: .\wh_packing\templates\wh_packing\search\bin_value_search.html:203
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:121
 #, fuzzy
@@ -2356,7 +2370,7 @@ msgstr "資料儲存成功"
 
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:5
 #: .\wh_packing\templates\wh_packing\action\packing_transfer_and_adjust.html:9
-#: .\wh_packing\templates\wh_packing\bases\base.html:64
+#: .\wh_packing\templates\wh_packing\bases\base.html:62
 msgid "Quantity Transfer & Adjust Form"
 msgstr "調撥及調帳"
 
@@ -2404,53 +2418,52 @@ msgstr "開帳資料匯入"
 msgid "Excel Import Tool"
 msgstr "Excel 匯入工具（開放數據）"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:48
+#: .\wh_packing\templates\wh_packing\bases\base.html:46
 msgid "Transaction Function"
 msgstr "交易功能"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:53
+#: .\wh_packing\templates\wh_packing\bases\base.html:51
 msgid "Packing Material Stock In"
 msgstr "包材倉入庫單"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:58
+#: .\wh_packing\templates\wh_packing\bases\base.html:56
 msgid "Packing Material Stock Out"
 msgstr "包材倉出庫單"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:74
+#: .\wh_packing\templates\wh_packing\bases\base.html:72
 msgid "Search Function"
 msgstr "搜尋功能"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:79
-msgid "Inventory Log"
-msgstr "庫存日誌"
-
-#: .\wh_packing\templates\wh_packing\bases\base.html:85
-#: .\wh_packing\templates\wh_packing\search\bin_value_search.html:4
-#: .\wh_packing\templates\wh_packing\search\bin_value_search.html:68
-msgid "Inventory Sheet"
-msgstr "盤點清冊"
-
-#: .\wh_packing\templates\wh_packing\bases\base.html:91
+#: .\wh_packing\templates\wh_packing\bases\base.html:78
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:5
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:67
 msgid "Transaction History"
 msgstr "交易紀錄"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:96
+#: .\wh_packing\templates\wh_packing\bases\base.html:83
 #: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:4
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:63
 msgid "New Transaction History"
 msgstr "最新交易"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:105
+#: .\wh_packing\templates\wh_packing\bases\base.html:89
+msgid "Inventory Log"
+msgstr "庫存日誌"
+
+#: .\wh_packing\templates\wh_packing\bases\base.html:95
+#: .\wh_packing\templates\wh_packing\search\bin_value_search.html:4
+#: .\wh_packing\templates\wh_packing\search\bin_value_search.html:68
+msgid "Inventory Sheet"
+msgstr "盤點清冊"
+
+#: .\wh_packing\templates\wh_packing\bases\base.html:104
 msgid "Basic Data"
 msgstr "基本資料"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:110
+#: .\wh_packing\templates\wh_packing\bases\base.html:109
 msgid "Shelf Locations Import"
 msgstr "匯入貨架位置"
 
-#: .\wh_packing\templates\wh_packing\bases\base.html:115
+#: .\wh_packing\templates\wh_packing\bases\base.html:114
 msgid "Bulk Stock Import"
 msgstr "批量入庫"
 
@@ -2473,19 +2486,19 @@ msgid "Remain Qty"
 msgstr "剩餘數量"
 
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:225
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:85
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:86
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:130
 msgid "Mvt"
 msgstr "異動碼"
 
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:227
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:89
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:90
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:134
 msgid "Create at"
 msgstr "輸入日期"
 
 #: .\wh_packing\templates\wh_packing\search\bin_history_search.html:228
-#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:90
+#: .\wh_packing\templates\wh_packing\search\bin_history_top100_search.html:91
 #: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:135
 msgid "Create by"
 msgstr "輸入者"
@@ -2531,7 +2544,7 @@ msgid ""
 "Kindly contact the system administrator for support and proper authorization."
 msgstr "如需協助或授權，請聯繫系統管理員。"
 
-#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:204
+#: .\wh_packing\templates\wh_packing\search\product_order_bin_search.html:228
 msgid "cannot all be null"
 msgstr "不能全部為空"
 
@@ -2539,11 +2552,11 @@ msgstr "不能全部為空"
 msgid "Packing Warehouse Map"
 msgstr "包材倉地圖"
 
-#: .\wh_packing\views.py:341
+#: .\wh_packing\views.py:343
 msgid "The quantity must be a positive number!"
 msgstr ""
 
-#: .\wh_packing\views.py:395
+#: .\wh_packing\views.py:397
 msgid "Invalid request method"
 msgstr ""
 
