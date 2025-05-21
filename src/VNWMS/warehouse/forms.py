@@ -12,11 +12,45 @@ class WarehouseForm(forms.ModelForm):
 
     class Meta:
         model = Warehouse  # Chỉ định model mà form này sẽ sử dụng
-        fields = ['wh_code', 'wh_name', 'wh_comment', 'wh_plant', 'wh_bg']
+        fields = [
+            'wh_code',
+            'wh_name',
+            'wh_comment',
+            'wh_plant',
+            'wh_bg',
+            'wh_packing_func',
+            'wh_former_func',
+            'wh_wip_func',
+            'wh_product_func',
+        ]
 
     wh_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     wh_name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     wh_comment = forms.CharField(max_length=500, required=False, widget=forms.Textarea(attrs={'class': 'form-control'}))
+    wh_packing_func = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'class': 'form-check-input big-checkbox'}
+        )
+    )
+    wh_former_func = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'class': 'form-check-input big-checkbox'}
+        )
+    )
+    wh_wip_func = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'class': 'form-check-input big-checkbox'}
+        )
+    )
+    wh_product_func = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(
+            attrs={'class': 'form-check-input big-checkbox'}
+        )
+    )
 
     wh_bg = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
 
