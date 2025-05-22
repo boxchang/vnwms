@@ -49,7 +49,6 @@ class BinValueForm(forms.Form):
         )
 
 
-# Tạo lớp ModelChoiceField tùy chỉnh
 class CustomModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.get_item_type_name()  # Sử dụng phương thức get_item_type_name để hiển thị tên
@@ -113,18 +112,6 @@ class BinSearchForm(forms.Form):
         self.fields['from_date'].initial = day7_ago
         self.fields['to_date'].initial = today
 
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #
-    #     _bin = cleaned_data.get("bin")
-    #     po_no = cleaned_data.get("po_no")
-    #     size = cleaned_data.get("size")
-    #
-    #     if not(_bin or po_no or size):
-    #         raise forms.ValidationError(_("Location, Product Order, and Size cannot all be null!"))
-    #
-    #     return cleaned_data
-
 
 class BinTransferForm(forms.Form):
     bin = forms.ModelChoiceField(
@@ -176,17 +163,6 @@ class QuantityAdjustForm(forms.Form):
 
 
 class StockInPForm(forms.Form):
-    # SIZE_CHOICES = [
-    #     (0, '---------'),
-    #     ('XXS', 'XXS'),
-    #     ('XS', 'XS'),
-    #     ('S', 'S'),
-    #     ('M', 'M'),
-    #     ('L', 'L'),
-    #     ('XL', 'XL'),
-    #     ('XXL', 'XXL'),
-    # ]
-
     product_order = forms.CharField(max_length=20, label=_("Product Order"), required=True, )  # VBELN 收貨單號
     customer_no = forms.CharField(max_length=20, label=_("Customer"), required=False,)  # 無
     version_no = forms.CharField(max_length=20, label=_("Version No"), required=True,)  # ZZVERSION

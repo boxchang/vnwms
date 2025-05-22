@@ -11,7 +11,7 @@ class WarehouseForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Warehouse  # Chỉ định model mà form này sẽ sử dụng
+        model = Warehouse
         fields = [
             'wh_code',
             'wh_name',
@@ -96,7 +96,7 @@ class AreaForm(forms.ModelForm):
     ]
 
     class Meta:
-        model = Area  # Chỉ định model mà form này sẽ sử dụng
+        model = Area
         fields = ['area_id', 'area_name', 'pos_x', 'pos_y', 'area_w', 'area_l', 'warehouse', 'layer']
 
     area_id = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -145,7 +145,7 @@ class AreaForm(forms.ModelForm):
 
 class BinForm(forms.ModelForm):
     class Meta:
-        model = Bin  # Chỉ định model mà form này sẽ sử dụng
+        model = Bin
         fields = ['bin_id', 'bin_name', 'area']
 
     bin_id = forms.CharField(max_length=20, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
