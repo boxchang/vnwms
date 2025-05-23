@@ -8,52 +8,28 @@
 
     <style>
 
-        th {
-            text-align: center;
-        }
-
         .jsgrid-cell {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 160px; /* Điều chỉnh theo nhu cầu */
-            cursor: pointer; /* Biểu tượng tay khi rê chuột */
+            cursor: pointer;
             transition: all 0.3s ease-in-out;
-        }
-
-        .jsgrid-header-cell{
-            white-space: nowrap;      /* Không cho xuống hàng */
-            width: auto;
         }
 
         .jsgrid-cell.expanded {
             white-space: normal;
             overflow: visible;
-            text-overflow: clip;
-            word-wrap: break-word;
-            max-width: none; /* Hiển thị toàn bộ nội dung */
         }
 
         .jsgrid-cell, .jsgrid-header-cell {
             padding: 12px 10px;
-            border-color: #eaebef;
-            border: 1px ridge !important;
         }
 
         .jsgrid-pager {
             display: flex;
-            justify-content: center; /* Căn giữa các nút phân trang */
-            align-items: center; /* Căn giữa theo chiều dọc */
+            justify-content: center;
+            align-items: center;
             width: 100%;
-        }
-
-        .jsgrid-grid-body::-webkit-scrollbar {
-            height: 16px !important;
-        }
-
-        #jsGrid {
-            font-size: 0.875rem;
-
         }
 
     </style>
