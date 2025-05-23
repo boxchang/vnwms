@@ -12,53 +12,36 @@
             height: 16px !important;
         }
 
-        th {
-            text-align: center;
-        }
-
         .jsgrid-cell {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 150px; /* Điều chỉnh theo nhu cầu */
-            cursor: pointer; /* Biểu tượng tay khi rê chuột */
+            max-width: 150px;
+            cursor: pointer;
             transition: all 0.3s ease-in-out;
-        }
-
-        .jsgrid-header-cell {
-         max-width: 150px;
         }
 
         .jsgrid-cell.expanded {
             white-space: normal;
             overflow: visible;
-            text-overflow: clip;
-            word-wrap: break-word;
-            max-width: none; /* Hiển thị toàn bộ nội dung */
         }
 
         .jsgrid-cell, .jsgrid-header-cell {
             padding: 12px 14px;
-            border-color: #eaebef;
         }
 
         .jsgrid-pager {
             display: flex;
-            justify-content: center; /* Căn giữa các nút phân trang */
-            align-items: center; /* Căn giữa theo chiều dọc */
+            justify-content: center;
+            align-items: center;
             width: 100%;
         }
 
-        body {
-            font-size: 0.875rem;
-        }
-
         #Search {
-            font-family: 'Calibri', Tahoma, Arial, sans-serif;
             font-weight: bold;
             border-radius: 5px 27px 27px 5px;
-
         }
+
     </style>
 {% endblock %}
 

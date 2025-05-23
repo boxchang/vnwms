@@ -48,7 +48,3 @@ urlpatterns = [
     url(r'^map/(?P<pk>\w+)/$', warehouse_map, name='warehouse_map'),
     url(r'^download-template/(?P<filename>[\w\-.]+)/$', download_excel_template, name='download_excel_template'),
 ]
-
-
-
-
